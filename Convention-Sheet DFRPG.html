@@ -40,6 +40,7 @@ defined by the Mozilla Public License, version 2.0.
         --lightBackgroundColor: rgb(237 237 223);
         --gapSize: 0.5rem;
         --largeGap: 1rem;
+        --smallGap: 0.15rem;
       }
 
       .bestiary-card {
@@ -48,6 +49,41 @@ defined by the Mozilla Public License, version 2.0.
         font-size: var(--fontSizeText);
         padding-left: 0;
         padding-right: 0;
+      }
+
+      #nb-attacks {
+        display: flow;
+        grid-template-columns: auto auto;
+        column-gap: var(--gapSize);
+        /* margin-top: var(--gapSize); */
+        flex-flow: column nowrap;
+        /* line-height: 1rem; */
+      }
+
+      #nb-attacks ul {
+        padding-left: 0;
+        list-style-position: inside;
+        margin-block: 0;
+        list-style-type: none;
+        line-height: 1rem;
+      }
+
+      #nb-attacks ul>li {
+        line-height: 1rem;
+        padding: var(--smallGap) 0;
+      }
+
+      #nb-attacks ul>li:nth-child(odd) {
+        background-color: var(--lightBackgroundColor);
+      }
+
+      #nb-attacks ul>li:nth-child(even) {
+        background-color: transparent;
+      }
+
+      .nb-melee-attack .attack {
+        font-size: var(--fontSizeBig);
+        font-weight: bold;
       }
 
       .bestiary-card #nb-top {
@@ -94,7 +130,7 @@ defined by the Mozilla Public License, version 2.0.
         text-align: left;
         font-size: var(--fontSizePrimary);
         font-family: var(--labelFont);
-        border-bottom: 2px solid var(--headerColor);
+        /* border-bottom: 2px solid var(--headerColor); */
         color: var(--headerColor);
         margin: var(--gapSize) 0 0 0;
         font-variant: small-caps;
@@ -178,7 +214,7 @@ defined by the Mozilla Public License, version 2.0.
         align-self: end;
         background: rgb(237 237 223);
         border-radius: var(--borderRadius);
-        padding: 0.25em;
+        padding: var(--smallGap);
       }
 
       .bestiary-card #nb-derived-attrs>* {
@@ -329,7 +365,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       #nb-traits-skills .column>div {
-        padding: 0.25em 0;
+        padding: var(--smallGap) 0;
       }
 
       #nb-spells:not(#nb-spells:has(.power)) {
@@ -366,7 +402,6 @@ defined by the Mozilla Public License, version 2.0.
       #nb-modifiers .modifier {
         display: grid;
         grid-template-columns: min-content 1fr;
-        column-gap: var(--gapSize);
         padding-left: var(--gapSize);
       }
 
@@ -387,7 +422,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .nb-melee-attack {
-        display: grid;
+        /* display: grid; */
         grid-template-columns: min-content min-content max-content min-content auto;
         align-self: start;
         row-gap: var(--gapSize);
@@ -399,7 +434,7 @@ defined by the Mozilla Public License, version 2.0.
         display: inline-flex;
         flex-flow: column nowrap;
         justify-content: center;
-        padding-left: 0.25em;
+        padding-left: var(--smallGap);
         font-weight: bold;
       }
 
@@ -468,14 +503,6 @@ defined by the Mozilla Public License, version 2.0.
         background-color: rgb(237 237 223);
       }
 
-      #nb-attacks {
-        display: flow;
-        grid-template-columns: auto auto;
-        column-gap: var(--gapSize);
-        margin-top: var(--gapSize);
-        flex-flow: column nowrap;
-      }
-
       .nb-ranged-attack {
         display: grid;
         /* grid-template-columns: repeat(8, auto); */
@@ -500,8 +527,8 @@ defined by the Mozilla Public License, version 2.0.
       #nb-equipment>div {
         margin-left: 1em;
         text-indent: -1em;
-        margin-right: 0.25em;
-        padding-bottom: 0.25em;
+        margin-right: var(--smallGap);
+        padding-bottom: var(--smallGap);
       }
 
       .bestiary-card #nb-attributes .portrait-image {
@@ -630,7 +657,7 @@ defined by the Mozilla Public License, version 2.0.
         <h2>Attacks</h2>
         <div id="nb-attacks">
           <div class="nb-melee-attack">
-            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black; height: unset;">MELEE
+            <!-- <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black; height: unset;">MELEE
               WEAPON
             </div>
             <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Usage</div>
@@ -644,7 +671,7 @@ defined by the Mozilla Public License, version 2.0.
             <div>@DAMAGE</div>
             <div>@REACH</div>
             <div>@DESCRIPTION_NOTES</div>
-            @MELEE_LOOP_END
+            @MELEE_LOOP_END -->
           </div>
 
           <div class="nb-ranged-attack" data-count="@RANGED_LOOP_COUNT">
@@ -845,108 +872,194 @@ defined by the Mozilla Public License, version 2.0.
       </div>
     </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const attackNames = document.querySelectorAll("#nb-attacks .nb-name")
+    <div id="melee-attack-data" style="display: none;">
+      @MELEE_LOOP_START
+      <div class="melee-attack">
+        <div class="name">@DESCRIPTION_PRIMARY</div>
+        <div class="level">@LEVEL</div>
+        <div class="notes">@DESCRIPTION_NOTES</div>
+        <div class="parry">@PARRY</div>
+        <div class="damage">@DAMAGE</div>
+        <div class="reach">@REACH</div>
+        <div class="usage">@USAGE</div>
+        @MELEE_LOOP_END
+      </div>
 
-        attackNames.forEach((name, index) => {
-          if (index > 0) {
-            const previousName = attackNames[index - 1]
-            if (previousName.textContent.trim() === name.textContent.trim()) {
-              name.style.color = "transparent"
-            }
-          }
-        })
-      });
-    </script>
-    <script>
-      function transformNotesHTML(html) {
-        const notesContainer = document.createElement('div')
-        notesContainer.className = 'notes-container'
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const attackNames = document.querySelectorAll("#nb-attacks .nb-name")
 
-        let inFlavorText = false
-        let inColumnText = false
-        let inInfoText = false
-
-        for (const node of html.childNodes) {
-          if (node.nodeType !== Node.TEXT_NODE && !inColumnText && !inInfoText && !inFlavorText) {
-            continue // Discard this node
-          }
-
-          // check if the node is a text node.
-          if (node.nodeType === Node.TEXT_NODE) {
-            if (!inColumnText && !inInfoText) {
-              const flavorTextMatch = node.textContent.match(/\$flavor\$\s*\*\*(.*?)\*\*/s)
-              if (flavorTextMatch) {
-                const strongParagraph = document.createElement('p')
-                strongParagraph.innerHTML = `<strong>${flavorTextMatch[1].trim()}</strong>`
-                notesContainer.appendChild(strongParagraph)
-                inFlavorText = true
-                continue // Skip to the next node
+          attackNames.forEach((name, index) => {
+            if (index > 0) {
+              const previousName = attackNames[index - 1]
+              if (previousName.textContent.trim() === name.textContent.trim()) {
+                name.style.color = "transparent"
               }
             }
+          })
+        });
+      </script>
+      <script>
+        function transformNotesHTML(html) {
+          const notesContainer = document.createElement('div')
+          notesContainer.className = 'notes-container'
 
-            // if we're in flavorText, the next TEXT node will be the start of the columnDiv.
-            // Reset inFlavorText to false, create the div, and set inColumnText to true.
-            if (inFlavorText) {
-              inFlavorText = false
-              const columnDiv = document.createElement('div')
-              columnDiv.style.columnCount = '2'
-              columnDiv.innerHTML = node.textContent.trim()
-              notesContainer.appendChild(columnDiv)
-              inColumnText = true
-              continue // Skip to the next node
+          let inFlavorText = false
+          let inColumnText = false
+          let inInfoText = false
+
+          for (const node of html.childNodes) {
+            if (node.nodeType !== Node.TEXT_NODE && !inColumnText && !inInfoText && !inFlavorText) {
+              continue // Discard this node
             }
 
-            const infoTextMatch = node.textContent.match(/\$info\$(.*)/s)
-            if (infoTextMatch && inColumnText) {
-              inColumnText = false
-              inInfoText = true
-              const infoDiv = document.createElement('div')
-              infoDiv.style.columnCount = '2'
-              infoDiv.className = 'character-info'
-              infoDiv.innerHTML = infoTextMatch[1].trim()
-              notesContainer.appendChild(infoDiv)
-              continue // Skip to the next node
-            }
-          }
-          if (inColumnText) {
+            // check if the node is a text node.
             if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (\S*?)(.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const columnDiv = notesContainer.lastChild
-                columnDiv.innerHTML += `<h3>${innerHTML}</h3>`
+              if (!inColumnText && !inInfoText) {
+                const flavorTextMatch = node.textContent.match(/\$flavor\$\s*\*\*(.*?)\*\*/s)
+                if (flavorTextMatch) {
+                  const strongParagraph = document.createElement('p')
+                  strongParagraph.innerHTML = `<strong>${flavorTextMatch[1].trim()}</strong>`
+                  notesContainer.appendChild(strongParagraph)
+                  inFlavorText = true
+                  continue // Skip to the next node
+                }
+              }
+
+              // if we're in flavorText, the next TEXT node will be the start of the columnDiv.
+              // Reset inFlavorText to false, create the div, and set inColumnText to true.
+              if (inFlavorText) {
+                inFlavorText = false
+                const columnDiv = document.createElement('div')
+                columnDiv.style.columnCount = '2'
+                columnDiv.innerHTML = node.textContent.trim()
+                notesContainer.appendChild(columnDiv)
+                inColumnText = true
+                continue // Skip to the next node
+              }
+
+              const infoTextMatch = node.textContent.match(/\$info\$(.*)/s)
+              if (infoTextMatch && inColumnText) {
+                inColumnText = false
+                inInfoText = true
+                const infoDiv = document.createElement('div')
+                infoDiv.style.columnCount = '2'
+                infoDiv.className = 'character-info'
+                infoDiv.innerHTML = infoTextMatch[1].trim()
+                notesContainer.appendChild(infoDiv)
                 continue // Skip to the next node
               }
             }
-            const columnDiv = notesContainer.lastChild
-            columnDiv.innerHTML += node.outerHTML || node.textContent
-          } else if (inInfoText) {
-            if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const infoDiv = notesContainer.lastChild
-                infoDiv.innerHTML += `<h3>${innerHTML}</h3>`
-                continue // Skip to the next node
+            if (inColumnText) {
+              if (node.nodeType === Node.TEXT_NODE) {
+                const h3TextMatch = node.textContent.match(/(.*?)### (\S*?)(.*)/s)
+                if (h3TextMatch) {
+                  const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
+                  const columnDiv = notesContainer.lastChild
+                  columnDiv.innerHTML += `<h3>${innerHTML}</h3>`
+                  continue // Skip to the next node
+                }
               }
+              const columnDiv = notesContainer.lastChild
+              columnDiv.innerHTML += node.outerHTML || node.textContent
+            } else if (inInfoText) {
+              if (node.nodeType === Node.TEXT_NODE) {
+                const h3TextMatch = node.textContent.match(/(.*?)### (.*)/s)
+                if (h3TextMatch) {
+                  const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
+                  const infoDiv = notesContainer.lastChild
+                  infoDiv.innerHTML += `<h3>${innerHTML}</h3>`
+                  continue // Skip to the next node
+                }
+              }
+              const infoDiv = notesContainer.lastChild
+              infoDiv.innerHTML += node.outerHTML || node.textContent
             }
-            const infoDiv = notesContainer.lastChild
-            infoDiv.innerHTML += node.outerHTML || node.textContent
           }
+
+          return notesContainer
         }
 
-        return notesContainer
-      }
+        document.addEventListener("DOMContentLoaded", () => {
+          const notesContainer = document.querySelector(".notes-container")
+          const transformedHTML = transformNotesHTML(notesContainer)
+          notesContainer.innerHTML = transformedHTML.innerHTML
+        });
+      </script>
+      <script>
+        function collapseMeleeAttacks() {
+          const meleeAttackData = document.getElementById('melee-attack-data')
+          const attackDivs = meleeAttackData.querySelectorAll('.melee-attack')
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const notesContainer = document.querySelector(".notes-container")
-        const transformedHTML = transformNotesHTML(notesContainer)
-        notesContainer.innerHTML = transformedHTML.innerHTML
-      });
-    </script>
+          // Step 1 & 2: Read melee-attack divs and create objects
+          const attackObjects = []
 
+          attackDivs.forEach(attackDiv => {
+            const name = attackDiv.querySelector('.name').textContent.trim()
+            const level = attackDiv.querySelector('.level').textContent.trim()
+            const notes = attackDiv.querySelector('.notes').textContent.trim()
+            const parry = attackDiv.querySelector('.parry').textContent.trim()
+            const damage = attackDiv.querySelector('.damage').textContent.trim()
+            const reach = attackDiv.querySelector('.reach').textContent.trim()
+            const usage = attackDiv.querySelector('.usage').textContent.trim()
+
+            attackObjects.push({
+              name,
+              level,
+              notes,
+              parry,
+              damage: [
+                {
+                  damage,
+                  reach,
+                  usage
+                }
+              ]
+            })
+          })
+
+          // Step 3: Combine attacks with same name, level, and notes
+          const collapsedAttacks = []
+
+          attackObjects.forEach(attack => {
+            const existing = collapsedAttacks.find(existing =>
+              existing.name === attack.name &&
+              existing.level === attack.level &&
+              existing.notes === attack.notes
+            )
+
+            if (existing) {
+              // Combine damage arrays
+              existing.damage.push(...attack.damage)
+            } else {
+              // Add new attack
+              collapsedAttacks.push(attack)
+            }
+          })
+
+          // Create a UL element, and for each collapsed attack, add one LI element.
+          const ul = document.createElement('ul')
+          collapsedAttacks.forEach(attack => {
+            const li = document.createElement('li')
+            li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
+              attack.damage.map(d => `${d.damage} Reach ${d.reach} (${d.usage})`).join(' <i>or</i> ') +
+              (attack.notes ? ` ${attack.notes}` : '')
+            ul.appendChild(li)
+          })
+
+          return ul
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const transformedHTML = collapseMeleeAttacks()
+          // insert the transformed HTML into the #nb-melee-attack div
+          const meleeAttackContainer = document.querySelector('#nb-attacks .nb-melee-attack')
+          if (meleeAttackContainer) {
+            meleeAttackContainer.innerHTML = '' // Clear existing content
+            meleeAttackContainer.appendChild(transformedHTML) // Append the new UL
+          }
+        });
+      </script>
   </body>
 
 </html>
