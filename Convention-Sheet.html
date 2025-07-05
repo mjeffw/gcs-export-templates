@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!--
+***** BEGIN LICENSE BLOCK *****
+Copyright (c) 1998-2021 by Richard A. Wilkes. All rights reserved.
+
+This Source Code Form is subject to the terms of the Mozilla Public
+License, version 2.0. If a copy of the MPL was not distributed with
+this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+This Source Code Form is "Incompatible With Secondary Licenses", as
+defined by the Mozilla Public License, version 2.0.
+***** END LICENSE BLOCK *****
+-->
+
+  <head>
+    <meta charset="utf-8" />
+    <title>@NAME – @TITLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght&#64;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif:wght&#64;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Antic+Slab&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --standardSpacing: 8px;
+        --backgroundColor: white;
+        --headerColor: rgb(113, 26, 22);
+        --h3color: rgb(113, 26, 22);
+        --colorSecondaryLabel: black;
+        --borderRadius: 3px;
+        --textFont: "Optima", serif;
+        --labelFont: "Optima", serif;
+        --fontSizeText: 13px;
+        --fontSizeName: 125%;
+        --fontSizePrimary: 120%;
+        --fontSizeBig: 110%;
+        --fontSizeSmall: 80%;
+        --lightBackgroundColor: rgb(237 237 223);
+        --gapSize: 0.5rem;
+      }
+
+      .bestiary-card {
+        background: var(--backgroundColor);
+        font-family: var(--textFont);
+        font-size: var(--fontSizeText);
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .bestiary-card #nb-top {
+        display: grid;
+        grid-template-columns: 6fr min-content;
+        gap: var(--gapSize);
+      }
+
+      .bestiary-card #header {
+        display: grid;
+        grid-template-columns: 50px 6fr 80px;
+        grid-template-rows: 30px 0fr min-content;
+        align-items: center;
+        margin: var(--standardSpacing);
+      }
+
+      .bestiary-card h1 {
+        border: none;
+        margin: 0;
+        color: var(--headerColor);
+        font-size: var(--fontSizeName);
+        font-family: var(--labelFont);
+        font-variant: small-caps;
+        text-align: center;
+      }
+
+      .bestiary-card #sm-container {
+        display: inline-flex;
+        grid-row: span 4;
+        font-family: var(--labelFont);
+      }
+
+      .bestiary-card #class-container {
+        display: inline-flex;
+        font-family: var(--labelFont);
+        flex-flow: row nowrap;
+        justify-content: center;
+        font-size: var(--fontSizeBig);
+        width: 100%;
+      }
+
+      .bestiary-card h2 {
+        width: 100%;
+        text-align: left;
+        font-size: var(--fontSizePrimary);
+        font-family: var(--fontLabel);
+        border-bottom: 2px solid var(--headerColor);
+        color: var(--headerColor);
+        margin: var(--gapSize) 0 0 0;
+        font-variant: small-caps;
+      }
+
+      .bestiary-card #nb-defenses h3,
+      .bestiary-card #nb-control-thresholds h3 {
+        color: var(--headerColor);
+        border-color: var(--headerColor);
+      }
+
+      .bestiary-card h3 {
+        text-align: center;
+        font-weight: bold;
+        font-size: var(--fontSizeBig);
+        font-family: var(--labelFont);
+        border-bottom: 2px solid var(--headerColor);
+        margin: 0;
+        color: var(--h3color);
+        font-variant: small-caps;
+      }
+
+      .bestiary-card .nb-value {
+        font-family: Roboto, sans-serif;
+        text-align: left;
+      }
+
+      .bestiary-card #nb-attributes {
+        display: grid;
+        grid-template-columns: 150px 4fr 1.5em;
+        gap: var(--gapSize);
+      }
+
+      .bestiary-card #nb-attributes-detail {
+        display: grid;
+        grid-template-columns: min-content 1fr min-content 1fr min-content 1fr min-content 1fr;
+        grid-template-rows: auto auto auto auto;
+        gap: 0.15em;
+        font-size: var(--fontSizePrimary);
+        min-width: 3em;
+        align-items: baseline;
+        font-weight: bold;
+      }
+
+      .bestiary-card label {
+        padding-top: 0.2em;
+        font-variant: small-caps;
+        color: var(--h3color);
+        text-align: right;
+        font-family: var(--labelFont);
+      }
+
+      .bestiary-card #nb-attributes-detail .nb-primary {
+        font-size: var(--fontSizePrimary);
+        min-width: 1.3em;
+      }
+
+      .bestiary-card #nb-attributes-detail label.nb-primary {
+        color: var(--headerColor);
+        text-align: right;
+      }
+
+      .bestiary-card #nb-derived-attrs label {
+        padding-right: var(--gapSize);
+        padding-top: 0;
+        font-variant: small-caps;
+        font-size: var(--fontSizeText);
+        font-weight: bold;
+        color: var(--colorSecondaryLabel);
+        text-align: left;
+      }
+
+      .bestiary-card #nb-derived-attrs {
+        grid-row: span 3;
+        width: 100%;
+        display: inline-grid;
+        grid-template-columns: auto auto auto auto;
+        color: var(--color-text-dark-primary);
+        white-space: nowrap;
+        height: auto;
+        align-self: end;
+        background: rgb(237 237 223);
+        border-radius: var(--borderRadius);
+        padding: 0.25em;
+      }
+
+      .bestiary-card #nb-derived-attrs>* {
+        padding-right: var(--gapSize);
+      }
+
+      .bestiary-card .nb-derived-attr {
+        display: inline-flex;
+        flex-flow: row nowrap;
+        font-size: var(--fontSizeBig);
+        align-items: baseline;
+      }
+
+      .bestiary-card #move {
+        display: flex;
+        flex-flow: column nowrap;
+      }
+
+      .bestiary-card .nb-penalty {
+        background: inherit !important;
+      }
+
+      .bestiary-card .nb-penalty.bulk:before {
+        content: var(--labelBulk);
+      }
+
+      .bestiary-card .nb-penalty.acc:before {
+        content: var(--labelAcc);
+      }
+
+      .bestiary-card #nb-attacks .nb-attack .nb-name,
+      .bestiary-card #nb-abilities .nb-ability .nb-name,
+      .bestiary-card #nb-traits .trait,
+      .bestiary-card #nb-skills .skill,
+      .bestiary-card #nb-powers .trait,
+      .bestiary-card #nb-spells .trait {
+        font-weight: 600;
+        line-height: 0;
+        color: var(--colorSecondaryLabel);
+      }
+
+      .bestiary-card #nb-traits .trait.disadvantage,
+      .bestiary-card #nb-powers .trait.disadvantage {
+        color: var(--headerColor);
+      }
+
+      .bestiary-card #nb-attacks .nb-attack .nb-level,
+      .bestiary-card #nb-abilities .nb-ability .nb-level {
+        font-weight: bold;
+      }
+
+      .bestiary-card #nb-traits-skills {
+        display: flex;
+        flex-flow: row nowrap;
+        column-gap: 1em;
+        margin: 0;
+      }
+
+      .bestiary-card #nb-traits {
+        flex: 1;
+      }
+
+      .bestiary-card #nb-skills {
+        flex: 0 1 auto;
+        max-width: 50%;
+      }
+
+      .bestiary-card #nb-spells ul {
+        column-count: 2;
+        column-gap: 1em;
+      }
+
+      .bestiary-card #nb-defenses .nb-defense,
+      .bestiary-card .nb-control-threshold-detail .nb-defense,
+      .bestiary-card #move .nb-move {
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: min-content min-content;
+        justify-items: center;
+        border-radius: var(--borderRadius);
+        min-width: 1em;
+        color: var(--color-text-dark-primary);
+      }
+
+      .nb-defense-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        color: black;
+      }
+
+      #nb-footer .nb-label {
+        color: var(--headerColor);
+      }
+
+      .bestiary-card #move .nb-move {
+        justify-content: right;
+      }
+
+      .bestiary-card #nb-defenses-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        justify-items: center;
+      }
+
+      .bestiary-card #nb-defense {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: min-content min-content;
+      }
+
+
+      .bestiary-card #nb-defense {
+        grid-column: span 8;
+        display: grid;
+        grid-template-rows: min-content 1fr min-content;
+        color: var(--headerColor);
+      }
+
+      .bestiary-card #nb-defense .nb-label {
+        color: var(--h3color);
+        font-size: var(--fontSizeSmall);
+        font-variant: small-caps;
+        font-weight: bold;
+      }
+
+      #nb-traits-skills .column {
+        /* column-count: 2; */
+        line-height: 1rem;
+      }
+
+      #nb-traits-skills .column>div {
+        padding: 0.25em 0;
+      }
+
+      #nb-spells:not(#nb-spells:has(.power)) {
+        display: none;
+      }
+
+
+      #nb-spells .power>.note {
+        text-indent: 1em;
+      }
+
+
+      .nb-ability:has(.nb-desc:empty) {
+        display: none;
+      }
+
+      .desc:has(.notes:empty) {
+        display: none;
+      }
+
+      .nb-ability,
+      .power {
+        margin-bottom: var(--gapSize);
+      }
+
+      .bestiary-card #nb-modifiers {
+        display: grid;
+        grid-template-columns: 6fr 6fr;
+        grid-template-rows: min-content 1fr;
+        column-gap: 1em;
+        margin: 0;
+      }
+
+      #nb-modifiers .modifier {
+        display: grid;
+        grid-template-columns: min-content 1fr;
+        column-gap: var(--gapSize);
+        padding-left: var(--gapSize);
+      }
+
+      #nb-modifiers .modifier .value {
+        text-align: right;
+      }
+
+      #nb-modifiers:not(:has(.value)) {
+        display: none;
+      }
+
+      #nb-attacks {
+        padding-left: var(--gapSize);
+      }
+
+      #nb-abilities {
+        padding-left: var(--gapSize);
+      }
+
+      .nb-melee-attack {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+        align-self: start;
+        row-gap: 0.25em;
+      }
+
+      .nb-ranged-attack .nb-name,
+      .nb-melee-attack .nb-name {
+        height: 100%;
+        display: inline-flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        padding-left: 0.25em;
+        font-weight: bold;
+      }
+
+      .nb-melee-attack>div,
+      .nb-ranged-attack>div {
+        padding-left: var(--gapSize);
+        height: 100%;
+        display: inline-flex;
+        flex-flow: column wrap;
+        justify-content: center;
+      }
+
+      .nb-ranged-attack>div:nth-child(16n-15),
+      .nb-ranged-attack>div:nth-child(16n-14),
+      .nb-ranged-attack>div:nth-child(16n-13),
+      .nb-ranged-attack>div:nth-child(16n-12),
+      .nb-ranged-attack>div:nth-child(16n-11),
+      .nb-ranged-attack>div:nth-child(16n-10),
+      .nb-ranged-attack>div:nth-child(16n-9),
+      .nb-ranged-attack>div:nth-child(16n-8),
+      .nb-melee-attack>div:nth-child(10n-9),
+      .nb-melee-attack>div:nth-child(10n-8),
+      .nb-melee-attack>div:nth-child(10n-7),
+      .nb-melee-attack>div:nth-child(10n-6),
+      .nb-melee-attack>div:nth-child(10n-5) {
+        background-color: transparent;
+      }
+
+      .nb-ranged-attack>div:nth-child(16n-7),
+      .nb-ranged-attack>div:nth-child(16n-6),
+      .nb-ranged-attack>div:nth-child(16n-5),
+      .nb-ranged-attack>div:nth-child(16n-4),
+      .nb-ranged-attack>div:nth-child(16n-3),
+      .nb-ranged-attack>div:nth-child(16n-2),
+      .nb-ranged-attack>div:nth-child(16n-1),
+      .nb-ranged-attack>div:nth-child(16n),
+      .nb-melee-attack>div:nth-child(10n-4),
+      .nb-melee-attack>div:nth-child(10n-3),
+      .nb-melee-attack>div:nth-child(10n-2),
+      .nb-melee-attack>div:nth-child(10n-1),
+      .nb-melee-attack>div:nth-child(10n) {
+        background-color: var(--lightBackgroundColor);
+      }
+
+      .nb-melee-attack>div:nth-child(1),
+      .nb-melee-attack>div:nth-child(2),
+      .nb-melee-attack>div:nth-child(3),
+      .nb-melee-attack>div:nth-child(4),
+      .nb-melee-attack>div:nth-child(5),
+      .nb-ranged-attack>div:nth-child(1),
+      .nb-ranged-attack>div:nth-child(2),
+      .nb-ranged-attack>div:nth-child(3),
+      .nb-ranged-attack>div:nth-child(4),
+      .nb-ranged-attack>div:nth-child(5),
+      .nb-ranged-attack>div:nth-child(6),
+      .nb-ranged-attack>div:nth-child(7),
+      .nb-ranged-attack>div:nth-child(8) {
+        color: black;
+        background-color: rgba(113, 26, 32, 0.25);
+        font-weight: bold;
+      }
+
+      #nb-traits>.column>div:nth-child(odd),
+      #nb-skills>.column>div:nth-child(odd),
+      .power:nth-child(odd) {
+        background-color: rgb(237 237 223);
+      }
+
+      #nb-attacks {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: var(--gapSize);
+        margin-top: var(--gapSize);
+      }
+
+      .nb-ranged-attack {
+        display: grid;
+        grid-template-columns: repeat(8, auto);
+        align-items: center;
+        align-self: start;
+        row-gap: 0.25em;
+      }
+
+      .nb-name .notes {
+        font-size: var(--fontSizeSmall);
+        font-weight: normal;
+      }
+
+      #nb-equipment {
+        display: flex;
+        flex-flow: column wrap;
+        height: 10em;
+        max-width: 33%;
+        margin-left: var(--gapSize);
+      }
+
+      #nb-equipment>div {
+        margin-left: 1em;
+        text-indent: -1em;
+        margin-right: 0.25em;
+        padding-bottom: 0.25em;
+      }
+
+      .bestiary-card #nb-attributes .portrait-image {
+        width: 100%;
+        height: auto;
+        max-width: 190px;
+        border-radius: var(--borderRadius);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .character-info {
+        background-color: var(--lightBackgroundColor);
+        padding: var(--gapSize);
+        border-radius: var(--borderRadius);
+        margin: var(--gapSize);
+        border: 1px solid var(--headerColor);
+      }
+
+      #nb-traits .traits>div,
+      #nb-skills .skills>div {
+        text-indent: calc(-1 * var(--gapSize));
+        padding-left: var(--gapSize);
+        font-size: var(--fontSizeSmall);
+      }
+
+      #nb-traits .traits>div .trait,
+      #nb-skills .skills>div .skill {
+        font-weight: bold;
+        font-size: var(--fontSizeText);
+      }
+
+      #nb-skills .skills>div {
+        /* white-space: nowrap; */
+      }
+
+      .nb-ranged-attack[data-count="0"],
+      #nb-powers[data-count="0"] {
+        display: none;
+      }
+
+      #er-container[data-name]:not([data-name="mage"]) {
+        display: none;
+      }
+
+      #er-label[data-name]:not([data-name="mage"]) {
+        display: none;
+      }
+
+      .with-button {
+        border: 1px solid black;
+        width: 50%;
+        height: 1.5rem;
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="bestiary-card">
+      <div id="nb-top">
+        <div id="header">
+          <div></div>
+          <h1>Name: <span style="min-width: 20em; text-decoration: underline;">@NAME</span>
+          </h1>
+          <div></div>
+
+          <div></div>
+          <div id="class-container">
+            <div id="class" class="nb-value">@TITLE</div>
+          </div>
+          <div></div>
+
+        </div>
+        <div id="nb-derived-attrs">
+          <h3>Roll</h3>
+          <h3>Location</h3>
+          <h3>Penalty</h3>
+          <h3>DR</h3>
+          @HIT_LOCATION_LOOP_START
+          <div style="text-align: right;">@ROLL</div>
+          <label>@WHERE</label>
+          <div class="nb-value" style="text-align: center;">@PENALTY</div>
+          <div class="nb-value" style="text-align: center;">@DR</div>
+          @HIT_LOCATION_LOOP_END
+        </div>
+
+        <div id="nb-attributes">
+          <div>
+            <img src="@NAME.png" alt="Portrait" class="portrait-image">
+          </div>
+          <div id="nb-attributes-detail">
+            <label class="nb-primary" for="st">ST</label>
+            <div id="st" class="nb-value nb-primary rollable">@ST</div>
+            <label class="nb-primary" for="dx">DX</label>
+            <div id="dx" class="nb-value nb-primary rollable">@DX</div>
+            <label class="nb-primary" for="iq">IQ</label>
+            <div id="iq" class="nb-value nb-primary rollable">@IQ</div>
+            <label class="nb-primary" for="ht">HT</label>
+            <div id="ht" class="nb-value nb-primary rollable">@HT</div>
+
+            <label for="hp">HP</label>
+            <div class="nb-value">@BASIC_HP</div>
+            <label for="will">Will</label>
+            <div id="will" class="nb-value rollable">@WILL</div>
+            <label for="per">Per</label>
+            <div id="per" class="nb-value rollable">@PERCEPTION</div>
+            <label for="fp">FP</label>
+            <div class="nb-value">@BASIC_FP</div>
+
+            <div id="hp-container" class="with-button"></div>
+            <label>Speed</label>
+            <div class="nb-value">@BASIC_SPEED</div>
+            <label>Fright</label>
+            <div class="nb-value">@FRIGHT_CHECK</div>
+            <div id="fp-container" class="with-button"></div>
+
+            <label id="er-label" for="er-container" style="grid-row: 5; grid-column: 7 / 9; text-align: left;"
+              data-name="@PLAYER">Energy Reserve <span style="color: black"> 9</span></label>
+            <div id="er-container" class="with-button" style="grid-row: 6; grid-column: 7 / 9; height: 1.5rem;"
+              data-name="@PLAYER"></div>
+
+            <div id="nb-defense">
+              <h3>Defenses</h3>
+              <div id="nb-defenses-detail">
+                <div class="nb-defense">
+                  <div class="nb-label">Parry</div>
+                  <div class="nb-defense-container">
+                    <div class="nb-value rollable" data-path="parry">
+                      @BEST_CURRENT_PARRY
+                    </div>
+                  </div>
+                </div>
+                <div class="nb-defense">
+                  <div class="nb-label">Dodge</div>
+                  <div class="nb-defense-container">
+                    <div class="nb-value rollable" data-path="dodge">
+                      @CURRENT_DODGE
+                    </div>
+                  </div>
+                </div>
+                <div class="nb-defense">
+                  <div class="nb-label">Block</div>
+                  <div class="nb-defense-container">
+                    <div class="nb-value rollable" data-path="block">
+                      @BEST_CURRENT_BLOCK
+                    </div>
+                  </div>
+                </div>
+                <div class="nb-defense">
+                  <div class="nb-label">DR</div>
+                  <div class="nb-defense-container">
+                    <div class="nb-value">@GENERAL_DR</div>
+                  </div>
+                </div>
+                <div class="nb-defense">
+                  <div class="nb-label">Move</div>
+                  <div class="nb-defense-container">
+                    <div class="nb-value">@CURRENT_MOVE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div></div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Attacks</h2>
+        <div id="nb-attacks">
+          <div class="nb-melee-attack">
+            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black; height: unset;">MELEE
+              WEAPON
+            </div>
+            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Usage</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Damage</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Reach</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;"></div>
+
+            @MELEE_LOOP_START
+            <div class="nb-name" style="white-space: nowrap;">@DESCRIPTION_PRIMARY-@LEVEL</div>
+            <div>@USAGE</div>
+            <div>@DAMAGE</div>
+            <div>@REACH</div>
+            <div>@DESCRIPTION_NOTES</div>
+            @MELEE_LOOP_END
+          </div>
+
+          <div class="nb-ranged-attack" data-count="@RANGED_LOOP_COUNT">
+            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black;">RANGED WEAPON</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Damage</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Range</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Acc</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">RoF</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Shots</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Bulk</div>
+            <div style="font-weight: bold; border-bottom: 1px solid black;">Rcl</div>
+
+            @RANGED_LOOP_START
+            <div class="nb-name">@DESCRIPTION_PRIMARY-@LEVEL<div class="notes">@DESCRIPTION_NOTES</div>
+            </div>
+            <div>@DAMAGE</div>
+            <div>@RANGE</div>
+            <div>@ACCURACY</div>
+            <div>@ROF</div>
+            <div>@SHOTS</div>
+            <div>@BULK</div>
+            <div>@RECOIL</div>
+            @RANGED_LOOP_END
+          </div>
+        </div>
+      </div>
+
+      <div id="nb-traits-skills">
+        <div id="nb-traits">
+          <h2>Traits</h2>
+          <div class="column traits">
+            @EXCLUDE_TAGS_POWER
+            @ADVANTAGES_ALL_LOOP_START
+            <div><span class="trait advantage">@DESCRIPTION_PRIMARY</span> @DESCRIPTION_NOTES</div>
+            @ADVANTAGES_ALL_LOOP_END
+
+            @EXCLUDE_TAGS_POWER
+            @DISADVANTAGES_ALL_LOOP_START
+            <div><span class="trait disadvantage">@DESCRIPTION_PRIMARY</span> @DESCRIPTION_NOTES</div>
+            @DISADVANTAGES_ALL_LOOP_END
+          </div>
+        </div>
+        <div id="nb-skills">
+          <h2>Skills</h2>
+          <div class="column skills">
+            @SKILLS_LOOP_START
+            <div><span class="skill">@DESCRIPTION_PRIMARY-@SL</span> @DESCRIPTION_NOTES</div>
+            @SKILLS_LOOP_END
+          </div>
+        </div>
+      </div>
+
+      @ONLY_TAGS_POWER
+      <div id="nb-powers" data-count="@ADVANTAGES_LOOP_COUNT">
+        <h2>Powers</h2>
+        <div class="content">
+          @ONLY_TAGS_POWER
+          @ADVANTAGES_ALL_LOOP_START
+          <div class="power"><span class="trait advantage">@DESCRIPTION_PRIMARY</span>. @DESCRIPTION_NOTES</div>
+          @ADVANTAGES_ALL_LOOP_END
+
+          @ONLY_TAGS_POWER
+          @DISADVANTAGES_ALL_LOOP_START
+          <div class="power"><span class="trait disadvantage">@DESCRIPTION_PRIMARY</span>. @DESCRIPTION_NOTES</div>
+          @DISADVANTAGES_ALL_LOOP_END
+        </div>
+      </div>
+
+
+      <div id="nb-modifiers">
+        <div id="nb-reaction-mods">
+          <h2>Reaction Modifiers</h2>
+          <div class="modifier">
+            @REACTION_LOOP_START
+            <div class="value">@MODIFIER</div>
+            <div class="situation">@SITUATION</div>
+            @REACTION_LOOP_END
+          </div>
+        </div>
+        <div id="nb-conditional-mods">
+          <h2>Conditional Modifiers</h2>
+          <div class="modifier">
+            @CONDITIONAL_MODIFIERS_LOOP_START
+            <div class="value">@MODIFIER</div>
+            <div class="situation">@SITUATION</div>
+            @CONDITIONAL_MODIFIERS_LOOP_END
+          </div>
+        </div>
+      </div>
+
+      <!-- <h2>Equipment</h2>
+      <div id="nb-equipment">
+        @EQUIPMENT_LOOP_START
+        <div>(@QTY)&nbsp;<strong>@DESCRIPTION_PRIMARY</strong><span class="desc">, <span
+              class="notes">@DESCRIPTION_NOTES</span></span></div>
+        @EQUIPMENT_LOOP_END
+      </div> -->
+
+      <div id="nb-spells" style="column-count: 2; break-inside: avoid-page;">
+        <h2 style="column-span: all;">Spells</h2>
+        @SPELLS_LOOP_START
+        <div class="power"><span class="trait">@DESCRIPTION_PRIMARY-@SL (@CLASS)</span>. <div class="note">
+            @DESCRIPTION_MODIFIER_NOTES</div>
+          <div class="note">Cost: @MANA_CAST (@MANA_MAINTAIN); Time: @TIME_CAST; Duration: @DURATION. (@REF)</div>
+        </div>
+        @SPELLS_LOOP_END
+      </div>
+
+      <h2>Notes</h2>
+      <div id="nb-abilities">
+        @ADVANTAGES_LOOP_START
+        <div class="nb-ability">
+          <span class="nb-name">@DESCRIPTION_PRIMARY: </span><span class="nb-desc">@DESCRIPTION_USER</span>
+        </div>
+        @ADVANTAGES_LOOP_END
+      </div>
+      <div class="notes-container">
+        @NOTES
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const attackNames = document.querySelectorAll("#nb-attacks .nb-name")
+
+        attackNames.forEach((name, index) => {
+          if (index > 0) {
+            const previousName = attackNames[index - 1]
+            if (previousName.textContent.trim() === name.textContent.trim()) {
+              name.style.color = "transparent"
+            }
+          }
+        })
+      });
+    </script>
+    <script>
+      function transformNotesHTML(html) {
+        const notesContainer = document.createElement('div')
+        notesContainer.className = 'notes-container'
+
+        let inFlavorText = false
+        let inColumnText = false
+        let inInfoText = false
+
+        for (const node of html.childNodes) {
+          if (node.nodeType !== Node.TEXT_NODE && !inColumnText && !inInfoText && !inFlavorText) {
+            continue // Discard this node
+          }
+
+          // check if the node is a text node.
+          if (node.nodeType === Node.TEXT_NODE) {
+            if (!inColumnText && !inInfoText) {
+              const flavorTextMatch = node.textContent.match(/\$flavor\$\s*\*\*(.*?)\*\*/s)
+              if (flavorTextMatch) {
+                const strongParagraph = document.createElement('p')
+                strongParagraph.innerHTML = `<strong>${flavorTextMatch[1].trim()}</strong>`
+                notesContainer.appendChild(strongParagraph)
+                inFlavorText = true
+                continue // Skip to the next node
+              }
+            }
+
+            // if we're in flavorText, the next TEXT node will be the start of the columnDiv.
+            // Reset inFlavorText to false, create the div, and set inColumnText to true.
+            if (inFlavorText) {
+              inFlavorText = false
+              const columnDiv = document.createElement('div')
+              columnDiv.style.columnCount = '2'
+              columnDiv.innerHTML = node.textContent.trim()
+              notesContainer.appendChild(columnDiv)
+              inColumnText = true
+              continue // Skip to the next node
+            }
+
+            const infoTextMatch = node.textContent.match(/\$info\$(.*)/s)
+            if (infoTextMatch && inColumnText) {
+              inColumnText = false
+              inInfoText = true
+              const infoDiv = document.createElement('div')
+              infoDiv.style.columnCount = '2'
+              infoDiv.className = 'character-info'
+              infoDiv.innerHTML = infoTextMatch[1].trim()
+              notesContainer.appendChild(infoDiv)
+              continue // Skip to the next node
+            }
+          }
+          if (inColumnText) {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const h3TextMatch = node.textContent.match(/(.*?)### (\S*?)(.*)/s)
+              if (h3TextMatch) {
+                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
+                const columnDiv = notesContainer.lastChild
+                columnDiv.innerHTML += `<h3>${innerHTML}</h3>`
+                continue // Skip to the next node
+              }
+            }
+            const columnDiv = notesContainer.lastChild
+            columnDiv.innerHTML += node.outerHTML || node.textContent
+          } else if (inInfoText) {
+            if (node.nodeType === Node.TEXT_NODE) {
+              const h3TextMatch = node.textContent.match(/(.*?)### (.*)/s)
+              if (h3TextMatch) {
+                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
+                const infoDiv = notesContainer.lastChild
+                infoDiv.innerHTML += `<h3>${innerHTML}</h3>`
+                continue // Skip to the next node
+              }
+            }
+            const infoDiv = notesContainer.lastChild
+            infoDiv.innerHTML += node.outerHTML || node.textContent
+          }
+        }
+
+        return notesContainer
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const notesContainer = document.querySelector(".notes-container")
+        const transformedHTML = transformNotesHTML(notesContainer)
+        notesContainer.innerHTML = transformedHTML.innerHTML
+      });
+    </script>
+
+  </body>
+
+</html>
