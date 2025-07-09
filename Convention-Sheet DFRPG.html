@@ -47,8 +47,8 @@ defined by the Mozilla Public License, version 2.0.
         background: var(--backgroundColor);
         font-family: var(--textFont);
         font-size: var(--fontSizeText);
-        padding-left: 0;
-        padding-right: 0;
+        padding: var(--standardSpacing);
+        border: 5px solid var(--headerColor);
       }
 
       .role-indicator {
@@ -529,8 +529,7 @@ defined by the Mozilla Public License, version 2.0.
       #nb-equipment {
         display: flex;
         flex-flow: column wrap;
-        height: 10em;
-        max-width: 33%;
+        max-height: 12em;
         margin-left: var(--gapSize);
       }
 
@@ -796,14 +795,30 @@ defined by the Mozilla Public License, version 2.0.
       </div>
 
       <h2>Equipment</h2>
-      <h3>Combat Load (@CARRIED_WEIGHT lb., @CARRIED_VALUE)</h3>
-      <div id="nb-equipment">
-        @EQUIPMENT_LOOP_START
-        <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
-            class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>
-          <span class="desc">, <span class="notes">@DESCRIPTION_NOTES</span></span>[$@COST_SUMMARY, @WEIGHT_SUMMARY lb.]
+      <div style="display: flex; flex-flow: row nowrap; row-gap: var(--gapSize);">
+        <div>
+          <h3>Combat Load (@CARRIED_WEIGHT lb., @CARRIED_VALUE)</h3>
+          <div id="nb-equipment">
+            @EQUIPMENT_LOOP_START
+            <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>
+              <span class="desc">, <span class="notes">@DESCRIPTION_NOTES</span></span>[$@COST_SUMMARY, @WEIGHT_SUMMARY
+              lb.]
+            </div>
+            @EQUIPMENT_LOOP_END
+          </div>
         </div>
-        @EQUIPMENT_LOOP_END
+        <div>
+          <h3>Other Equipment (@OTHER_EQUIPMENT_VALUE)</h3>
+          <div id="nb-equipment">
+            @OTHER_EQUIPMENT_LOOP_START
+            <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>, <span
+                class="notes">@DESCRIPTION_NOTES</span> [$@COST_SUMMARY, @WEIGHT_SUMMARY lb.]
+            </div>
+            @OTHER_EQUIPMENT_LOOP_END
+          </div>
+        </div>
       </div>
 
       <div id="nb-spells" style="column-count: 2; break-inside: avoid-page;">
