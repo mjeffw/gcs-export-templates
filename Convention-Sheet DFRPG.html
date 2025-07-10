@@ -15,7 +15,7 @@ defined by the Mozilla Public License, version 2.0.
 
   <head>
     <meta charset="utf-8" />
-    <title>@NAME – @TITLE</title>
+    <title>@NAME – @TITLE - @TOTAL_POINTS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght&#64;400;500&display=swap" rel="stylesheet">
@@ -56,11 +56,11 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       #nb-attacks {
-        display: flow;
-        grid-template-columns: auto auto;
-        column-gap: var(--gapSize);
-        flex-flow: column nowrap;
+        display: flex;
+        flex-direction: column;
+        padding-left: var(--gapSize);
       }
+
 
       #nb-attacks ul {
         padding-left: 0;
@@ -68,7 +68,6 @@ defined by the Mozilla Public License, version 2.0.
         margin-block: 0;
         list-style-type: none;
         line-height: 1rem;
-        /* min-height: calc(1em * 4); */
         column-count: 1;
         column-gap: 1em;
 
@@ -82,6 +81,31 @@ defined by the Mozilla Public License, version 2.0.
       #nb-attacks ul>li {
         line-height: 1rem;
         padding: var(--smallGap) 0;
+        position: relative;
+        padding-left: 1.2em;
+        /* room for custom bullet */
+      }
+
+      #nb-attacks ul>li.melee::before {
+        content: '\F095';
+        /* Unicode for desired symbol */
+        font-family: 'Webdings', sans-serif;
+        /* Webdings font */
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 1rem;
+      }
+
+      #nb-attacks ul>li.ranged::before {
+        content: '\27B6';
+        /* Unicode for desired symbol */
+        font-family: 'Zapf Dingbats', sans-serif;
+        /* Zapf Dingbats font */
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 1rem;
       }
 
       #nb-attacks ul>li:nth-child(odd) {
@@ -178,7 +202,7 @@ defined by the Mozilla Public License, version 2.0.
         display: grid;
         grid-template-columns: min-content 1fr min-content 1fr min-content 1fr min-content 1fr;
         grid-template-rows: auto auto auto auto auto auto;
-        gap: var(--gapSize);
+        gap: var(--smallGap);
         font-size: var(--fontSizePrimary);
         min-width: 3em;
         align-items: baseline;
@@ -423,10 +447,6 @@ defined by the Mozilla Public License, version 2.0.
         display: none;
       }
 
-      #nb-attacks {
-        padding-left: var(--gapSize);
-      }
-
       #nb-abilities {
         padding-left: var(--gapSize);
       }
@@ -614,6 +634,15 @@ defined by the Mozilla Public License, version 2.0.
       .modifier .value:nth-of-type(2n)+.situation {
         background-color: transparent;
       }
+
+      /* Hide extra DR unless it's for Torso */
+      .extra-dr {
+        display: none;
+      }
+
+      .extra-dr[data-where="Torso"] {
+        display: inline;
+      }
     </style>
   </head>
 
@@ -622,7 +651,7 @@ defined by the Mozilla Public License, version 2.0.
       <div id="nb-top">
         <div id="header">
           <div></div>
-          <h1>@NAME <span class="role-indicator">(@TITLE)</span></span></h1>
+          <h1>@NAME <span class="role-indicator">(@TITLE) - Total Points: @TOTAL_POINTS</span></span></h1>
           <div></div>
         </div>
         <div id="nb-derived-attrs">
@@ -690,44 +719,6 @@ defined by the Mozilla Public License, version 2.0.
         <h2>Attacks</h2>
         <div id="nb-attacks">
           <div class="nb-melee-attack">
-            <!-- <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black; height: unset;">MELEE
-              WEAPON
-            </div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Usage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Damage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Reach</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;"></div>
-
-            @MELEE_LOOP_START
-            <div class="nb-name" style="white-space: nowrap;">@DESCRIPTION_PRIMARY-@LEVEL</div>
-            <div>@USAGE</div>
-            <div>@DAMAGE</div>
-            <div>@REACH</div>
-            <div>@DESCRIPTION_NOTES</div>
-            @MELEE_LOOP_END -->
-          </div>
-
-          <div class="nb-ranged-attack" data-count="@RANGED_LOOP_COUNT">
-            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black;">RANGED WEAPON</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Damage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Range</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Acc</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">RoF</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Shots</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Bulk</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Rcl</div>
-
-            @RANGED_LOOP_START
-            <div class="nb-name">@DESCRIPTION_PRIMARY-@LEVEL<div class="notes">@DESCRIPTION_NOTES</div>
-            </div>
-            <div>@DAMAGE</div>
-            <div>@RANGE</div>
-            <div>@ACCURACY</div>
-            <div>@ROF</div>
-            <div>@SHOTS</div>
-            <div>@BULK</div>
-            <div>@RECOIL</div>
-            @RANGED_LOOP_END
           </div>
         </div>
       </div>
@@ -802,8 +793,7 @@ defined by the Mozilla Public License, version 2.0.
             @EQUIPMENT_LOOP_START
             <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
                 class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>
-              <span class="desc">, <span class="notes">@DESCRIPTION_NOTES</span></span>[$@COST_SUMMARY, @WEIGHT_SUMMARY
-              lb.]
+              <span class="desc">, <span class="notes">@DESCRIPTION_NOTES</span></span>[$@COST_SUMMARY, @WEIGHT_SUMMARY]
             </div>
             @EQUIPMENT_LOOP_END
           </div>
@@ -814,7 +804,7 @@ defined by the Mozilla Public License, version 2.0.
             @OTHER_EQUIPMENT_LOOP_START
             <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
                 class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>, <span
-                class="notes">@DESCRIPTION_NOTES</span> [$@COST_SUMMARY, @WEIGHT_SUMMARY lb.]
+                class="notes">@DESCRIPTION_NOTES</span> [$@COST_SUMMARY, @WEIGHT_SUMMARY]
             </div>
             @OTHER_EQUIPMENT_LOOP_END
           </div>
@@ -839,7 +829,7 @@ defined by the Mozilla Public License, version 2.0.
             <div class="nb-label">Parry</div>
             <div class="nb-defense-container">
               <div class="nb-value rollable" data-path="parry">
-                @BEST_CURRENT_PARRY
+                @BEST_CURRENT_PARRY<span class="db-value"></span>
               </div>
             </div>
           </div>
@@ -847,7 +837,7 @@ defined by the Mozilla Public License, version 2.0.
             <div class="nb-label">Dodge</div>
             <div class="nb-defense-container">
               <div class="nb-value rollable" data-path="dodge">
-                @CURRENT_DODGE
+                @CURRENT_DODGE<span class="db-value"></span>
               </div>
             </div>
           </div>
@@ -855,14 +845,18 @@ defined by the Mozilla Public License, version 2.0.
             <div class="nb-label">Block</div>
             <div class="nb-defense-container">
               <div class="nb-value rollable" data-path="block">
-                @BEST_CURRENT_BLOCK
+                @BEST_CURRENT_BLOCK<span class="db-value"></span>
               </div>
             </div>
           </div>
           <div class="nb-defense">
             <div class="nb-label">DR</div>
             <div class="nb-defense-container">
-              <div class="nb-value">@GENERAL_DR</div>
+              <div class="nb-value">
+                @HIT_LOCATION_LOOP_START
+                <span class="extra-dr" data-where="@WHERE">@DR</span>
+                @HIT_LOCATION_LOOP_END
+              </div>
             </div>
           </div>
           <div class="nb-defense">
@@ -919,9 +913,10 @@ defined by the Mozilla Public License, version 2.0.
 
       <h2>Notes</h2>
       <div class="notes-container">
-
+        @NOTES
       </div>
     </div>
+
     <div id="melee-attack-data" style="display: none;">
       @MELEE_LOOP_START
       <div class="melee-attack">
@@ -932,8 +927,8 @@ defined by the Mozilla Public License, version 2.0.
         <div class="damage">@DAMAGE</div>
         <div class="reach">@REACH</div>
         <div class="usage">@USAGE</div>
-        @MELEE_LOOP_END
       </div>
+      @MELEE_LOOP_END
     </div>
     <div id="ranged-attack-data" style="display: none;">
       @RANGED_LOOP_START
@@ -949,270 +944,238 @@ defined by the Mozilla Public License, version 2.0.
         <div class="rcl">@RECOIL</div>
         <div class="damage">@DAMAGE</div>
         <div class="usage">@USAGE</div>
-        @RANGED_LOOP_END
       </div>
+      @RANGED_LOOP_END
     </div>
+    <div id="carried-equipment-data" style="display: none;">
+      @EQUIPMENT_LOOP_START
+      <div class="carried-equipment">
+        <div class="name">@DESCRIPTION_PRIMARY</div>
+        <div class="qty">@QTY</div>
+        <div class="weight">@WEIGHT_SUMMARY</div>
+        <div class="cost">@COST_SUMMARY</div>
+        <div class="notes">@DESCRIPTION_NOTES</div>
+      </div>
+      @EQUIPMENT_LOOP_END
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const attackNames = document.querySelectorAll("#nb-attacks .nb-name")
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const attackNames = document.querySelectorAll("#nb-attacks .nb-name")
 
-        attackNames.forEach((name, index) => {
-          if (index > 0) {
-            const previousName = attackNames[index - 1]
-            if (previousName.textContent.trim() === name.textContent.trim()) {
-              name.style.color = "transparent"
-            }
-          }
-        })
-      });
-    </script>
-    <script>
-      function transformNotesHTML(html) {
-        const notesContainer = document.createElement('div')
-        notesContainer.className = 'notes-container'
-
-        let inFlavorText = false
-        let inColumnText = false
-        let inInfoText = false
-
-        for (const node of html.childNodes) {
-          if (node.nodeType !== Node.TEXT_NODE && !inColumnText && !inInfoText && !inFlavorText) {
-            continue // Discard this node
-          }
-
-          // check if the node is a text node.
-          if (node.nodeType === Node.TEXT_NODE) {
-            if (!inColumnText && !inInfoText) {
-              const flavorTextMatch = node.textContent.match(/\$flavor\$\s*\*\*(.*?)\*\*/s)
-              if (flavorTextMatch) {
-                const strongParagraph = document.createElement('p')
-                strongParagraph.innerHTML = `<strong>${flavorTextMatch[1].trim()}</strong>`
-                notesContainer.appendChild(strongParagraph)
-                inFlavorText = true
-                continue // Skip to the next node
+          attackNames.forEach((name, index) => {
+            if (index > 0) {
+              const previousName = attackNames[index - 1]
+              if (previousName.textContent.trim() === name.textContent.trim()) {
+                name.style.color = "transparent"
               }
             }
-
-            // if we're in flavorText, the next TEXT node will be the start of the columnDiv.
-            // Reset inFlavorText to false, create the div, and set inColumnText to true.
-            if (inFlavorText) {
-              inFlavorText = false
-              const columnDiv = document.createElement('div')
-              columnDiv.style.columnCount = '2'
-              columnDiv.innerHTML = node.textContent.trim()
-              notesContainer.appendChild(columnDiv)
-              inColumnText = true
-              continue // Skip to the next node
-            }
-
-            const infoTextMatch = node.textContent.match(/\$info\$(.*)/s)
-            if (infoTextMatch && inColumnText) {
-              inColumnText = false
-              inInfoText = true
-              const infoDiv = document.createElement('div')
-              infoDiv.style.columnCount = '2'
-              infoDiv.className = 'character-info'
-              infoDiv.innerHTML = infoTextMatch[1].trim()
-              notesContainer.appendChild(infoDiv)
-              continue // Skip to the next node
-            }
-          }
-          if (inColumnText) {
-            if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (\S*?)(.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const columnDiv = notesContainer.lastChild
-                columnDiv.innerHTML += `<h3>${innerHTML}</h3>`
-                continue // Skip to the next node
-              }
-            }
-            const columnDiv = notesContainer.lastChild
-            columnDiv.innerHTML += node.outerHTML || node.textContent
-          } else if (inInfoText) {
-            if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const infoDiv = notesContainer.lastChild
-                infoDiv.innerHTML += `<h3>${innerHTML}</h3>`
-                continue // Skip to the next node
-              }
-            }
-            const infoDiv = notesContainer.lastChild
-            infoDiv.innerHTML += node.outerHTML || node.textContent
-          }
+          })
+        });
+      </script>
+      <script>
+        function transformNotesHTML(html) {
+          // If we find text surrounded by '*', convert it to <emph>
+          const emphRegex = /\*(.*?)\*/g
+          html.innerHTML = html.innerHTML.replace(emphRegex, '<em>$1</em>')
+          return html
         }
 
-        return notesContainer
-      }
+        document.addEventListener("DOMContentLoaded", () => {
+          const notesContainer = document.querySelector(".notes-container")
+          const transformedHTML = transformNotesHTML(notesContainer)
+          notesContainer.innerHTML = transformedHTML.innerHTML
+        });
+      </script>
+      <script>
+        function collapseMeleeAttacks() {
+          const meleeAttackData = document.getElementById('melee-attack-data')
+          const attackDivs = meleeAttackData.querySelectorAll('.melee-attack')
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const notesContainer = document.querySelector(".notes-container")
-        const transformedHTML = transformNotesHTML(notesContainer)
-        notesContainer.innerHTML = transformedHTML.innerHTML
-      });
-    </script>
-    <script>
-      function collapseMeleeAttacks() {
-        const meleeAttackData = document.getElementById('melee-attack-data')
-        const attackDivs = meleeAttackData.querySelectorAll('.melee-attack')
+          // Step 1 & 2: Read melee-attack divs and create objects
+          const attackObjects = []
 
-        // Step 1 & 2: Read melee-attack divs and create objects
-        const attackObjects = []
+          attackDivs.forEach(attackDiv => {
+            const name = attackDiv.querySelector('.name').textContent.trim()
+            const level = attackDiv.querySelector('.level').textContent.trim()
+            const notes = attackDiv.querySelector('.notes').textContent.trim()
+            const parry = attackDiv.querySelector('.parry').textContent.trim()
+            const damage = attackDiv.querySelector('.damage').textContent.trim()
+            const reach = attackDiv.querySelector('.reach').textContent.trim()
+            const usage = attackDiv.querySelector('.usage').textContent.trim()
 
-        attackDivs.forEach(attackDiv => {
-          const name = attackDiv.querySelector('.name').textContent.trim()
-          const level = attackDiv.querySelector('.level').textContent.trim()
-          const notes = attackDiv.querySelector('.notes').textContent.trim()
-          const parry = attackDiv.querySelector('.parry').textContent.trim()
-          const damage = attackDiv.querySelector('.damage').textContent.trim()
-          const reach = attackDiv.querySelector('.reach').textContent.trim()
-          const usage = attackDiv.querySelector('.usage').textContent.trim()
-
-          attackObjects.push({
-            name,
-            level,
-            notes,
-            parry,
-            type: 'melee',
-            damage: [
-              {
-                damage,
-                reach,
-                usage
-              }
-            ]
+            attackObjects.push({
+              name,
+              level,
+              notes,
+              parry,
+              type: 'melee',
+              damage: [
+                {
+                  damage,
+                  reach,
+                  usage
+                }
+              ]
+            })
           })
-        })
 
-        // Step 3: Combine attacks with same name, level, and notes
-        const collapsedAttacks = []
+          // Step 3: Combine attacks with same name, level, and notes
+          const collapsedAttacks = []
 
-        attackObjects.forEach(attack => {
-          const existing = collapsedAttacks.find(existing =>
-            existing.name === attack.name &&
-            existing.level === attack.level &&
-            existing.notes === attack.notes
-          )
+          attackObjects.forEach(attack => {
+            const existing = collapsedAttacks.find(existing =>
+              existing.name === attack.name &&
+              existing.level === attack.level &&
+              existing.notes === attack.notes
+            )
 
-          if (existing) {
-            // Combine damage arrays
-            existing.damage.push(...attack.damage)
-          } else {
-            // Add new attack
-            collapsedAttacks.push(attack)
-          }
-        })
-
-        return collapsedAttacks
-      }
-
-      function collapseRangedAttacks() {
-        const rangedAttackData = document.getElementById('ranged-attack-data')
-        const attackDivs = rangedAttackData.querySelectorAll('.ranged-attack')
-
-        // Step 1 & 2: Read ranged-attack divs and create objects
-        const attackObjects = []
-
-        attackDivs.forEach(attackDiv => {
-          const name = attackDiv.querySelector('.name').textContent.trim()
-          const level = attackDiv.querySelector('.level').textContent.trim()
-          const notes = attackDiv.querySelector('.notes').textContent.trim()
-          const acc = attackDiv.querySelector('.acc').textContent.trim()
-          const bulk = attackDiv.querySelector('.bulk').textContent.trim()
-          const shots = attackDiv.querySelector('.shots').textContent.trim()
-          const rcl = attackDiv.querySelector('.rcl').textContent.trim()
-          const damage = attackDiv.querySelector('.damage').textContent.trim()
-          const usage = attackDiv.querySelector('.usage').textContent.trim()
-          const range = attackDiv.querySelector('.range').textContent.trim()
-          const rof = attackDiv.querySelector('.rof').textContent.trim()
-
-          attackObjects.push({
-            name,
-            level,
-            notes,
-            acc,
-            bulk,
-            range,
-            shots,
-            rof,
-            rcl,
-            type: 'ranged',
-            damage: [
-              {
-                damage,
-                usage
-              }
-            ]
+            if (existing) {
+              // Combine damage arrays
+              existing.damage.push(...attack.damage)
+            } else {
+              // Add new attack
+              collapsedAttacks.push(attack)
+            }
           })
-        })
 
-        // Step 3: Combine attacks with same all the same attributes other than damage
-        // (name, level, notes, acc, bulk, range, shots, rof, rcl)
-        const collapsedAttacks = []
-
-        attackObjects.forEach(attack => {
-          const existing = collapsedAttacks.find(existing =>
-            existing.name === attack.name &&
-            existing.level === attack.level &&
-            existing.notes === attack.notes &&
-            existing.acc === attack.acc &&
-            existing.bulk === attack.bulk &&
-            existing.range === attack.range &&
-            existing.shots === attack.shots &&
-            existing.rof === attack.rof &&
-            existing.rcl === attack.rcl
-          )
-
-          if (existing) {
-            // Combine damage arrays
-            existing.damage.push(...attack.damage)
-          } else {
-            // Add new attack
-            collapsedAttacks.push(attack)
-          }
-        })
-
-        return collapsedAttacks
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const meleeAttacks = collapseMeleeAttacks()
-        const rangedAttacks = collapseRangedAttacks()
-
-        // Combine all attacks
-        const allAttacks = [...meleeAttacks, ...rangedAttacks]
-
-        // Create a single UL element for all attacks
-        const ul = document.createElement('ul')
-
-        allAttacks.forEach(attack => {
-          const li = document.createElement('li')
-
-          if (attack.type === 'melee') {
-            li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
-              attack.damage.map(d => `${d.damage} Reach ${d.reach} (${d.usage})`).join(' <i>or</i> ') +
-              (attack.notes ? ` ${attack.notes}` : '')
-          } else if (attack.type === 'ranged') {
-            li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
-              attack.damage.map(d => `${d.damage} (${d.usage})`).join(' <i>or</i> ') +
-              ` Acc ${attack.acc}, Range ${attack.range}, Bulk ${attack.bulk}, Shots ${attack.shots}, RoF ${attack.rof}, Rcl ${attack.rcl}` +
-              (attack.notes ? ` ${attack.notes}` : '')
-          }
-
-          ul.appendChild(li)
-        })
-
-        // Insert the combined UL into the attacks container
-        const attacksContainer = document.querySelector('#nb-attacks .nb-melee-attack')
-        if (attacksContainer) {
-          attacksContainer.innerHTML = '' // Clear existing content
-          attacksContainer.appendChild(ul) // Append the new UL
+          return collapsedAttacks
         }
-      });
-    </script>
+
+        function collapseRangedAttacks() {
+          const rangedAttackData = document.getElementById('ranged-attack-data')
+          const attackDivs = rangedAttackData.querySelectorAll('.ranged-attack')
+
+          // Step 1 & 2: Read ranged-attack divs and create objects
+          const attackObjects = []
+
+          attackDivs.forEach(attackDiv => {
+            const name = attackDiv.querySelector('.name').textContent.trim()
+            const level = attackDiv.querySelector('.level').textContent.trim()
+            const notes = attackDiv.querySelector('.notes').textContent.trim()
+            const acc = attackDiv.querySelector('.acc').textContent.trim()
+            const bulk = attackDiv.querySelector('.bulk').textContent.trim()
+            const shots = attackDiv.querySelector('.shots').textContent.trim()
+            const rcl = attackDiv.querySelector('.rcl').textContent.trim()
+            const damage = attackDiv.querySelector('.damage').textContent.trim()
+            const usage = attackDiv.querySelector('.usage').textContent.trim()
+            const range = attackDiv.querySelector('.range').textContent.trim()
+            const rof = attackDiv.querySelector('.rof').textContent.trim()
+
+            attackObjects.push({
+              name,
+              level,
+              notes,
+              acc,
+              bulk,
+              range,
+              shots,
+              rof,
+              rcl,
+              type: 'ranged',
+              damage: [
+                {
+                  damage,
+                  usage
+                }
+              ]
+            })
+          })
+
+          // Step 3: Combine attacks with same all the same attributes other than damage
+          // (name, level, notes, acc, bulk, range, shots, rof, rcl)
+          const collapsedAttacks = []
+
+          attackObjects.forEach(attack => {
+            const existing = collapsedAttacks.find(existing =>
+              existing.name === attack.name &&
+              existing.level === attack.level &&
+              existing.notes === attack.notes &&
+              existing.acc === attack.acc &&
+              existing.bulk === attack.bulk &&
+              existing.range === attack.range &&
+              existing.shots === attack.shots &&
+              existing.rof === attack.rof &&
+              existing.rcl === attack.rcl
+            )
+
+            if (existing) {
+              // Combine damage arrays
+              existing.damage.push(...attack.damage)
+            } else {
+              // Add new attack
+              collapsedAttacks.push(attack)
+            }
+          })
+
+          return collapsedAttacks
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const meleeAttacks = collapseMeleeAttacks()
+          const rangedAttacks = collapseRangedAttacks()
+
+          // Combine all attacks
+          const allAttacks = [...meleeAttacks, ...rangedAttacks]
+
+          // Create a single UL element for all attacks
+          const ul = document.createElement('ul')
+
+          allAttacks.forEach(attack => {
+            const li = document.createElement('li')
+            // add class 'melee'
+
+            if (attack.type === 'melee') {
+              li.classList.add('melee')
+              li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
+                attack.damage.map(d => `${d.damage} Reach ${d.reach} (${d.usage})`).join(' <i>or</i> ') +
+                (attack.notes ? ` ${attack.notes}` : '')
+            } else if (attack.type === 'ranged') {
+              li.classList.add('ranged')
+              li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
+                attack.damage.map(d => `${d.damage} (${d.usage})`).join(' <i>or</i> ') +
+                ` Acc ${attack.acc}, Range ${attack.range}, Bulk ${attack.bulk}, Shots ${attack.shots}, RoF ${attack.rof}, Rcl ${attack.rcl}` +
+                (attack.notes ? ` ${attack.notes}` : '')
+            }
+
+            ul.appendChild(li)
+          })
+
+          // Insert the combined UL into the attacks container
+          const attacksContainer = document.querySelector('#nb-attacks .nb-melee-attack')
+          if (attacksContainer) {
+            attacksContainer.innerHTML = '' // Clear existing content
+            attacksContainer.appendChild(ul) // Append the new UL
+          }
+        });
+      </script>
+      <script>
+        // create a script that will run after the page loads.
+        // It looks at the carried-equipment-data div and looks for notes that contain "+<number> DB".
+        // Find the largest number in the notes and set the value of the div with class 'dr-value' to that number.
+        document.addEventListener("DOMContentLoaded", () => {
+          const carriedEquipmentData = document.getElementById('carried-equipment-data')
+          const dbValue = document.querySelectorAll('.db-value')
+
+          if (carriedEquipmentData && dbValue) {
+            const notes = carriedEquipmentData.querySelectorAll('.notes')
+            let maxDB = 0
+
+            notes.forEach(note => {
+              const match = note.textContent.match(/\+(\d+) DB/)
+              if (match) {
+                const dbValue = parseInt(match[1], 10)
+                if (dbValue > maxDB) {
+                  maxDB = dbValue
+                }
+              }
+            })
+
+            dbValue.forEach(div => {
+              div.textContent = maxDB > 0 ? `+${maxDB}` : ''
+            })
+          }
+        });
+      </script>
   </body>
 
 </html>
