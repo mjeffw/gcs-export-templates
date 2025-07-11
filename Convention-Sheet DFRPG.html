@@ -541,28 +541,29 @@ defined by the Mozilla Public License, version 2.0.
         row-gap: var(--gapSize);
       }
 
-      .nb-name .notes {
+      .nb-name .notes,
+      .nb-equipment .notes {
         font-size: var(--fontSizeSmall);
         font-weight: normal;
       }
 
-      #nb-equipment {
+      .nb-equipment {
         display: flex;
         flex-flow: column wrap;
-        max-height: 12em;
+        /* max-height: 12em; */
         margin-left: var(--gapSize);
       }
 
-      #nb-equipment>div {
+      .nb-equipment>div {
         margin-right: var(--smallGap);
         padding-bottom: var(--smallGap);
       }
 
-      #nb-equipment>div:nth-child(odd) {
+      .nb-equipment>div:nth-child(odd) {
         background-color: var(--lightBackgroundColor);
       }
 
-      #nb-equipment>div:nth-child(even) {
+      .nb-equipment>div:nth-child(even) {
         background-color: transparent;
       }
 
@@ -786,25 +787,25 @@ defined by the Mozilla Public License, version 2.0.
       </div>
 
       <h2>Equipment</h2>
-      <div style="display: flex; flex-flow: row nowrap; row-gap: var(--gapSize);">
+      <div style="display: inline-grid;grid-template-columns: 1fr 2fr;row-gap: var(--gapSize);">
         <div>
           <h3>Combat Load (@CARRIED_WEIGHT lb., @CARRIED_VALUE)</h3>
-          <div id="nb-equipment">
+          <div class="nb-equipment">
             @EQUIPMENT_LOOP_START
-            <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
-                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>
-              <span class="desc">, <span class="notes">@DESCRIPTION_NOTES</span></span>[$@COST_SUMMARY, @WEIGHT_SUMMARY]
+            <div data-count="@QTY" data-parent="@PARENT_ID" style="padding-left: @DEPTHx1.25rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong><span class="notes">,
+                @DESCRIPTION_NOTES [$@COST_SUMMARY, @WEIGHT_SUMMARY]</span>
             </div>
             @EQUIPMENT_LOOP_END
           </div>
         </div>
         <div>
           <h3>Other Equipment (@OTHER_EQUIPMENT_VALUE)</h3>
-          <div id="nb-equipment">
+          <div class="nb-equipment">
             @OTHER_EQUIPMENT_LOOP_START
-            <div data-count="@QTY" style="padding-left: @DEPTHx1.25rem;"><span
-                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong>, <span
-                class="notes">@DESCRIPTION_NOTES</span> [$@COST_SUMMARY, @WEIGHT_SUMMARY]
+            <div data-count="@QTY" data-parent="@PARENT_ID" style="padding-left: @DEPTHx1.25rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong><span class="notes">,
+                @DESCRIPTION_NOTES [$@COST_SUMMARY, @WEIGHT_SUMMARY]</span>
             </div>
             @OTHER_EQUIPMENT_LOOP_END
           </div>
@@ -1175,6 +1176,15 @@ defined by the Mozilla Public License, version 2.0.
             })
           }
         });
+      </script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const equipmentDivs = document.querySelectorAll('.nb-equipment')
+          if (equipmentDivs.length > 1) {
+            const prevHeight = equipmentDivs[0].offsetHeight
+            equipmentDivs[1].style.maxHeight = `${prevHeight}px`
+          }
+        })
       </script>
   </body>
 
