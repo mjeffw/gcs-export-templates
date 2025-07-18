@@ -26,13 +26,13 @@ defined by the Mozilla Public License, version 2.0.
       :root {
         --standardSpacing: 8px;
         --backgroundColor: white;
-        --headerColor: rgb(20, 90, 113);
-        --h3color: rgb(20, 90, 113);
+        --borderColor: rgb(130, 188, 22);
+        --textEmphasisColor: rgb(80, 113, 20);
         --colorSecondaryLabel: black;
         --borderRadius: 3px;
         --textFont: "Baker Signet BT", serif;
         --labelFont: "IM Fell English", serif;
-        --fontSizeText: 12px;
+        --fontSizeText: 13px;
         --fontSizeName: 150%;
         --fontSizePrimary: 120%;
         --fontSizeBig: 110%;
@@ -48,7 +48,7 @@ defined by the Mozilla Public License, version 2.0.
         font-family: var(--textFont);
         font-size: var(--fontSizeText);
         padding: var(--standardSpacing);
-        border: 5px solid var(--headerColor);
+        border: 5px solid var(--borderColor);
       }
 
       .role-indicator {
@@ -75,7 +75,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       span.damage {
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         font-weight: bold;
       }
 
@@ -140,7 +140,7 @@ defined by the Mozilla Public License, version 2.0.
         grid-area: header;
         align-items: center;
         margin: var(--standardSpacing);
-        border-bottom: 2px var(--headerColor) solid;
+        border-bottom: 2px var(--borderColor) solid;
       }
 
       .bestiary-card h1 {
@@ -172,15 +172,15 @@ defined by the Mozilla Public License, version 2.0.
         text-align: left;
         font-size: var(--fontSizePrimary);
         font-family: var(--labelFont);
-        /* border-bottom: 2px solid var(--headerColor); */
-        color: var(--headerColor);
+        /* border-bottom: 2px solid var(--borderColor); */
+        color: var(--textEmphasisColor);
         margin: var(--gapSize) 0 0 0;
         font-variant: small-caps;
       }
 
       .bestiary-card #nb-control-thresholds h3 {
-        color: var(--headerColor);
-        border-color: var(--headerColor);
+        color: var(--textEmphasisColor);
+        border-color: var(--borderColor);
       }
 
       .bestiary-card h3 {
@@ -188,7 +188,7 @@ defined by the Mozilla Public License, version 2.0.
         font-size: var(--fontSizeBig);
         font-family: var(--labelFont);
         margin: 0;
-        color: var(--h3color);
+        color: var(--textEmphasisColor);
         font-variant: small-caps;
       }
 
@@ -219,7 +219,7 @@ defined by the Mozilla Public License, version 2.0.
       .bestiary-card label {
         padding-top: 0.2em;
         font-variant: small-caps;
-        color: var(--h3color);
+        color: var(--textEmphasisColor);
         text-align: right;
         font-family: var(--labelFont);
       }
@@ -230,7 +230,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .bestiary-card #nb-attributes-detail label.nb-primary {
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         text-align: right;
       }
 
@@ -353,7 +353,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       #nb-footer .nb-label {
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
       }
 
       .bestiary-card #move .nb-move {
@@ -370,12 +370,12 @@ defined by the Mozilla Public License, version 2.0.
         display: grid;
         grid-template-columns: auto auto;
         grid-template-rows: min-content min-content;
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         column-gap: var(--largeGap);
       }
 
       #nb-defense .nb-label {
-        color: var(--h3color);
+        color: var(--textEmphasisColor);
         font-size: var(--fontSizeSmall);
         font-variant: small-caps;
         font-weight: bold;
@@ -393,7 +393,7 @@ defined by the Mozilla Public License, version 2.0.
         font-family: var(--labelFont);
         border-bottom: 2px solid grey;
         margin: var(--gapSize) 0 0 0;
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         font-variant: small-caps;
       }
 
@@ -402,9 +402,9 @@ defined by the Mozilla Public License, version 2.0.
         font-weight: bold;
         font-size: var(--fontSizeBig);
         font-family: var(--labelFont);
-        border-bottom: 2px solid var(--headerColor);
+        border-bottom: 2px solid var(--borderColor);
         margin: var(--gapSize) 0 0 0;
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         font-variant: small-caps;
       }
 
@@ -441,9 +441,8 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .bestiary-card #nb-modifiers {
-        display: grid;
-        grid-template-columns: 6fr 6fr;
-        grid-template-rows: min-content 1fr;
+        display: flex;
+        flex-flow: row nowrap;
         column-gap: var(--largeGap);
         margin: 0;
       }
@@ -565,9 +564,8 @@ defined by the Mozilla Public License, version 2.0.
 
       .nb-carried-equipment,
       .nb-other-equipment {
-        max-height: 12em;
+        /* max-height: 12em; */
         margin-left: var(--gapSize);
-
         list-style: none;
         margin: 0;
         padding: 0;
@@ -607,7 +605,7 @@ defined by the Mozilla Public License, version 2.0.
         padding: var(--gapSize);
         border-radius: var(--borderRadius);
         margin: var(--gapSize);
-        border: 1px solid var(--headerColor);
+        border: 1px solid var(--borderColor);
       }
 
       #nb-traits .traits>div,
@@ -623,7 +621,15 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .nb-ranged-attack[data-count="0"],
+      #notes[data-count="0"],
+      #nb-reaction-mods[data-count="0"],
+      #nb-conditional-mods[data-count="0"],
       #nb-powers[data-count="0"] {
+        display: none;
+      }
+
+      /* Hide quantity span when count is 1 */
+      [data-count="1"] .qty {
         display: none;
       }
 
@@ -641,11 +647,6 @@ defined by the Mozilla Public License, version 2.0.
         height: 1.5rem;
         grid-column: span 2;
         grid-row: span 2;
-      }
-
-      /* Hide quantity span when count is 1 */
-      [data-count="1"] .qty {
-        display: none;
       }
 
       /* Group .value and .situation into pairs and alternate backgrounds */
@@ -670,10 +671,6 @@ defined by the Mozilla Public License, version 2.0.
 
       .extra-dr[data-where="Torso"] {
         display: inline;
-      }
-
-      #notes[data-count="0"] {
-        display: none;
       }
 
       span.bulk[data-bulk=""] {
@@ -863,7 +860,7 @@ defined by the Mozilla Public License, version 2.0.
       </div>
 
       <div id="nb-modifiers">
-        <div id="nb-reaction-mods">
+        <div id="nb-reaction-mods" data-count="@REACTION_LOOP_COUNT">
           <h2>Reaction Modifiers</h2>
           <div class="modifier">
             @REACTION_LOOP_START
@@ -872,7 +869,7 @@ defined by the Mozilla Public License, version 2.0.
             @REACTION_LOOP_END
           </div>
         </div>
-        <div id="nb-conditional-mods">
+        <div id="nb-conditional-mods" data-count="@CONDITIONAL_MODIFIERS_LOOP_COUNT">
           <h2>Conditional Modifiers</h2>
           <div class="modifier">
             @CONDITIONAL_MODIFIERS_LOOP_START
