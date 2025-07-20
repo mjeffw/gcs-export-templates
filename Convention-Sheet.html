@@ -15,61 +15,145 @@ defined by the Mozilla Public License, version 2.0.
 
   <head>
     <meta charset="utf-8" />
-    <title>@NAME – @TITLE</title>
+    <title>@NAME – @TITLE - @TOTAL_POINTS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght&#64;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bree+Serif:wght&#64;400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Antic+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amarante&display=swap" rel="stylesheet">
     <style>
       :root {
         --standardSpacing: 8px;
         --backgroundColor: white;
         --headerColor: rgb(113, 26, 22);
-        --h3color: rgb(113, 26, 22);
+        --textEmphasisColor: rgb(113, 26, 22);
         --colorSecondaryLabel: black;
         --borderRadius: 3px;
         --textFont: "Optima", serif;
-        --labelFont: "Optima", serif;
+        --ornateFont: "Buffied", sans-serif;
+        --labelFont: "Amarante", sans-serif;
         --fontSizeText: 13px;
-        --fontSizeName: 125%;
+        --fontSizeName: 150%;
         --fontSizePrimary: 120%;
         --fontSizeBig: 110%;
         --fontSizeSmall: 80%;
         --lightBackgroundColor: rgb(237 237 223);
         --gapSize: 0.5rem;
+        --largeGap: 1rem;
+        --smallGap: 0.15rem;
       }
 
       .bestiary-card {
         background: var(--backgroundColor);
         font-family: var(--textFont);
         font-size: var(--fontSizeText);
+        padding: var(--standardSpacing);
+        border: 5px solid var(--borderColor);
+      }
+
+      .role-indicator {
+        font-size: 60%;
+        font-family: var(--labelFont);
+        color: black;
+      }
+
+      #nb-attacks {
+        display: flex;
+        flex-direction: column;
+        padding-left: var(--gapSize);
+      }
+
+
+      #nb-attacks ul {
         padding-left: 0;
-        padding-right: 0;
+        list-style-position: inside;
+        margin-block: 0;
+        list-style-type: none;
+        line-height: 1rem;
+        column-count: 1;
+        column-gap: 1em;
+
+        max-height: none;
+      }
+
+      span.damage {
+        color: var(--textEmphasisColor);
+        font-weight: bold;
+      }
+
+      #nb-attacks ul:has(li:nth-child(5)) {
+        column-count: 2;
+      }
+
+      #nb-attacks ul>li {
+        line-height: 1rem;
+        padding: var(--smallGap) 0;
+        position: relative;
+        padding-left: 1.2em;
+        /* room for custom bullet */
+      }
+
+      #nb-attacks ul>li.melee::before {
+        content: '\F095';
+        /* Unicode for desired symbol */
+        font-family: 'Webdings', sans-serif;
+        /* Webdings font */
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 1rem;
+      }
+
+      #nb-attacks ul>li.ranged::before {
+        content: '\27B6';
+        /* Unicode for desired symbol */
+        font-family: 'Zapf Dingbats', sans-serif;
+        /* Zapf Dingbats font */
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 1rem;
+      }
+
+      #nb-attacks ul>li:nth-child(odd) {
+        background-color: var(--lightBackgroundColor);
+      }
+
+      #nb-attacks ul>li:nth-child(even) {
+        background-color: transparent;
+      }
+
+      .nb-melee-attack .attack {
+        font-size: var(--fontSizeBig);
+        font-weight: bold;
       }
 
       .bestiary-card #nb-top {
         display: grid;
         grid-template-columns: 6fr min-content;
-        gap: var(--gapSize);
+        grid-template-areas:
+          "header derived-attrs"
+          "attributes derived-attrs"
+          "defenses derived-attrs";
+        column-gap: var(--gapSize);
       }
 
       .bestiary-card #header {
-        display: grid;
-        grid-template-columns: 50px 6fr 80px;
-        grid-template-rows: 30px 0fr min-content;
+        grid-area: header;
         align-items: center;
         margin: var(--standardSpacing);
+        border-bottom: 2px var(--borderColor) solid;
       }
 
       .bestiary-card h1 {
         border: none;
         margin: 0;
-        color: var(--headerColor);
-        font-size: var(--fontSizeName);
-        font-family: var(--labelFont);
+        font-size: 200%;
+        font-family: var(--ornateFont);
         font-variant: small-caps;
         text-align: center;
+        color: var(--headerColor);
       }
 
       .bestiary-card #sm-container {
@@ -91,46 +175,45 @@ defined by the Mozilla Public License, version 2.0.
         width: 100%;
         text-align: left;
         font-size: var(--fontSizePrimary);
-        font-family: var(--fontLabel);
-        border-bottom: 2px solid var(--headerColor);
-        color: var(--headerColor);
+        font-family: var(--labelFont);
+        /* border-bottom: 2px solid var(--borderColor); */
+        color: var(--textEmphasisColor);
         margin: var(--gapSize) 0 0 0;
         font-variant: small-caps;
       }
 
-      .bestiary-card #nb-defenses h3,
       .bestiary-card #nb-control-thresholds h3 {
-        color: var(--headerColor);
-        border-color: var(--headerColor);
+        color: var(--textEmphasisColor);
+        border-color: var(--borderColor);
       }
 
       .bestiary-card h3 {
-        text-align: center;
         font-weight: bold;
         font-size: var(--fontSizeBig);
         font-family: var(--labelFont);
-        border-bottom: 2px solid var(--headerColor);
         margin: 0;
-        color: var(--h3color);
+        color: var(--textEmphasisColor);
         font-variant: small-caps;
       }
 
       .bestiary-card .nb-value {
-        font-family: Roboto, sans-serif;
+        font-family: var(--textFont), sans-serif;
         text-align: left;
+        white-space: nowrap;
       }
 
       .bestiary-card #nb-attributes {
+        grid-area: attributes;
         display: grid;
-        grid-template-columns: 150px 4fr 1.5em;
+        grid-template-columns: 150px 4fr;
         gap: var(--gapSize);
       }
 
       .bestiary-card #nb-attributes-detail {
         display: grid;
         grid-template-columns: min-content 1fr min-content 1fr min-content 1fr min-content 1fr;
-        grid-template-rows: auto auto auto auto;
-        gap: 0.15em;
+        grid-template-rows: auto auto auto auto auto auto;
+        gap: var(--smallGap);
         font-size: var(--fontSizePrimary);
         min-width: 3em;
         align-items: baseline;
@@ -140,7 +223,7 @@ defined by the Mozilla Public License, version 2.0.
       .bestiary-card label {
         padding-top: 0.2em;
         font-variant: small-caps;
-        color: var(--h3color);
+        color: var(--textEmphasisColor);
         text-align: right;
         font-family: var(--labelFont);
       }
@@ -151,14 +234,16 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .bestiary-card #nb-attributes-detail label.nb-primary {
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
         text-align: right;
+        font-family: var(--ornateFont);
+        font-size: var(--fontSizeName);
       }
 
       .bestiary-card #nb-derived-attrs label {
         padding-right: var(--gapSize);
         padding-top: 0;
-        font-variant: small-caps;
+        font-family: var(--textFont);
         font-size: var(--fontSizeText);
         font-weight: bold;
         color: var(--colorSecondaryLabel);
@@ -166,6 +251,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .bestiary-card #nb-derived-attrs {
+        grid-area: derived-attrs;
         grid-row: span 3;
         width: 100%;
         display: inline-grid;
@@ -176,7 +262,7 @@ defined by the Mozilla Public License, version 2.0.
         align-self: end;
         background: rgb(237 237 223);
         border-radius: var(--borderRadius);
-        padding: 0.25em;
+        padding: var(--smallGap);
       }
 
       .bestiary-card #nb-derived-attrs>* {
@@ -220,7 +306,7 @@ defined by the Mozilla Public License, version 2.0.
 
       .bestiary-card #nb-traits .trait.disadvantage,
       .bestiary-card #nb-powers .trait.disadvantage {
-        color: var(--headerColor);
+        color: darkslategrey;
       }
 
       .bestiary-card #nb-attacks .nb-attack .nb-level,
@@ -231,7 +317,7 @@ defined by the Mozilla Public License, version 2.0.
       .bestiary-card #nb-traits-skills {
         display: flex;
         flex-flow: row nowrap;
-        column-gap: 1em;
+        column-gap: var(--largeGap);
         margin: 0;
       }
 
@@ -246,10 +332,14 @@ defined by the Mozilla Public License, version 2.0.
 
       .bestiary-card #nb-spells ul {
         column-count: 2;
-        column-gap: 1em;
+        column-gap: var(--largeGap);
       }
 
-      .bestiary-card #nb-defenses .nb-defense,
+      .bestiary-card #nb-defense {
+        /* grid-area: defenses; */
+      }
+
+      .bestiary-card #nb-defense .nb-defense,
       .bestiary-card .nb-control-threshold-detail .nb-defense,
       .bestiary-card #move .nb-move {
         display: grid;
@@ -269,38 +359,60 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       #nb-footer .nb-label {
-        color: var(--headerColor);
+        color: var(--textEmphasisColor);
       }
 
       .bestiary-card #move .nb-move {
         justify-content: right;
       }
 
-      .bestiary-card #nb-defenses-detail {
+      .nb-defenses-detail {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         justify-items: center;
       }
 
-      .bestiary-card #nb-defense {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: min-content min-content;
+      #nb-defense {
+        /* display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: min-content min-content; */
+        color: var(--textEmphasisColor);
+        /* column-gap: var(--largeGap); */
       }
 
-
-      .bestiary-card #nb-defense {
-        grid-column: span 8;
-        display: grid;
-        grid-template-rows: min-content 1fr min-content;
-        color: var(--headerColor);
-      }
-
-      .bestiary-card #nb-defense .nb-label {
-        color: var(--h3color);
+      #nb-defense .nb-label {
+        color: var(--textEmphasisColor);
         font-size: var(--fontSizeSmall);
         font-variant: small-caps;
         font-weight: bold;
+      }
+
+      #nb-defense .nb-value {
+        font-size: var(--fontSizePrimary);
+        font-weight: bold;
+        color: black;
+      }
+
+      #nb-defense h2 {
+        text-align: center;
+        font-weight: bold;
+        font-size: var(--fontSizeBig);
+        font-family: var(--labelFont);
+        border-bottom: 2px solid grey;
+        margin: var(--gapSize) 0 0 0;
+        color: var(--textEmphasisColor);
+        font-variant: small-caps;
+      }
+
+      #nb-defense h3 {
+        text-align: center;
+        font-weight: bold;
+        font-size: var(--fontSizeBig);
+        font-family: var(--labelFont);
+        border-bottom: 2px solid var(--borderColor);
+        margin: var(--gapSize) 0 0 0;
+        color: var(--textEmphasisColor);
+        font-variant: small-caps;
       }
 
       #nb-traits-skills .column {
@@ -309,7 +421,7 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       #nb-traits-skills .column>div {
-        padding: 0.25em 0;
+        padding: var(--smallGap) 0;
       }
 
       #nb-spells:not(#nb-spells:has(.power)) {
@@ -336,17 +448,15 @@ defined by the Mozilla Public License, version 2.0.
       }
 
       .bestiary-card #nb-modifiers {
-        display: grid;
-        grid-template-columns: 6fr 6fr;
-        grid-template-rows: min-content 1fr;
-        column-gap: 1em;
+        display: flex;
+        flex-flow: row nowrap;
+        column-gap: var(--largeGap);
         margin: 0;
       }
 
       #nb-modifiers .modifier {
         display: grid;
         grid-template-columns: min-content 1fr;
-        column-gap: var(--gapSize);
         padding-left: var(--gapSize);
       }
 
@@ -358,19 +468,15 @@ defined by the Mozilla Public License, version 2.0.
         display: none;
       }
 
-      #nb-attacks {
-        padding-left: var(--gapSize);
-      }
-
       #nb-abilities {
         padding-left: var(--gapSize);
       }
 
       .nb-melee-attack {
-        display: grid;
-        grid-template-columns: auto auto auto auto auto;
+        /* display: grid; */
+        grid-template-columns: min-content min-content max-content min-content auto;
         align-self: start;
-        row-gap: 0.25em;
+        row-gap: var(--gapSize);
       }
 
       .nb-ranged-attack .nb-name,
@@ -379,7 +485,7 @@ defined by the Mozilla Public License, version 2.0.
         display: inline-flex;
         flex-flow: column nowrap;
         justify-content: center;
-        padding-left: 0.25em;
+        padding-left: var(--smallGap);
         font-weight: bold;
       }
 
@@ -448,45 +554,55 @@ defined by the Mozilla Public License, version 2.0.
         background-color: rgb(237 237 223);
       }
 
-      #nb-attacks {
-        display: grid;
-        grid-template-columns: auto auto;
-        column-gap: var(--gapSize);
-        margin-top: var(--gapSize);
-      }
-
       .nb-ranged-attack {
         display: grid;
-        grid-template-columns: repeat(8, auto);
+        /* grid-template-columns: repeat(8, auto); */
         align-items: center;
         align-self: start;
-        row-gap: 0.25em;
+        row-gap: var(--gapSize);
       }
 
-      .nb-name .notes {
+      .nb-name .notes,
+      .nb-carried-equipment .notes,
+      .nb-other-equipment .notes {
         font-size: var(--fontSizeSmall);
         font-weight: normal;
       }
 
-      #nb-equipment {
-        display: flex;
-        flex-flow: column wrap;
-        height: 10em;
-        max-width: 33%;
+      .nb-carried-equipment,
+      .nb-other-equipment {
+        /* max-height: 12em; */
         margin-left: var(--gapSize);
+        list-style: none;
+        margin: 0;
+        padding: 0;
       }
 
-      #nb-equipment>div {
-        margin-left: 1em;
-        text-indent: -1em;
-        margin-right: 0.25em;
-        padding-bottom: 0.25em;
+      .nb-other-equipment {
+        column-count: 2;
+        column-gap: var(--smallGap);
+      }
+
+      .nb-carried-equipment>li,
+      .nb-other-equipment>li {
+        margin-right: var(--smallGap);
+        padding-bottom: var(--smallGap);
+      }
+
+      .nb-carried-equipment>li:nth-child(odd),
+      .nb-other-equipment>li:nth-child(odd) {
+        background-color: var(--lightBackgroundColor);
+      }
+
+      .nb-carried-equipment>li:nth-child(even),
+      .nb-other-equipment>li:nth-child(even) {
+        background-color: transparent;
       }
 
       .bestiary-card #nb-attributes .portrait-image {
         width: 100%;
         height: auto;
-        max-width: 190px;
+        /* max-width: 100px; */
         border-radius: var(--borderRadius);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
@@ -496,28 +612,31 @@ defined by the Mozilla Public License, version 2.0.
         padding: var(--gapSize);
         border-radius: var(--borderRadius);
         margin: var(--gapSize);
-        border: 1px solid var(--headerColor);
+        border: 1px solid var(--borderColor);
       }
 
       #nb-traits .traits>div,
       #nb-skills .skills>div {
         text-indent: calc(-1 * var(--gapSize));
         padding-left: var(--gapSize);
-        font-size: var(--fontSizeSmall);
       }
 
       #nb-traits .traits>div .trait,
       #nb-skills .skills>div .skill {
         font-weight: bold;
-        font-size: var(--fontSizeText);
-      }
-
-      #nb-skills .skills>div {
-        /* white-space: nowrap; */
+        font-size: calc(1.1 * var(--fontSizeText));
       }
 
       .nb-ranged-attack[data-count="0"],
+      #notes[data-count="0"],
+      #nb-reaction-mods[data-count="0"],
+      #nb-conditional-mods[data-count="0"],
       #nb-powers[data-count="0"] {
+        display: none;
+      }
+
+      /* Hide quantity span when count is 1 */
+      [data-count="1"] .qty {
         display: none;
       }
 
@@ -536,6 +655,34 @@ defined by the Mozilla Public License, version 2.0.
         grid-column: span 2;
         grid-row: span 2;
       }
+
+      /* Group .value and .situation into pairs and alternate backgrounds */
+      .modifier .value:nth-of-type(4n+1),
+      .modifier .value:nth-of-type(4n+1)+.situation {
+        background-color: var(--lightBackgroundColor);
+      }
+
+      .modifier .situation {
+        padding-left: var(--gapSize);
+      }
+
+      .modifier .value:nth-of-type(2n),
+      .modifier .value:nth-of-type(2n)+.situation {
+        background-color: transparent;
+      }
+
+      /* Hide extra DR unless it's for Torso */
+      .extra-dr {
+        display: none;
+      }
+
+      .extra-dr[data-where="Torso"] {
+        display: inline;
+      }
+
+      span.bulk[data-bulk=""] {
+        display: none;
+      }
     </style>
   </head>
 
@@ -544,24 +691,16 @@ defined by the Mozilla Public License, version 2.0.
       <div id="nb-top">
         <div id="header">
           <div></div>
-          <h1>Name: <span style="min-width: 20em; text-decoration: underline;">@NAME</span>
-          </h1>
+          <h1>@NAME <span class="role-indicator">(@TITLE) - Total Points: @TOTAL_POINTS</span></span></h1>
           <div></div>
-
-          <div></div>
-          <div id="class-container">
-            <div id="class" class="nb-value">@TITLE</div>
-          </div>
-          <div></div>
-
         </div>
         <div id="nb-derived-attrs">
           <h3>Roll</h3>
           <h3>Location</h3>
-          <h3>Penalty</h3>
+          <h3>Mod</h3>
           <h3>DR</h3>
           @HIT_LOCATION_LOOP_START
-          <div style="text-align: right;">@ROLL</div>
+          <div style="text-align: center;">@ROLL</div>
           <label>@WHERE</label>
           <div class="nb-value" style="text-align: center;">@PENALTY</div>
           <div class="nb-value" style="text-align: center;">@DR</div>
@@ -569,25 +708,25 @@ defined by the Mozilla Public License, version 2.0.
         </div>
 
         <div id="nb-attributes">
-          <div>
+          <div style="grid-row: span 2;">
             <img src="@NAME.png" alt="Portrait" class="portrait-image">
           </div>
           <div id="nb-attributes-detail">
             <label class="nb-primary" for="st">ST</label>
-            <div id="st" class="nb-value nb-primary rollable">@ST</div>
+            <div id="st" class="nb-value nb-primary ">@ST</div>
             <label class="nb-primary" for="dx">DX</label>
-            <div id="dx" class="nb-value nb-primary rollable">@DX</div>
+            <div id="dx" class="nb-value nb-primary ">@DX</div>
             <label class="nb-primary" for="iq">IQ</label>
-            <div id="iq" class="nb-value nb-primary rollable">@IQ</div>
+            <div id="iq" class="nb-value nb-primary ">@IQ</div>
             <label class="nb-primary" for="ht">HT</label>
-            <div id="ht" class="nb-value nb-primary rollable">@HT</div>
+            <div id="ht" class="nb-value nb-primary ">@HT</div>
 
             <label for="hp">HP</label>
             <div class="nb-value">@BASIC_HP</div>
             <label for="will">Will</label>
-            <div id="will" class="nb-value rollable">@WILL</div>
+            <div id="will" class="nb-value ">@WILL</div>
             <label for="per">Per</label>
-            <div id="per" class="nb-value rollable">@PERCEPTION</div>
+            <div id="per" class="nb-value ">@PERCEPTION</div>
             <label for="fp">FP</label>
             <div class="nb-value">@BASIC_FP</div>
 
@@ -598,100 +737,94 @@ defined by the Mozilla Public License, version 2.0.
             <div class="nb-value">@FRIGHT_CHECK</div>
             <div id="fp-container" class="with-button"></div>
 
+            <label for="size" style="grid-column: 1;">SM</label>
+            <div id="size" class="nb-value ">@SIZE</div>
+            <label for="Move">Move</label>
+            <div id="move" class="nb-value ">@CURRENT_MOVE (@BASIC_MOVE)</div>
+            <label for="lift">Lift</label>
+            <div id="lift" class="nb-value ">@BASIC_LIFT</div>
+            <label for="damage">Dmg</label>
+            <div id="damage" class="nb-value ">@SWING/@THRUST</div>
+
             <label id="er-label" for="er-container" style="grid-row: 5; grid-column: 7 / 9; text-align: left;"
               data-name="@PLAYER">Energy Reserve <span style="color: black"> 9</span></label>
             <div id="er-container" class="with-button" style="grid-row: 6; grid-column: 7 / 9; height: 1.5rem;"
               data-name="@PLAYER"></div>
 
-            <div id="nb-defense">
-              <h3>Defenses</h3>
-              <div id="nb-defenses-detail">
-                <div class="nb-defense">
-                  <div class="nb-label">Parry</div>
-                  <div class="nb-defense-container">
-                    <div class="nb-value rollable" data-path="parry">
-                      @BEST_CURRENT_PARRY
-                    </div>
-                  </div>
-                </div>
-                <div class="nb-defense">
-                  <div class="nb-label">Dodge</div>
-                  <div class="nb-defense-container">
-                    <div class="nb-value rollable" data-path="dodge">
-                      @CURRENT_DODGE
-                    </div>
-                  </div>
-                </div>
-                <div class="nb-defense">
-                  <div class="nb-label">Block</div>
-                  <div class="nb-defense-container">
-                    <div class="nb-value rollable" data-path="block">
-                      @BEST_CURRENT_BLOCK
-                    </div>
-                  </div>
-                </div>
-                <div class="nb-defense">
-                  <div class="nb-label">DR</div>
-                  <div class="nb-defense-container">
-                    <div class="nb-value">@GENERAL_DR</div>
-                  </div>
-                </div>
-                <div class="nb-defense">
-                  <div class="nb-label">Move</div>
-                  <div class="nb-defense-container">
-                    <div class="nb-value">@CURRENT_MOVE</div>
-                  </div>
+          </div>
+          <div id="nb-defense">
+            <h2>Defenses</h2>
+            <div></div>
+            <!-- <h2>Control Thresholds</h2> -->
+            <div class="nb-defenses-detail">
+              <div class="nb-defense">
+                <div class="nb-label">Parry</div>
+                <div class="nb-value " data-path="parry">@BEST_CURRENT_PARRY<span class="db-value"></span>
                 </div>
               </div>
+              <div class="nb-defense">
+                <div class="nb-label">Dodge</div>
+                <div class="nb-value " data-path="dodge">@CURRENT_DODGE<span class="db-value"></span>
+                </div>
+              </div>
+              <div class="nb-defense">
+                <div class="nb-label">Block</div>
+                <div class="nb-value " data-path="block">@BEST_CURRENT_BLOCK<span class="db-value"></span>
+                </div>
+              </div>
+              <div class="nb-defense">
+                <div class="nb-label">DR</div>
+                <div class="nb-value">
+                  @HIT_LOCATION_LOOP_START
+                  <span class="extra-dr" data-where="@WHERE">@DR</span>
+                  @HIT_LOCATION_LOOP_END
+                </div>
+              </div>
+              <div class="nb-defense">
+                <div class="nb-label">Move</div>
+                <div class="nb-value">@CURRENT_MOVE</div>
+              </div>
             </div>
-
+            <!-- <div class="nb-defenses-detail">
+                    <div class="nb-defense">
+                      <div class="nb-label">Grabbed</div>
+                      <div class="nb-value " data-path="parry">
+                        @GRABBED
+                      </div>
+                    </div>
+                    <div class="nb-defense">
+                      <div class="nb-label">Grappled</div>
+                      <div class="nb-value " data-path="parry">
+                        @GRAPPLED
+                      </div>
+                    </div>
+                    <div class="nb-defense">
+                      <div class="nb-label">Restrained</div>
+                      <div class="nb-value " data-path="parry">
+                        @RESTRAINED
+                      </div>
+                    </div>
+                    <div class="nb-defense">
+                      <div class="nb-label">Controlled</div>
+                      <div class="nb-value " data-path="parry">
+                        @CONTROLLED
+                      </div>
+                    </div>
+                    <div class="nb-defense">
+                      <div class="nb-label">Pinned</div>
+                      <div class="nb-value " data-path="parry">
+                        @PINNED
+                      </div>
+                    </div>
+                  </div> -->
           </div>
-          <div></div>
         </div>
       </div>
 
-      <div>
+      <div id="nb-attacks">
         <h2>Attacks</h2>
         <div id="nb-attacks">
           <div class="nb-melee-attack">
-            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black; height: unset;">MELEE
-              WEAPON
-            </div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Usage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Damage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;">Reach</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black; height: unset;"></div>
-
-            @MELEE_LOOP_START
-            <div class="nb-name" style="white-space: nowrap;">@DESCRIPTION_PRIMARY-@LEVEL</div>
-            <div>@USAGE</div>
-            <div>@DAMAGE</div>
-            <div>@REACH</div>
-            <div>@DESCRIPTION_NOTES</div>
-            @MELEE_LOOP_END
-          </div>
-
-          <div class="nb-ranged-attack" data-count="@RANGED_LOOP_COUNT">
-            <div class="nb-name" style="font-weight: bold; border-bottom: 1px solid black;">RANGED WEAPON</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Damage</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Range</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Acc</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">RoF</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Shots</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Bulk</div>
-            <div style="font-weight: bold; border-bottom: 1px solid black;">Rcl</div>
-
-            @RANGED_LOOP_START
-            <div class="nb-name">@DESCRIPTION_PRIMARY-@LEVEL<div class="notes">@DESCRIPTION_NOTES</div>
-            </div>
-            <div>@DAMAGE</div>
-            <div>@RANGE</div>
-            <div>@ACCURACY</div>
-            <div>@ROF</div>
-            <div>@SHOTS</div>
-            <div>@BULK</div>
-            <div>@RECOIL</div>
-            @RANGED_LOOP_END
           </div>
         </div>
       </div>
@@ -700,15 +833,11 @@ defined by the Mozilla Public License, version 2.0.
         <div id="nb-traits">
           <h2>Traits</h2>
           <div class="column traits">
+            @EXCLUDE_TAGS_HIDDEN
             @EXCLUDE_TAGS_POWER
-            @ADVANTAGES_ALL_LOOP_START
+            @ADVANTAGES_LOOP_START
             <div><span class="trait advantage">@DESCRIPTION_PRIMARY</span> @DESCRIPTION_NOTES</div>
-            @ADVANTAGES_ALL_LOOP_END
-
-            @EXCLUDE_TAGS_POWER
-            @DISADVANTAGES_ALL_LOOP_START
-            <div><span class="trait disadvantage">@DESCRIPTION_PRIMARY</span> @DESCRIPTION_NOTES</div>
-            @DISADVANTAGES_ALL_LOOP_END
+            @ADVANTAGES_LOOP_END
           </div>
         </div>
         <div id="nb-skills">
@@ -737,9 +866,8 @@ defined by the Mozilla Public License, version 2.0.
         </div>
       </div>
 
-
       <div id="nb-modifiers">
-        <div id="nb-reaction-mods">
+        <div id="nb-reaction-mods" data-count="@REACTION_LOOP_COUNT">
           <h2>Reaction Modifiers</h2>
           <div class="modifier">
             @REACTION_LOOP_START
@@ -748,7 +876,7 @@ defined by the Mozilla Public License, version 2.0.
             @REACTION_LOOP_END
           </div>
         </div>
-        <div id="nb-conditional-mods">
+        <div id="nb-conditional-mods" data-count="@CONDITIONAL_MODIFIERS_LOOP_COUNT">
           <h2>Conditional Modifiers</h2>
           <div class="modifier">
             @CONDITIONAL_MODIFIERS_LOOP_START
@@ -760,14 +888,32 @@ defined by the Mozilla Public License, version 2.0.
       </div>
 
       <!-- <h2>Equipment</h2>
-      <div id="nb-equipment">
-        @EQUIPMENT_LOOP_START
-        <div>(@QTY)&nbsp;<strong>@DESCRIPTION_PRIMARY</strong><span class="desc">, <span
-              class="notes">@DESCRIPTION_NOTES</span></span></div>
-        @EQUIPMENT_LOOP_END
+      <div style="display: inline-grid; grid-template-columns: auto 2fr; column-gap: var(--gapSize);">
+        <div>
+          <h3>Combat Load (@CARRIED_WEIGHT)</h3>
+          <ul class="nb-carried-equipment">
+            @EQUIPMENT_LOOP_START
+            <li data-count="@QTY" data-parent="@PARENT_ID" style="padding-left: @DEPTHx1.2rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong><span class="notes">
+                @DESCRIPTION_NOTES</span>
+            </li>
+            @EQUIPMENT_LOOP_END
+          </ul>
+        </div>
+        <div>
+          <h3>Other Equipment</h3>
+          <ul class="nb-other-equipment">
+            @OTHER_EQUIPMENT_LOOP_START
+            <li data-count="@QTY" data-parent="@PARENT_ID" style="padding-left: @DEPTHx1.2rem;"><span
+                class="qty">@QTY&times&nbsp;</span><strong>@DESCRIPTION_PRIMARY</strong><span class="notes">
+                @DESCRIPTION_NOTES</span>
+            </li>
+            @OTHER_EQUIPMENT_LOOP_END
+          </ul>
+        </div>
       </div> -->
 
-      <div id="nb-spells" style="column-count: 2; break-inside: avoid-page;">
+      <!-- <div id="nb-spells" style="column-count: 2; break-inside: avoid-page;">
         <h2 style="column-span: all;">Spells</h2>
         @SPELLS_LOOP_START
         <div class="power"><span class="trait">@DESCRIPTION_PRIMARY-@SL (@CLASS)</span>. <div class="note">
@@ -775,19 +921,55 @@ defined by the Mozilla Public License, version 2.0.
           <div class="note">Cost: @MANA_CAST (@MANA_MAINTAIN); Time: @TIME_CAST; Duration: @DURATION. (@REF)</div>
         </div>
         @SPELLS_LOOP_END
-      </div>
+      </div> -->
 
-      <h2>Notes</h2>
-      <div id="nb-abilities">
-        @ADVANTAGES_LOOP_START
-        <div class="nb-ability">
-          <span class="nb-name">@DESCRIPTION_PRIMARY: </span><span class="nb-desc">@DESCRIPTION_USER</span>
+      <div id="notes" data-count="@NOTES_LOOP_COUNT">
+        <h2>Notes</h2>
+        <div class="notes-container">
+          @NOTES
         </div>
-        @ADVANTAGES_LOOP_END
       </div>
-      <div class="notes-container">
-        @NOTES
+    </div>
+
+    <div id="melee-attack-data" style="display: none;">
+      @MELEE_LOOP_START
+      <div class="melee-attack">
+        <div class="name">@DESCRIPTION_PRIMARY</div>
+        <div class="level">@LEVEL</div>
+        <div class="notes">@DESCRIPTION_NOTES</div>
+        <div class="parry">@PARRY</div>
+        <div class="damage">@DAMAGE</div>
+        <div class="reach">@REACH</div>
+        <div class="usage">@USAGE</div>
       </div>
+      @MELEE_LOOP_END
+    </div>
+    <div id="ranged-attack-data" style="display: none;">
+      @RANGED_LOOP_START
+      <div class="ranged-attack">
+        <div class="name">@DESCRIPTION_PRIMARY</div>
+        <div class="level">@LEVEL</div>
+        <div class="notes">@DESCRIPTION_NOTES</div>
+        <div class="acc">@ACCURACY</div>
+        <div class="range">@RANGE</div>
+        <div class="rof">@ROF</div>
+        <div class="shots">@SHOTS</div>
+        <div class="bulk">@BULK</div>
+        <div class="damage">@DAMAGE</div>
+        <div class="usage">@USAGE</div>
+      </div>
+      @RANGED_LOOP_END
+    </div>
+    <div id="carried-equipment-data" style="display: none;">
+      @EQUIPMENT_LOOP_START
+      <div class="carried-equipment">
+        <div class="name">@DESCRIPTION_PRIMARY</div>
+        <div class="qty">@QTY</div>
+        <div class="weight">@WEIGHT_SUMMARY</div>
+        <div class="cost">@COST_SUMMARY</div>
+        <div class="notes">@DESCRIPTION_NOTES</div>
+      </div>
+      @EQUIPMENT_LOOP_END
     </div>
 
     <script>
@@ -806,83 +988,10 @@ defined by the Mozilla Public License, version 2.0.
     </script>
     <script>
       function transformNotesHTML(html) {
-        const notesContainer = document.createElement('div')
-        notesContainer.className = 'notes-container'
-
-        let inFlavorText = false
-        let inColumnText = false
-        let inInfoText = false
-
-        for (const node of html.childNodes) {
-          if (node.nodeType !== Node.TEXT_NODE && !inColumnText && !inInfoText && !inFlavorText) {
-            continue // Discard this node
-          }
-
-          // check if the node is a text node.
-          if (node.nodeType === Node.TEXT_NODE) {
-            if (!inColumnText && !inInfoText) {
-              const flavorTextMatch = node.textContent.match(/\$flavor\$\s*\*\*(.*?)\*\*/s)
-              if (flavorTextMatch) {
-                const strongParagraph = document.createElement('p')
-                strongParagraph.innerHTML = `<strong>${flavorTextMatch[1].trim()}</strong>`
-                notesContainer.appendChild(strongParagraph)
-                inFlavorText = true
-                continue // Skip to the next node
-              }
-            }
-
-            // if we're in flavorText, the next TEXT node will be the start of the columnDiv.
-            // Reset inFlavorText to false, create the div, and set inColumnText to true.
-            if (inFlavorText) {
-              inFlavorText = false
-              const columnDiv = document.createElement('div')
-              columnDiv.style.columnCount = '2'
-              columnDiv.innerHTML = node.textContent.trim()
-              notesContainer.appendChild(columnDiv)
-              inColumnText = true
-              continue // Skip to the next node
-            }
-
-            const infoTextMatch = node.textContent.match(/\$info\$(.*)/s)
-            if (infoTextMatch && inColumnText) {
-              inColumnText = false
-              inInfoText = true
-              const infoDiv = document.createElement('div')
-              infoDiv.style.columnCount = '2'
-              infoDiv.className = 'character-info'
-              infoDiv.innerHTML = infoTextMatch[1].trim()
-              notesContainer.appendChild(infoDiv)
-              continue // Skip to the next node
-            }
-          }
-          if (inColumnText) {
-            if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (\S*?)(.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const columnDiv = notesContainer.lastChild
-                columnDiv.innerHTML += `<h3>${innerHTML}</h3>`
-                continue // Skip to the next node
-              }
-            }
-            const columnDiv = notesContainer.lastChild
-            columnDiv.innerHTML += node.outerHTML || node.textContent
-          } else if (inInfoText) {
-            if (node.nodeType === Node.TEXT_NODE) {
-              const h3TextMatch = node.textContent.match(/(.*?)### (.*)/s)
-              if (h3TextMatch) {
-                const innerHTML = `${h3TextMatch[1].trim()}<strong>${h3TextMatch[2].trim()}</strong>`
-                const infoDiv = notesContainer.lastChild
-                infoDiv.innerHTML += `<h3>${innerHTML}</h3>`
-                continue // Skip to the next node
-              }
-            }
-            const infoDiv = notesContainer.lastChild
-            infoDiv.innerHTML += node.outerHTML || node.textContent
-          }
-        }
-
-        return notesContainer
+        // If we find text surrounded by '*', convert it to <emph>
+        const emphRegex = /\*(.*?)\*/g
+        html.innerHTML = html.innerHTML.replace(emphRegex, '<em>$1</em>')
+        return html
       }
 
       document.addEventListener("DOMContentLoaded", () => {
@@ -892,6 +1001,203 @@ defined by the Mozilla Public License, version 2.0.
       });
     </script>
 
+    <script>
+      function collapseMeleeAttacks() {
+        const meleeAttackData = document.getElementById('melee-attack-data')
+        const attackDivs = meleeAttackData.querySelectorAll('.melee-attack')
+
+        // Step 1 & 2: Read melee-attack divs and create objects
+        const attackObjects = []
+
+        attackDivs.forEach(attackDiv => {
+          const name = attackDiv.querySelector('.name').textContent.trim()
+          const level = attackDiv.querySelector('.level').textContent.trim()
+          const notes = attackDiv.querySelector('.notes').textContent.trim()
+          const parry = attackDiv.querySelector('.parry').textContent.trim()
+          const damage = attackDiv.querySelector('.damage').textContent.trim()
+          const reach = attackDiv.querySelector('.reach').textContent.trim()
+          const usage = attackDiv.querySelector('.usage').textContent.trim()
+
+          attackObjects.push({
+            name,
+            level,
+            notes,
+            parry,
+            type: 'melee',
+            damage: [
+              {
+                damage,
+                reach,
+                usage
+              }
+            ]
+          })
+        })
+
+        // Step 3: Combine attacks with same name, level, and notes
+        const collapsedAttacks = []
+
+        attackObjects.forEach(attack => {
+          const existing = collapsedAttacks.find(existing =>
+            existing.name === attack.name &&
+            existing.level === attack.level &&
+            existing.damage[0].reach === attack.damage[0].reach && // Reach
+            existing.notes === attack.notes
+          )
+
+          if (existing) {
+            // Combine damage arrays
+            existing.damage.push(...attack.damage)
+          } else {
+            // Add new attack
+            collapsedAttacks.push(attack)
+          }
+        })
+
+        return collapsedAttacks
+      }
+
+      function collapseRangedAttacks() {
+        const rangedAttackData = document.getElementById('ranged-attack-data')
+        const attackDivs = rangedAttackData.querySelectorAll('.ranged-attack')
+
+        // Step 1 & 2: Read ranged-attack divs and create objects
+        const attackObjects = []
+
+        attackDivs.forEach(attackDiv => {
+          const name = attackDiv.querySelector('.name').textContent.trim()
+          const level = attackDiv.querySelector('.level').textContent.trim()
+          const notes = attackDiv.querySelector('.notes').textContent.trim()
+          const acc = attackDiv.querySelector('.acc').textContent.trim()
+          const bulk = attackDiv.querySelector('.bulk').textContent.trim()
+          const shots = attackDiv.querySelector('.shots').textContent.trim()
+          const damage = attackDiv.querySelector('.damage').textContent.trim()
+          const usage = attackDiv.querySelector('.usage').textContent.trim()
+          const range = attackDiv.querySelector('.range').textContent.trim()
+          const rof = attackDiv.querySelector('.rof').textContent.trim()
+
+          attackObjects.push({
+            name,
+            level,
+            notes,
+            acc,
+            bulk,
+            range,
+            shots,
+            rof,
+            type: 'ranged',
+            damage: [
+              {
+                damage,
+                usage
+              }
+            ]
+          })
+        })
+
+        // Step 3: Combine attacks with same all the same attributes other than damage
+        // (name, level, notes, acc, bulk, range, shots, rof, rcl)
+        const collapsedAttacks = []
+
+        attackObjects.forEach(attack => {
+          const existing = collapsedAttacks.find(existing =>
+            existing.name === attack.name &&
+            existing.level === attack.level &&
+            existing.notes === attack.notes &&
+            existing.acc === attack.acc &&
+            existing.bulk === attack.bulk &&
+            existing.range === attack.range &&
+            existing.shots === attack.shots &&
+            existing.rof === attack.rof
+          )
+
+          if (existing) {
+            // Combine damage arrays
+            existing.damage.push(...attack.damage)
+          } else {
+            // Add new attack
+            collapsedAttacks.push(attack)
+          }
+        })
+
+        return collapsedAttacks
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const meleeAttacks = collapseMeleeAttacks()
+        const rangedAttacks = collapseRangedAttacks()
+
+        // Combine all attacks
+        const allAttacks = [...meleeAttacks, ...rangedAttacks]
+
+        // Create a single UL element for all attacks
+        const ul = document.createElement('ul')
+
+        allAttacks.forEach(attack => {
+          const li = document.createElement('li')
+          // add class 'melee'
+
+          if (attack.type === 'melee') {
+            li.classList.add('melee')
+            li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
+              attack.damage.map(d => `<span class="damage">${d.damage}</span> (${d.usage})`).join(' <i>or</i> ') + '</span>' +
+              `. Reach ${attack.damage[0].reach}.` + (attack.notes ? ` ${attack.notes}` : '')
+          } else if (attack.type === 'ranged') {
+            li.classList.add('ranged')
+            li.innerHTML = `<span class="attack">${attack.name}-${attack.level}: </span>` +
+              attack.damage.map(d => `<span class="damage">${d.damage}</span> (${d.usage})`).join(' <i>or</i> ') +
+              `: Acc ${attack.acc}, Range ${attack.range}, <span class="bulk" data-bulk="${attack.bulk}">Bulk ${attack.bulk}, </span>Shots ${attack.shots}, RoF ${attack.rof}` +
+              (attack.notes ? ` ${attack.notes}` : '')
+          }
+
+          ul.appendChild(li)
+        })
+
+        // Insert the combined UL into the attacks container
+        const attacksContainer = document.querySelector('#nb-attacks .nb-melee-attack')
+        if (attacksContainer) {
+          attacksContainer.innerHTML = '' // Clear existing content
+          attacksContainer.appendChild(ul) // Append the new UL
+        }
+      });
+    </script>
+    <script>
+      // create a script that will run after the page loads.
+      // It looks at the carried-equipment-data div and looks for notes that contain "+<number> DB".
+      // Find the largest number in the notes and set the value of the div with class 'dr-value' to that number.
+      document.addEventListener("DOMContentLoaded", () => {
+        const carriedEquipmentData = document.getElementById('carried-equipment-data')
+        const dbValue = document.querySelectorAll('.db-value')
+
+        if (carriedEquipmentData && dbValue) {
+          const notes = carriedEquipmentData.querySelectorAll('.notes')
+          let maxDB = 0
+
+          notes.forEach(note => {
+            const match = note.textContent.match(/\+(\d+) DB/)
+            if (match) {
+              const dbValue = parseInt(match[1], 10)
+              if (dbValue > maxDB) {
+                maxDB = dbValue
+              }
+            }
+          })
+
+          dbValue.forEach(div => {
+            div.textContent = maxDB > 0 ? `+${maxDB}` : ''
+          })
+        }
+      });
+    </script>
+    <script>
+      // document.addEventListener("DOMContentLoaded", () => {
+      //   const equipmentDivs = document.querySelectorAll('.nb-equipment')
+      //   if (equipmentDivs.length > 1) {
+      //     const prevHeight = equipmentDivs[0].offsetHeight
+      //     equipmentDivs[1].style.maxHeight = `calc(max(${prevHeight}px, 12rem))`
+      //   }
+      // })
+    </script>
   </body>
 
 </html>
