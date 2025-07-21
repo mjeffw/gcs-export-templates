@@ -683,6 +683,15 @@ defined by the Mozilla Public License, version 2.0.
       span.bulk[data-bulk=""] {
         display: none;
       }
+
+      /* Show "Spells" instead of "Powers" when data-name="mage" */
+      #nb-powers[data-name="mage"] .power-label {
+        display: none;
+      }
+
+      #nb-powers[data-name="mage"] .spell-label {
+        display: inline !important;
+      }
     </style>
   </head>
 
@@ -739,17 +748,17 @@ defined by the Mozilla Public License, version 2.0.
 
             <label for="size" style="grid-column: 1;">SM</label>
             <div id="size" class="nb-value ">@SIZE</div>
-            <label for="Move">Move</label>
+            <label for="move">Move</label>
             <div id="move" class="nb-value ">@CURRENT_MOVE (@BASIC_MOVE)</div>
             <label for="lift">Lift</label>
             <div id="lift" class="nb-value ">@BASIC_LIFT</div>
             <label for="damage">Dmg</label>
             <div id="damage" class="nb-value ">@SWING/@THRUST</div>
 
-            <label id="er-label" for="er-container" style="grid-row: 5; grid-column: 7 / 9; text-align: left;"
-              data-name="@PLAYER">Energy Reserve <span style="color: black"> 9</span></label>
-            <div id="er-container" class="with-button" style="grid-row: 6; grid-column: 7 / 9; height: 1.5rem;"
-              data-name="@PLAYER"></div>
+            <label id="er-label" for="er-container" data-name="@PLAYER" style="grid-column: 2 / 4;">Energy
+              Reserve</label>
+            <div id="er-container" class="nb-value" data-name="@PLAYER"> 9</div>
+            <div id="er-container" class="with-button" data-name="@PLAYER"></div>
 
           </div>
           <div id="nb-defense">
@@ -851,8 +860,8 @@ defined by the Mozilla Public License, version 2.0.
       </div>
 
       @ONLY_TAGS_POWER
-      <div id="nb-powers" data-count="@ADVANTAGES_LOOP_COUNT">
-        <h2>Powers</h2>
+      <div id="nb-powers" data-count="@ADVANTAGES_LOOP_COUNT" data-name="@PLAYER">
+        <h2><span class="power-label">Powers</span><span class="spell-label" style="display: none;">Spells</span></h2>
         <div class="content">
           @ONLY_TAGS_POWER
           @ADVANTAGES_ALL_LOOP_START
