@@ -606,7 +606,7 @@ GCS HTML Template v1
 
         <!-- ── Attributes ── -->
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">🔷</span>Attributes</div>
+          <div class="section-title">Attributes</div>
           <div class="attr-cards">
             {{- range .Attributes.Primary}}
             <div class="attr-card primary">
@@ -657,7 +657,7 @@ GCS HTML Template v1
 
         <!-- ── Defenses ── -->
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">🛡️</span>Defenses</div>
+          <div class="section-title">Defenses</div>
           <div class="attr-cards">
             {{- range .Encumbrance}}{{if .IsCurrent}}
             <div class="attr-card">
@@ -678,7 +678,7 @@ GCS HTML Template v1
               <div class="a-val">—</div>
             </div>
           </div>
-          <div class="section-title section-spaced"><span class="icon" aria-hidden="true">❤️</span>Status</div>
+          <div class="section-title section-spaced">Status</div>
           <div class="attr-row">
             {{- range .Attributes.Pools}}
             <div class="tracker-card">
@@ -707,7 +707,7 @@ GCS HTML Template v1
       <div class="mod-row">
         {{- if .Reactions}}
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">💬</span>Reaction Modifiers</div>
+          <div class="section-title">Reaction Modifiers</div>
           <table class="mod-table">
             {{- range .Reactions}}
             <tr>
@@ -720,7 +720,7 @@ GCS HTML Template v1
         {{- end}}
         {{- if .ConditionalModifiers}}
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">⚠️</span>Conditional Modifiers</div>
+          <div class="section-title">Conditional Modifiers</div>
           <table class="mod-table">
             {{- range .ConditionalModifiers}}
             {{- if not (or (eq .Situation "Vision") (eq .Situation "Hearing") (eq .Situation "Taste & Smell") (eq .Situation "Touch"))}}
@@ -739,7 +739,7 @@ GCS HTML Template v1
       <!-- ═══ TRAITS + SKILLS ═══ -->
       <div class="two-col">
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">⭐</span>Traits</div>
+          <div class="section-title">Traits</div>
           <ul class="item-list">
             {{- range .Traits}}
             {{- if ne .Description "Natural Attacks"}}
@@ -754,7 +754,7 @@ GCS HTML Template v1
           </ul>
         </div>
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true">📚</span>Skills</div>
+          <div class="section-title">Skills</div>
           <ul class="item-list">
             {{- range .Skills}}
             <li>
@@ -773,7 +773,7 @@ GCS HTML Template v1
       <!-- ═══ ATTACKS ═══ -->
       {{- if .MeleeWeapons}}
       <div class="section">
-        <div class="section-title"><span class="icon" aria-hidden="true">⚔️</span>Melee Attacks</div>
+        <div class="section-title">Melee Attacks</div>
         <table class="atk-table">
           <tr>
             <th>Weapon</th>
@@ -801,7 +801,7 @@ GCS HTML Template v1
       {{- end}}
       {{- if .RangedWeapons}}
       <div class="section">
-        <div class="section-title"><span class="icon" aria-hidden="true">🏹</span>Ranged Attacks</div>
+        <div class="section-title">Ranged Attacks</div>
         <table class="atk-table">
           <tr>
             <th>Weapon</th>
@@ -833,7 +833,7 @@ GCS HTML Template v1
       <!-- ═══ SPELLS ═══ -->
       {{- if .Spells}}
       <div class="section section-spaced">
-        <div class="section-title"><span class="icon" aria-hidden="true">✨</span>Spells</div>
+        <div class="section-title">Spells</div>
         <table class="spell-table">
           <tr>
             <th>Spell</th>
@@ -864,7 +864,7 @@ GCS HTML Template v1
       <!-- ═══ EQUIPMENT ═══ -->
       {{- if .Equipment.Carried}}
       <div class="section section-spaced">
-        <div class="section-title"><span class="icon" aria-hidden="true">🎒</span>Equipment
+        <div class="section-title">Equipment
           ({{.Equipment.CarriedWeight}}, ${{.Equipment.CarriedValue}})</div>
         <table class="item-table">
           <tbody>
