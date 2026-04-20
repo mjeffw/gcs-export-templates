@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Aldric Voss – Knight-Errant — 250 pts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet">
+    <style>
+      /* ── Design Tokens ─────────────────────────────────────────── */
+      :root {
+        --bg: #fdfdfc;
+        --surface: #f4f3ef;
+        --surface-alt: #eae8e2;
+        --border: #d4d1c7;
+        --accent: #8b2020;
+        --accent-light: rgba(139, 32, 32, .08);
+        --text: #1a1a1a;
+        --text-muted: #5c5c5c;
+        --text-inv: #fff;
+        --radius: 6px;
+        --font: 'Inter', system-ui, sans-serif;
+        --mono: 'JetBrains Mono', monospace;
+        --gap: .5rem;
+        --gap-lg: 1rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: letter;
+        margin: .4in;
+      }
+
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .sheet {
+          box-shadow: none;
+          border: none;
+        }
+      }
+
+      body {
+        font-family: var(--font);
+        font-size: 13px;
+        line-height: 1.35;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      /* ── Sheet Shell ───────────────────────────────────────────── */
+      .sheet {
+        max-width: 7.5in;
+        margin: 0 auto;
+        padding: var(--gap-lg);
+      }
+
+      /* ── Header ────────────────────────────────────────────────── */
+      .header {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-lg);
+        padding-bottom: var(--gap);
+        border-bottom: 3px solid var(--accent);
+        margin-bottom: var(--gap);
+      }
+
+      .header .portrait {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius);
+        object-fit: cover;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        background: var(--surface);
+      }
+
+      .header .identity {
+        flex: 1;
+      }
+
+      .header .identity h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .header .identity .subtitle {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .header .points {
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      .header .points .total {
+        font-size: 30px;
+        font-weight: 700;
+        font-family: var(--mono);
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .header .points .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+      }
+
+      /* ── Top Grid: Attrs + Defenses ────────────────────────────── */
+      .top-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap-lg);
+        margin-bottom: var(--gap);
+      }
+
+      /* ── Section chrome ────────────────────────────────────────── */
+      .section {
+        break-inside: avoid;
+      }
+
+      .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: var(--accent);
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 2px;
+        margin-bottom: 4px;
+      }
+
+      /* ── Attribute cards ──────────────────────────────────────── */
+      .attr-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .attr-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 6px 8px;
+        text-align: center;
+      }
+
+      .attr-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .attr-card .a-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .attr-card.primary {
+        border-color: var(--accent);
+        background: var(--accent-light);
+      }
+
+      .attr-card.primary .a-label {
+        color: var(--accent);
+        font-size: 12px;
+      }
+
+      .attr-card.primary .a-val {
+        font-size: 20px;
+        color: var(--accent);
+      }
+
+      .attr-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .tracker-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 4px 8px 6px;
+        text-align: center;
+      }
+
+      .tracker-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .tracker-card .t-max {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .tracker-card .t-current {
+        display: inline-block;
+        width: 2.2em;
+        border-bottom: 1.5px solid var(--text-muted);
+        font-family: var(--mono);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--text);
+        text-align: center;
+      }
+
+      /* ── Defense bar ───────────────────────────────────────────── */
+      .def-bar {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .def-item {
+        flex: 1;
+        min-width: 46px;
+        text-align: center;
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 3px 4px;
+      }
+
+      .def-item .d-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+      }
+
+      .def-item .d-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 16px;
+      }
+
+
+
+      /* ── Attacks ───────────────────────────────────────────────── */
+      .attacks-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .atk-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .atk-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-inv);
+        background: var(--accent);
+        padding: 2px 4px;
+      }
+
+      .atk-table th:first-child {
+        border-radius: var(--radius) 0 0 0;
+      }
+
+      .atk-table th:last-child {
+        border-radius: 0 var(--radius) 0 0;
+      }
+
+      .atk-table td {
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+
+      .atk-table tr:nth-child(even) td {
+        background: var(--surface);
+      }
+
+      .atk-table .dmg {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .atk-table .atk-notes {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: block;
+      }
+
+      /* ── Traits / Skills two-column ────────────────────────────── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .item-list {
+        list-style: none;
+      }
+
+      .item-list li {
+        padding: 1px 4px;
+        line-height: 1.3;
+      }
+
+      .item-list li:nth-child(odd) {
+        background: var(--surface);
+        border-radius: 2px;
+      }
+
+      .item-list .i-name {
+        font-weight: 600;
+      }
+
+      .item-list .i-detail {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .item-list .i-level {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .item-list li.trait-neg .i-name {
+        color: var(--accent);
+      }
+
+      .item-list li.trait-neg .i-detail {
+        color: var(--accent);
+        opacity: .7;
+      }
+
+      /* ── Spells ────────────────────────────────────────────────── */
+      .spell-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-bottom: var(--gap);
+      }
+
+      .spell-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+        padding: 1px 4px;
+      }
+
+      .spell-table td {
+        padding: 1px 4px;
+      }
+
+      .spell-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+      /* ── Modifiers row ─────────────────────────────────────────── */
+      .mod-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .mod-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .mod-table td {
+        padding: 1px 4px;
+      }
+
+      .mod-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+      .mod-table .mod-val {
+        font-family: var(--mono);
+        font-weight: 700;
+        text-align: right;
+        width: 3em;
+      }
+
+      /* ── Notes ─────────────────────────────────────────────────── */
+      .notes-block {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 4px 8px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+
+
+      /* ── Footer ────────────────────────────────────────────────── */
+      .footer {
+        margin-top: var(--gap);
+        padding-top: 3px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      /* ── Utilities ─────────────────────────────────────────────── */
+      .empty {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sheet">
+
+      <!-- ═══ HEADER ═══ -->
+      <div class="header">
+        <!-- placeholder portrait -->
+        <svg class="portrait" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+          <rect width="72" height="72" rx="6" fill="#eae8e2" />
+          <text x="36" y="40" text-anchor="middle" font-size="10" font-family="Inter,sans-serif"
+            fill="#8b2020">Portrait</text>
+        </svg>
+        <div class="identity">
+          <h1>Aldric Voss</h1>
+          <div class="subtitle">
+            Knight-Errant · TL3 · Male · Age 28 · 6'1", 195 lbs
+          </div>
+        </div>
+        <div class="points">
+          <div class="total">250</div>
+          <div class="label">Total Points</div>
+        </div>
+      </div>
+
+      <!-- ═══ TOP GRID: Attributes | Defenses ═══ -->
+      <div class="top-grid">
+
+        <!-- ── Attributes ── -->
+        <div class="section">
+          <div class="section-title">Attributes</div>
+          <div class="attr-cards">
+            <div class="attr-card primary">
+              <div class="a-label">ST</div>
+              <div class="a-val">14</div>
+            </div>
+            <div class="attr-card primary">
+              <div class="a-label">DX</div>
+              <div class="a-val">13</div>
+            </div>
+            <div class="attr-card primary">
+              <div class="a-label">IQ</div>
+              <div class="a-val">11</div>
+            </div>
+            <div class="attr-card primary">
+              <div class="a-label">HT</div>
+              <div class="a-val">13</div>
+            </div>
+          </div>
+          <div class="attr-cards">
+            <div class="attr-card">
+              <div class="a-label">Will</div>
+              <div class="a-val">12</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Per</div>
+              <div class="a-val">11</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Thr</div>
+              <div class="a-val">1d</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Sw</div>
+              <div class="a-val">2d</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Speed</div>
+              <div class="a-val">6.50</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Move</div>
+              <div class="a-val">6</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">BL</div>
+              <div class="a-val">39 lbs</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">SM</div>
+              <div class="a-val">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Defenses ── -->
+        <div class="section">
+          <div class="section-title">Defenses</div>
+          <div class="def-bar">
+            <div class="def-item">
+              <div class="d-label">Dodge</div>
+              <div class="d-val">9</div>
+            </div>
+            <div class="def-item">
+              <div class="d-label">Move</div>
+              <div class="d-val">5</div>
+            </div>
+            <div class="def-item">
+              <div class="d-label">Parry</div>
+              <div class="d-val">12</div>
+            </div>
+            <div class="def-item">
+              <div class="d-label">Block</div>
+              <div class="d-val">11</div>
+            </div>
+          </div>
+          <div class="section-title" style="margin-top:6px">Status</div>
+          <div class="attr-row">
+            <div class="tracker-card">
+              <div class="a-label">HP (14)</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 14</span></div>
+            </div>
+            <div class="tracker-card">
+              <div class="a-label">FP (13)</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 13</span></div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">DR</div>
+              <div class="a-val">4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ NOTES ═══ -->
+      <div class="section">
+        <div class="section-title">Notes</div>
+        <div class="notes-block">
+          <div>Aldric Voss is a landless knight who travels the realm seeking glory and righting wrongs. He was trained
+            at the Academy of the Silver Blade and still wears their sigil—a silver sword on a blue field. His horse,
+            Stormwind, is stabled at the inn (not carried equipment).</div>
+          <div style="margin-top:4px">Combat notes: With Combat Reflexes he never freezes, and gets +1 to all active
+            defenses and +6 to Fright Checks. Weapon Master (Broadsword) adds +2 per die to damage with his primary
+            weapon.</div>
+        </div>
+      </div>
+
+      <!-- ═══ ATTACKS ═══ -->
+      <div class="attacks-grid">
+        <div class="section">
+          <div class="section-title">Melee Attacks</div>
+          <table class="atk-table">
+            <tr>
+              <th>Weapon</th>
+              <th>Lvl</th>
+              <th>Damage</th>
+              <th>Reach</th>
+              <th>Parry</th>
+            </tr>
+            <tr>
+              <td>Broadsword<span class="atk-notes">Swing</span></td>
+              <td>16</td>
+              <td class="dmg">2d+1 cut</td>
+              <td>1</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>Broadsword<span class="atk-notes">Thrust</span></td>
+              <td>16</td>
+              <td class="dmg">1d+2 cr</td>
+              <td>1</td>
+              <td>12</td>
+            </tr>
+            <tr>
+              <td>Large Knife<span class="atk-notes">Swing</span></td>
+              <td>14</td>
+              <td class="dmg">2d-2 cut</td>
+              <td>C,1</td>
+              <td>9</td>
+            </tr>
+            <tr>
+              <td>Large Knife<span class="atk-notes">Thrust</span></td>
+              <td>14</td>
+              <td class="dmg">1d imp</td>
+              <td>C</td>
+              <td>9</td>
+            </tr>
+            <tr>
+              <td>Shield Bash</td>
+              <td>13</td>
+              <td class="dmg">1d cr</td>
+              <td>1</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Kick</td>
+              <td>12</td>
+              <td class="dmg">1d+1 cr</td>
+              <td>C,1</td>
+              <td>—</td>
+            </tr>
+          </table>
+        </div>
+        <div class="section">
+          <div class="section-title">Ranged Attacks</div>
+          <table class="atk-table">
+            <tr>
+              <th>Weapon</th>
+              <th>Lvl</th>
+              <th>Damage</th>
+              <th>Acc</th>
+              <th>Range</th>
+              <th>RoF</th>
+            </tr>
+            <tr>
+              <td>Throwing Axe</td>
+              <td>14</td>
+              <td class="dmg">2d+1 cut</td>
+              <td>2</td>
+              <td>14/21</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>Large Knife<span class="atk-notes">Thrown</span></td>
+              <td>13</td>
+              <td class="dmg">1d imp</td>
+              <td>0</td>
+              <td>7/14</td>
+              <td>1</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ TRAITS + SKILLS ═══ -->
+      <div class="two-col">
+        <div class="section">
+          <div class="section-title">Traits</div>
+          <ul class="item-list">
+            <li>
+              <span class="i-name">Combat Reflexes</span>
+            </li>
+            <li>
+              <span class="i-name">High Pain Threshold</span>
+            </li>
+            <li>
+              <span class="i-name">Fit</span>
+            </li>
+            <li>
+              <span class="i-name">Weapon Master</span>
+              <span class="i-detail">Broadsword</span>
+            </li>
+            <li>
+              <span class="i-name">Shield Wall Training</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Sense of Duty</span>
+              <span class="i-detail">Companions</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Code of Honor</span>
+              <span class="i-detail">Chivalry</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Overconfidence</span>
+              <span class="i-detail">CR: 12</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Stubbornness</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Vow</span>
+              <span class="i-detail">Never refuse a challenge to single combat</span>
+            </li>
+            <li>
+              <span class="i-name">Appearance</span>
+              <span class="i-detail">Attractive</span>
+            </li>
+            <li>
+              <span class="i-name">Language: Common</span>
+              <span class="i-detail">Native</span>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <div class="section-title">Skills</div>
+          <ul class="item-list">
+            <li>
+              <span class="i-name">Broadsword</span>
+              <span class="i-level">16</span>
+            </li>
+            <li>
+              <span class="i-name">Shield</span>
+              <span class="i-level">14</span>
+            </li>
+            <li>
+              <span class="i-name">Knife</span>
+              <span class="i-level">14</span>
+            </li>
+            <li>
+              <span class="i-name">Thrown Weapon (Axe/Mace)</span>
+              <span class="i-level">14</span>
+            </li>
+            <li>
+              <span class="i-name">Riding</span>
+              <span class="i-level">13</span>
+              <span class="i-detail">Horse</span>
+            </li>
+            <li>
+              <span class="i-name">Leadership</span>
+              <span class="i-level">12</span>
+            </li>
+            <li>
+              <span class="i-name">Tactics</span>
+              <span class="i-level">11</span>
+            </li>
+            <li>
+              <span class="i-name">Strategy</span>
+              <span class="i-level">10</span>
+            </li>
+            <li>
+              <span class="i-name">Brawling</span>
+              <span class="i-level">14</span>
+            </li>
+            <li>
+              <span class="i-name">Wrestling</span>
+              <span class="i-level">13</span>
+            </li>
+            <li>
+              <span class="i-name">Stealth</span>
+              <span class="i-level">12</span>
+            </li>
+            <li>
+              <span class="i-name">First Aid</span>
+              <span class="i-level">11</span>
+            </li>
+            <li>
+              <span class="i-name">Survival</span>
+              <span class="i-level">10</span>
+              <span class="i-detail">Woodlands</span>
+            </li>
+            <li>
+              <span class="i-name">Armoury</span>
+              <span class="i-level">10</span>
+              <span class="i-detail">Melee Weapons</span>
+            </li>
+            <li>
+              <span class="i-name">Heraldry</span>
+              <span class="i-level">11</span>
+            </li>
+            <li>
+              <span class="i-name">Savoir-Faire</span>
+              <span class="i-level">12</span>
+              <span class="i-detail">High Society</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ═══ REACTIONS + CONDITIONAL MODIFIERS ═══ -->
+      <div class="mod-row">
+        <div class="section">
+          <div class="section-title">Reaction Modifiers</div>
+          <table class="mod-table">
+            <tr>
+              <td class="mod-val">+1</td>
+              <td>from anyone (Attractive)</td>
+            </tr>
+            <tr>
+              <td class="mod-val">+2</td>
+              <td>from fellow knights and nobles</td>
+            </tr>
+          </table>
+        </div>
+        <div class="section">
+          <div class="section-title">Conditional Modifiers</div>
+          <table class="mod-table">
+            <tr>
+              <td class="mod-val">+1</td>
+              <td>to active defense rolls (Combat Reflexes)</td>
+            </tr>
+            <tr>
+              <td class="mod-val">+1</td>
+              <td>to HT rolls to stay conscious (Fit)</td>
+            </tr>
+            <tr>
+              <td class="mod-val">+6</td>
+              <td>to Fright (Combat Reflexes)</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ EQUIPMENT ═══ -->
+      <div class="section" style="margin-bottom:var(--gap)">
+        <div class="section-title">Equipment (62.5 lbs, $1,530)</div>
+        <ul class="item-list" style="columns:2; column-gap:var(--gap-lg)">
+          <li style="break-inside:avoid">
+            <span class="i-name">Broadsword</span>
+            <span class="i-detail">Fine quality</span>
+            <span class="i-pts">3 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Medium Shield</span>
+            <span class="i-detail">+2 DB</span>
+            <span class="i-pts">15 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Mail Hauberk</span>
+            <span class="i-detail">DR 4; Torso, Arms, Legs</span>
+            <span class="i-pts">25 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Steel Pot Helm</span>
+            <span class="i-detail">DR 4; Skull</span>
+            <span class="i-pts">5 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Large Knife</span>
+            <span class="i-pts">1 lb</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Throwing Axe</span>
+            <span class="i-pts">4 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Backpack, Small</span>
+            <span class="i-pts">3 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Personal Basics</span>
+            <span class="i-pts">1 lb</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Rope, 10 yards</span>
+            <span class="i-pts">1.5 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Waterskin</span>
+            <span class="i-pts">2 lbs</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Rations, 2 days</span>
+            <span class="i-detail">Trail rations</span>
+            <span class="i-pts">1 lb</span>
+          </li>
+          <li style="break-inside:avoid">
+            <span class="i-name">Coins</span>
+            <span class="i-detail">$68 in silver</span>
+            <span class="i-pts">1 lb</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ═══ FOOTER ═══ -->
+      <div class="footer">
+        <span>Player: Jeff</span>
+        <span>Created: April 15, 2026 · Modified: April 19, 2026</span>
+      </div>
+
+    </div>
+  </body>
+
+</html>

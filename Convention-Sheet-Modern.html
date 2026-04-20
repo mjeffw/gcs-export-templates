@@ -1,0 +1,753 @@
+GCS HTML Template v1
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>{{.Name}} – {{.Title}} — {{.Points.Total}} pts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet">
+    <style>
+      /* ── Design Tokens ─────────────────────────────────────────── */
+      :root {
+        --bg: #fdfdfc;
+        --surface: #f4f3ef;
+        --surface-alt: #eae8e2;
+        --border: #d4d1c7;
+        --accent: #8b2020;
+        --accent-light: rgba(139, 32, 32, .08);
+        --text: #1a1a1a;
+        --text-muted: #5c5c5c;
+        --text-inv: #fff;
+        --radius: 6px;
+        --font: 'Inter', system-ui, sans-serif;
+        --mono: 'JetBrains Mono', monospace;
+        --gap: .5rem;
+        --gap-lg: 1rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: letter;
+        margin: .4in;
+      }
+
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .sheet {
+          box-shadow: none;
+          border: none;
+        }
+      }
+
+      body {
+        font-family: var(--font);
+        font-size: 13px;
+        line-height: 1.35;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      /* ── Sheet Shell ───────────────────────────────────────────── */
+      .sheet {
+        max-width: 7.5in;
+        margin: 0 auto;
+        padding: var(--gap-lg);
+      }
+
+      /* ── Header ────────────────────────────────────────────────── */
+      .header {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-lg);
+        padding-bottom: var(--gap);
+        border-bottom: 3px solid var(--accent);
+        margin-bottom: var(--gap);
+      }
+
+      .header .portrait {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius);
+        object-fit: cover;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .header .identity {
+        flex: 1;
+      }
+
+      .header .identity h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .header .identity .subtitle {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .header .points {
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      .header .points .total {
+        font-size: 30px;
+        font-weight: 700;
+        font-family: var(--mono);
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .header .points .label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+      }
+
+      /* ── Top Grid: Attrs + Defenses ────────────────────────────── */
+      .top-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap-lg);
+        margin-bottom: var(--gap);
+      }
+
+      /* ── Section chrome ────────────────────────────────────────── */
+      .section {
+        break-inside: avoid;
+      }
+
+      .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: var(--accent);
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 2px;
+        margin-bottom: 4px;
+      }
+
+      /* ── Attribute cards ──────────────────────────────────────── */
+      .attr-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .attr-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 6px 8px;
+        text-align: center;
+      }
+
+      .attr-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .attr-card .a-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .attr-card.primary {
+        border-color: var(--accent);
+        background: var(--accent-light);
+      }
+
+      .attr-card.primary .a-label {
+        color: var(--accent);
+        font-size: 12px;
+      }
+
+      .attr-card.primary .a-val {
+        font-size: 20px;
+        color: var(--accent);
+      }
+
+      .attr-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .tracker-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 4px 8px 6px;
+        text-align: center;
+      }
+
+      .tracker-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .tracker-card .t-max {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .tracker-card .t-current {
+        display: inline-block;
+        width: 2.2em;
+        border-bottom: 1.5px solid var(--text-muted);
+        font-family: var(--mono);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--text);
+        text-align: center;
+      }
+
+      /* ── Defense bar ───────────────────────────────────────────── */
+      .def-bar {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .def-item {
+        flex: 1;
+        min-width: 46px;
+        text-align: center;
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 3px 4px;
+      }
+
+      .def-item .d-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+      }
+
+      .def-item .d-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 16px;
+      }
+
+
+
+      /* ── Attacks ───────────────────────────────────────────────── */
+      .attacks-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .atk-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .atk-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-inv);
+        background: var(--accent);
+        padding: 2px 4px;
+      }
+
+      .atk-table th:first-child {
+        border-radius: var(--radius) 0 0 0;
+      }
+
+      .atk-table th:last-child {
+        border-radius: 0 var(--radius) 0 0;
+      }
+
+      .atk-table td {
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+
+      .atk-table tr:nth-child(even) td {
+        background: var(--surface);
+      }
+
+      .atk-table .dmg {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .atk-table .atk-notes {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: block;
+      }
+
+      /* ── Traits / Skills two-column ────────────────────────────── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .item-list {
+        list-style: none;
+      }
+
+      .item-list li {
+        padding: 1px 4px;
+        line-height: 1.3;
+      }
+
+      .item-list li:nth-child(odd) {
+        background: var(--surface);
+        border-radius: 2px;
+      }
+
+      .item-list .i-name {
+        font-weight: 600;
+      }
+
+      .item-list .i-detail {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .item-list .i-level {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .item-list li.trait-neg .i-name {
+        color: var(--accent);
+      }
+
+      .item-list li.trait-neg .i-detail {
+        color: var(--accent);
+        opacity: .7;
+      }
+
+      /* ── Spells ────────────────────────────────────────────────── */
+      .spell-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-bottom: var(--gap);
+      }
+
+      .spell-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+        padding: 1px 4px;
+      }
+
+      .spell-table td {
+        padding: 1px 4px;
+      }
+
+      .spell-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+      /* ── Modifiers row ─────────────────────────────────────────── */
+      .mod-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .mod-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .mod-table td {
+        padding: 1px 4px;
+      }
+
+      .mod-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+      .mod-table .mod-val {
+        font-family: var(--mono);
+        font-weight: 700;
+        text-align: right;
+        width: 3em;
+      }
+
+      /* ── Notes ─────────────────────────────────────────────────── */
+      .notes-block {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 4px 8px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+
+
+      /* ── Footer ────────────────────────────────────────────────── */
+      .footer {
+        margin-top: var(--gap);
+        padding-top: 3px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      /* ── HP / FP tracker boxes ─────────────────────────────────── */
+      .tracker {
+        display: flex;
+        gap: 3px;
+        margin-top: 2px;
+      }
+
+      .tracker-box {
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 2px;
+      }
+
+      /* ── Utilities ─────────────────────────────────────────────── */
+      .empty {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sheet">
+
+      <!-- ═══ HEADER ═══ -->
+      <div class="header">
+        {{- if .EmbeddedPortraitDataURL}}
+        <img class="portrait" src="{{.EmbeddedPortraitDataURL}}" alt="Portrait">
+        {{- end}}
+        <div class="identity">
+          <h1>{{.Name}}</h1>
+          <div class="subtitle">
+            {{- .Title}}{{if .Title}} · {{end}}TL{{.TechLevel}}
+            {{- if .Gender}} · {{.Gender}}{{end}}
+            {{- if .Age}} · Age {{.Age}}{{end}}
+            {{- if .Height}} · {{.Height}}{{end}}
+            {{- if .Weight}}, {{.Weight}}{{end}}
+          </div>
+        </div>
+        <div class="points">
+          <div class="total">{{.Points.Total}}</div>
+          <div class="label">Total Points</div>
+        </div>
+      </div>
+
+      <!-- ═══ TOP GRID: Attributes | Defenses ═══ -->
+      <div class="top-grid">
+
+        <!-- ── Attributes ── -->
+        <div class="section">
+          <div class="section-title">Attributes</div>
+          <div class="attr-cards">
+            {{- range .Attributes.Primary}}
+            <div class="attr-card primary">
+              <div class="a-label">{{.Name}}</div>
+              <div class="a-val">{{.Value}}</div>
+            </div>
+            {{- end}}
+          </div>
+          <div class="attr-cards">
+            {{- range .Attributes.Secondary}}
+            <div class="attr-card">
+              <div class="a-label">{{.Name}}</div>
+              <div class="a-val">{{.Value}}</div>
+            </div>
+            {{- end}}
+            <div class="attr-card">
+              <div class="a-label">Thrust</div>
+              <div class="a-val">{{.Thrust}}</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">Swing</div>
+              <div class="a-val">{{.Swing}}</div>
+            </div>
+            <div class="attr-card">
+              <div class="a-label">BL</div>
+              <div class="a-val">{{.Lift.Basic}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Defenses ── -->
+        <div class="section">
+          <div class="section-title">Defenses</div>
+          <div class="def-bar">
+            {{- range .Encumbrance}}{{if .IsCurrent}}
+            <div class="def-item">
+              <div class="d-label">Dodge</div>
+              <div class="d-val">{{.Dodge}}</div>
+            </div>
+            <div class="def-item">
+              <div class="d-label">Move</div>
+              <div class="d-val">{{.Move}}</div>
+            </div>
+            {{- end}}{{end}}
+            <div class="def-item">
+              <div class="d-label">Parry</div>
+              <div class="d-val">—</div>
+            </div>
+            <div class="def-item">
+              <div class="d-label">Block</div>
+              <div class="d-val">—</div>
+            </div>
+          </div>
+          <div class="section-title" style="margin-top:6px">Status</div>
+          <div class="attr-row">
+            {{- range .Attributes.Pools}}
+            <div class="tracker-card">
+              <div class="a-label">{{.Name}} ({{.Maximum}})</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ {{.Maximum}}</span></div>
+            </div>
+            {{- end}}
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ NOTES ═══ -->
+      {{- if .Notes}}
+      <div class="section">
+        <div class="section-title">Notes</div>
+        <div class="notes-block">
+          {{- range .Notes}}
+          <div>{{.Description}}</div>
+          {{- end}}
+        </div>
+      </div>
+      {{- end}}
+
+      <!-- ═══ ATTACKS ═══ -->
+      <div class="attacks-grid">
+        {{- if .MeleeWeapons}}
+        <div class="section">
+          <div class="section-title">Melee Attacks</div>
+          <table class="atk-table">
+            <tr>
+              <th>Weapon</th>
+              <th>Lvl</th>
+              <th>Damage</th>
+              <th>Reach</th>
+              <th>Parry</th>
+            </tr>
+            {{- range .MeleeWeapons}}
+            <tr>
+              <td>
+                {{.Description}}
+                {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
+              </td>
+              <td>{{.Level}}</td>
+              <td class="dmg">{{.Damage}}</td>
+              <td>{{.Reach}}</td>
+              <td>{{.Parry}}</td>
+            </tr>
+            {{- end}}
+          </table>
+        </div>
+        {{- end}}
+        {{- if .RangedWeapons}}
+        <div class="section">
+          <div class="section-title">Ranged Attacks</div>
+          <table class="atk-table">
+            <tr>
+              <th>Weapon</th>
+              <th>Lvl</th>
+              <th>Damage</th>
+              <th>Acc</th>
+              <th>Range</th>
+              <th>RoF</th>
+            </tr>
+            {{- range .RangedWeapons}}
+            <tr>
+              <td>
+                {{.Description}}
+                {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
+              </td>
+              <td>{{.Level}}</td>
+              <td class="dmg">{{.Damage}}</td>
+              <td>{{.Accuracy}}</td>
+              <td>{{.Range}}</td>
+              <td>{{.RateOfFire}}</td>
+            </tr>
+            {{- end}}
+          </table>
+        </div>
+        {{- end}}
+      </div>
+
+      <!-- ═══ TRAITS + SKILLS ═══ -->
+      <div class="two-col">
+        <div class="section">
+          <div class="section-title">Traits</div>
+          <ul class="item-list">
+            {{- range .Traits}}
+            <li{{if hasPrefix .Points.String "-"}} class="trait-neg" {{end}}>
+              <span class="i-name">{{.Description}}</span>
+              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+              </li>
+              {{- end}}
+          </ul>
+        </div>
+        <div class="section">
+          <div class="section-title">Skills</div>
+          <ul class="item-list">
+            {{- range .Skills}}
+            <li>
+              <span class="i-name">{{.Description}}</span>
+              <span class="i-level">{{.Level}}</span>
+              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+            </li>
+            {{- end}}
+          </ul>
+        </div>
+      </div>
+
+      <!-- ═══ SPELLS ═══ -->
+      {{- if .Spells}}
+      <div class="section" style="margin-bottom:var(--gap)">
+        <div class="section-title">Spells</div>
+        <table class="spell-table">
+          <tr>
+            <th>Spell</th>
+            <th>Class</th>
+            <th>College</th>
+            <th>Lvl</th>
+            <th>Cost</th>
+            <th>Maintain</th>
+            <th>Time</th>
+            <th>Duration</th>
+          </tr>
+          {{- range .Spells}}
+          <tr>
+            <td><strong>{{.Description}}</strong>{{if .Notes}} <span
+                style="color:var(--text-muted)">{{.Notes}}</span>{{end}}</td>
+            <td>{{.Class}}</td>
+            <td>{{join .Colleges ", "}}</td>
+            <td style="font-family:var(--mono);font-weight:700">{{.Level}}</td>
+            <td>{{.Mana.Cast}}</td>
+            <td>{{.Mana.Maintain}}</td>
+            <td>{{.TimeToCast}}</td>
+            <td>{{.Duration}}</td>
+          </tr>
+          {{- end}}
+        </table>
+      </div>
+      {{- end}}
+
+      <!-- ═══ REACTIONS + CONDITIONAL MODIFIERS ═══ -->
+      {{- if or .Reactions .ConditionalModifiers}}
+      <div class="mod-row">
+        {{- if .Reactions}}
+        <div class="section">
+          <div class="section-title">Reaction Modifiers</div>
+          <table class="mod-table">
+            {{- range .Reactions}}
+            <tr>
+              <td class="mod-val">{{.Total.StringWithSign}}</td>
+              <td>{{.Situation}}</td>
+            </tr>
+            {{- end}}
+          </table>
+        </div>
+        {{- end}}
+        {{- if .ConditionalModifiers}}
+        <div class="section">
+          <div class="section-title">Conditional Modifiers</div>
+          <table class="mod-table">
+            {{- range .ConditionalModifiers}}
+            {{- if not (or (eq .Situation "Vision") (eq .Situation "Hearing") (eq .Situation "Taste & Smell") (eq .Situation "Touch"))}}
+            <tr>
+              <td class="mod-val">{{.Total.StringWithSign}}</td>
+              <td>{{replace .Situation "Fright Check" "Fright"}}</td>
+            </tr>
+            {{- end}}
+            {{- end}}
+          </table>
+        </div>
+        {{- end}}
+      </div>
+      {{- end}}
+
+      <!-- ═══ EQUIPMENT ═══ -->
+      {{- if .Equipment.Carried}}
+      <div class="section" style="margin-bottom:var(--gap)">
+        <div class="section-title">Equipment ({{.Equipment.CarriedWeight}}, ${{.Equipment.CarriedValue}})</div>
+        <ul class="item-list" style="columns:2; column-gap:var(--gap-lg)">
+          {{- range .Equipment.Carried}}
+          <li style="break-inside:avoid">
+            {{- if ne (numberToInt .Quantity) 1}}<span class="i-level">{{.Quantity}}×</span> {{end}}
+            <span class="i-name">{{.Description}}</span>
+            {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+            <span class="i-pts">{{.ExtendedWeight}}</span>
+          </li>
+          {{- end}}
+        </ul>
+      </div>
+      {{- end}}
+
+      <!-- ═══ FOOTER ═══ -->
+      <div class="footer">
+        <span>Player: {{.Player}}</span>
+        <span>Created: {{.CreatedOn}} · Modified: {{.ModifiedOn}}</span>
+      </div>
+
+    </div>
+  </body>
+
+</html>
