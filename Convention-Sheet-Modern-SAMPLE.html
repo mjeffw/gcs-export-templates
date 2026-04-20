@@ -10,7 +10,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet">
     <style>
-       
       :root {
         --bg: #fdfdfc;
         --surface: #e0ded7;
@@ -25,20 +24,20 @@
         --mono: 'JetBrains Mono', monospace;
         --gap: .5rem;
         --gap-lg: 1rem;
-         
+
         --font-size-base: 12.5px;
         --font-size-xs: calc(var(--font-size-base) * 0.85);
-         
+
         --font-size-sm: var(--font-size-base);
-         
+
         --font-size-md: calc(var(--font-size-base) * 1.15);
-         
+
         --font-size-lg: calc(var(--font-size-base) * 1.5);
-         
+
         --font-size-xl: calc(var(--font-size-base) * 1.85);
-         
+
         --font-size-xxl: calc(var(--font-size-base) * 2.3);
-         
+
       }
 
       *,
@@ -74,14 +73,14 @@
         background: var(--bg);
       }
 
-       
+
       .sheet {
         max-width: 7.5in;
         margin: 0 auto;
         padding: var(--gap-lg);
       }
 
-       
+
       .header {
         display: flex;
         align-items: center;
@@ -136,7 +135,7 @@
         color: var(--text-muted);
       }
 
-       
+
       .top-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -144,7 +143,7 @@
         margin-bottom: var(--gap);
       }
 
-       
+
       .section {
         break-inside: avoid;
       }
@@ -161,7 +160,7 @@
         padding-top: 4px;
       }
 
-       
+
       .attr-cards {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -286,7 +285,7 @@
         text-align: center;
       }
 
-       
+
       .def-bar {
         display: flex;
         gap: 4px;
@@ -317,7 +316,7 @@
 
 
 
-       
+
       .attacks-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -370,7 +369,7 @@
         display: block;
       }
 
-       
+
       .two-col {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -423,7 +422,7 @@
         gap: 0.5em;
       }
 
-       
+
       .spell-table {
         width: 100%;
         border-collapse: collapse;
@@ -449,7 +448,7 @@
         background: var(--surface);
       }
 
-       
+
       .mod-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -478,7 +477,7 @@
         width: 3em;
       }
 
-       
+
       .notes-block {
         background: var(--surface);
         border-radius: var(--radius);
@@ -487,7 +486,7 @@
         line-height: 1.4;
       }
 
-       
+
       .footer {
         margin-top: var(--gap);
         padding-top: 3px;
@@ -498,7 +497,7 @@
         color: var(--text-muted);
       }
 
-       
+
       .tracker {
         display: flex;
         gap: 3px;
@@ -512,12 +511,12 @@
         border-radius: 2px;
       }
 
-       
+
       .empty {
         display: none;
       }
 
-       
+
       .item-table {
         width: 100%;
         border-collapse: separate;
@@ -575,7 +574,11 @@
         font-family: var(--mono);
       }
 
-       
+      .item-table td:nth-child(odd) {
+        border-right: 1px solid var(--border);
+      }
+
+
       .atk-table td,
       .atk-table th,
       .mod-table td,
@@ -597,7 +600,7 @@
   <body>
     <div class="sheet">
 
-      
+
       <div class="header">
         <div class="identity">
           <h1>Alex Reyes</h1>
@@ -610,10 +613,10 @@
         </div>
       </div>
 
-      
+
       <div class="top-grid">
 
-        
+
         <div class="section">
           <div class="section-title">Attributes</div>
           <div class="attr-cards">
@@ -674,7 +677,7 @@
           </div>
         </div>
 
-        
+
         <div class="section">
           <div class="section-title">Defenses</div>
           <div class="attr-cards">
@@ -709,15 +712,16 @@
         </div>
       </div>
 
-      
+
       <div class="section">
         <div class="section-title"><span class="icon" aria-hidden="true"></span>Notes</div>
         <div class="notes-block">
-          <div>Alex is an influencer with a moderate audience (several thousand followers). They are obsessed with streaming, adding more followers, and monetizing their social media.</div>
+          <div>Alex is an influencer with a moderate audience (several thousand followers). They are obsessed with
+            streaming, adding more followers, and monetizing their social media.</div>
         </div>
       </div>
 
-      
+
       <div class="mod-row">
         <div class="section">
           <div class="section-title">Reaction Modifiers</div>
@@ -747,28 +751,29 @@
         </div>
       </div>
 
-      
+
       <div class="two-col">
         <div class="section">
           <div class="section-title">Traits</div>
           <ul class="item-list">
             <li>
               <span class="i-name">Appearance</span>
-              </li>
+            </li>
             <li>
               <span class="i-name">Charisma 1</span>
-              </li>
-            <li class="trait-neg" >
+            </li>
+            <li class="trait-neg">
               <span class="i-name">Compulsive Behaviour (Stream)</span> <span class="i-detail">(CR:9)</span>
               <div class="user-description">Becomes irritable (Bad Temper) if unable to record or stream.</div>
-              </li>
+            </li>
             <li>
               <span class="i-name">High Manual Dexterity 1</span>
-              </li>
-            <li class="trait-neg" >
+            </li>
+            <li class="trait-neg">
               <span class="i-name">Obsession</span> <span class="i-detail">Reach a million followers. (CR:12)</span>
-              <div class="user-description">Make a self-control roll whenever it would be wise to stop recording/streaming. If you fail, you continue regardless of the consequences.</div>
-              </li>
+              <div class="user-description">Make a self-control roll whenever it would be wise to stop
+                recording/streaming. If you fail, you continue regardless of the consequences.</div>
+            </li>
           </ul>
         </div>
         <div class="section">
@@ -814,7 +819,7 @@
         </div>
       </div>
 
-      
+
       <div class="section">
         <div class="section-title">Melee Attacks</div>
         <table class="atk-table">
@@ -859,16 +864,16 @@
         </table>
       </div>
 
-      
 
-      
+
+
       <div class="section section-spaced">
         <div class="section-title">Equipment
           (4 lb, $565)</div>
         <table class="item-table">
           <tbody>
-            
-            
+
+
             <tr>
               <td class="no-break">
                 <div class="equip-text">
@@ -876,28 +881,28 @@
                   <span class="i-name"><strong>LED Light Bank</strong></span>
                   <span class="i-pts">0.5 lb</span>
                 </div>
-                
+
                 <div class="equip-notes">3 yard wide area illumination; color/warmth adjustable</div>
               </td>
-              
-            
-            
-              
-            
+
+
+
+
+
               <td class="no-break">
                 <div class="equip-text">
                   <span class="i-level"></span>
                   <span class="i-name"><strong>Power Bank</strong></span>
                   <span class="i-pts">0.5 lb</span>
                 </div>
-                
+
                 <div class="equip-notes">Phone recharger with cable, good for 6 hours</div>
               </td>
-              
+
             </tr>
-            
-              
-            
+
+
+
             <tr>
               <td class="no-break">
                 <div class="equip-text">
@@ -905,27 +910,27 @@
                   <span class="i-name"><strong>Selfie Stick, Telescoping</strong></span>
                   <span class="i-pts">1.5 lb</span>
                 </div>
-                
+
                 <div class="equip-notes">4&#39; max extension</div>
               </td>
-              
-            
-            
-              
-            
+
+
+
+
+
               <td class="no-break">
                 <div class="equip-text">
                   <span class="i-level"></span>
                   <span class="i-name"><strong>Smart Phone</strong></span>
                   <span class="i-pts">0.5 lb</span>
                 </div>
-                
+
               </td>
-              
+
             </tr>
-            
-              
-            
+
+
+
             <tr>
               <td class="no-break">
                 <div class="equip-text">
@@ -933,18 +938,18 @@
                   <span class="i-name"><strong>Umbrella, Pocket</strong></span>
                   <span class="i-pts">1 lb</span>
                 </div>
-                
+
               </td>
-              
-            
-            
-              
-              </tr>
+
+
+
+
+            </tr>
           </tbody>
         </table>
       </div>
 
-      
+
       <div class="footer">
         <span>Player: </span>
         <span>Created: Apr 19, 2026, 6:12 PM · Modified: Apr 20, 2026, 5:03 PM</span>
