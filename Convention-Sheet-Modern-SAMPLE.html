@@ -21,12 +21,33 @@
         <img class="portrait" src="https://via.placeholder.com/72" alt="Portrait">
         <div class="identity">
           <h1>Sample Character</h1>
-          <div class="subtitle">Adventurer · TL3 · Male · Age 25 · 5'10", 170 lbs</div>
+          <div class="subtitle">Adventurer · TL3 · Male · Age 25{{if and .Height (ne .Height "0'")}} ·
+            5'10"{{end}}{{if and .Weight (ne .Weight "0 lb")}}, 170 lbs{{end}}</div>
         </div>
-        <div class="points">
-          <div class="total">250</div>
-          <div class="label">Total Points</div>
+        <div class="event-block">
+          <div class="event-title">Blackout</div>
+          <div class="event-sub">Gen Con 2026</div>
         </div>
+        <style>
+          .event-block {
+            text-align: right;
+            flex-shrink: 0;
+          }
+
+          .event-title {
+            font-size: 26px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: #8b2020;
+            line-height: 1;
+          }
+
+          .event-sub {
+            font-size: 13px;
+            color: #5c5c5c;
+            margin-top: 2px;
+          }
+        </style>
       </div>
       <!-- TOP GRID -->
       <div class="top-grid">
@@ -237,24 +258,49 @@
         <div class="section-title"><span class="icon">🎒</span>Equipment (45 lbs, $1,200)</div>
         <table class="item-table">
           <tbody>
+          <tbody>
             <tr>
-              <td class="no-break"><span class="i-name"><strong>Broadsword</strong></span><span class="i-detail"> Fine
-                  quality</span><span class="i-pts"> 3 lbs</span></td>
-              <td class="no-break"><span class="i-name"><strong>Medium Shield</strong></span><span class="i-detail"> +2
-                  DB</span><span class="i-pts"> 15 lbs</span></td>
+              <td class="no-break">
+                <span class="i-name"><strong>Broadsword</strong></span><span class="i-pts"> 3 lbs</span>
+                <div class="equip-notes">Fine quality</div>
+              </td>
+              <td class="no-break">
+                <span class="i-name"><strong>Medium Shield</strong></span><span class="i-pts"> 15 lbs</span>
+                <div class="equip-notes">+2 DB</div>
+              </td>
             </tr>
             <tr>
-              <td class="no-break"><span class="i-name"><strong>Mail Hauberk</strong></span><span class="i-detail"> DR
-                  4; Torso, Arms, Legs</span><span class="i-pts"> 25 lbs</span></td>
-              <td class="no-break"><span class="i-name"><strong>Steel Pot Helm</strong></span><span class="i-detail"> DR
-                  4; Skull</span><span class="i-pts"> 5 lbs</span></td>
+              <td class="no-break">
+                <span class="i-name"><strong>Mail Hauberk</strong></span><span class="i-pts"> 25 lbs</span>
+                <div class="equip-notes">DR 4; Torso, Arms, Legs</div>
+              </td>
+              <td class="no-break">
+                <span class="i-name"><strong>Steel Pot Helm</strong></span><span class="i-pts"> 5 lbs</span>
+                <div class="equip-notes">DR 4; Skull</div>
+              </td>
             </tr>
             <tr>
-              <td class="no-break"><span class="i-name"><strong>Large Knife</strong></span><span class="i-pts"> 1
-                  lb</span></td>
-              <td class="no-break"><span class="i-name"><strong>Throwing Axe</strong></span><span class="i-pts"> 4
-                  lbs</span></td>
+              <td class="no-break">
+                <span class="i-name"><strong>Large Knife</strong></span><span class="i-pts"> 1 lb</span>
+              </td>
+              <td class="no-break">
+                <span class="i-name"><strong>Throwing Axe</strong></span><span class="i-pts"> 4 lbs</span>
+              </td>
             </tr>
+          </tbody>
+          <style>
+            .equip-notes {
+              margin-top: 2px;
+              font-size: 13px;
+              color: #5c5c5c;
+              font-style: italic;
+              line-height: 1.4;
+            }
+          </style>
+          lb</span></td>
+          <td class="no-break"><span class="i-name"><strong>Throwing Axe</strong></span><span class="i-pts"> 4
+              lbs</span></td>
+          </tr>
           </tbody>
         </table>
       </div>
