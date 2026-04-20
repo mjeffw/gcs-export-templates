@@ -26,6 +26,20 @@ GCS HTML Template v1
         --mono: 'JetBrains Mono', monospace;
         --gap: .5rem;
         --gap-lg: 1rem;
+        /* Font size scale */
+        --font-size-base: 12.5px;
+        --font-size-xs: calc(var(--font-size-base) * 0.85);
+        /* ~11px */
+        --font-size-sm: var(--font-size-base);
+        /* 12.5px */
+        --font-size-md: calc(var(--font-size-base) * 1.15);
+        /* ~14.4px */
+        --font-size-lg: calc(var(--font-size-base) * 1.5);
+        /* ~18.75px */
+        --font-size-xl: calc(var(--font-size-base) * 1.85);
+        /* ~23.1px */
+        --font-size-xxl: calc(var(--font-size-base) * 2.3);
+        /* ~28.75px */
       }
 
       *,
@@ -55,7 +69,7 @@ GCS HTML Template v1
 
       body {
         font-family: var(--font);
-        font-size: 13px;
+        font-size: var(--font-size-base);
         line-height: 1.35;
         color: var(--text);
         background: var(--bg);
@@ -73,7 +87,6 @@ GCS HTML Template v1
         display: flex;
         align-items: center;
         gap: var(--gap-lg);
-        padding-bottom: var(--gap);
         border-bottom: 3px solid var(--accent);
         margin-bottom: var(--gap);
       }
@@ -93,14 +106,14 @@ GCS HTML Template v1
       }
 
       .header .identity h1 {
-        font-size: 24px;
+        font-size: var(--font-size-xl);
         font-weight: 700;
         color: var(--accent);
         line-height: 1.1;
       }
 
       .header .identity .subtitle {
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         color: var(--text-muted);
         margin-top: 2px;
       }
@@ -111,14 +124,14 @@ GCS HTML Template v1
       }
 
       .header .event .session {
-        font-size: 30px;
+        font-size: var(--font-size-xl);
         font-weight: 700;
         color: var(--accent);
         line-height: 1;
       }
 
       .header .event .venue {
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         letter-spacing: .08em;
         color: var(--text-muted);
@@ -138,7 +151,7 @@ GCS HTML Template v1
       }
 
       .section-title {
-        font-size: 12px;
+        font-size: var(--font-size-md);
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: .1em;
@@ -146,6 +159,7 @@ GCS HTML Template v1
         border-bottom: 2px solid var(--accent);
         padding-bottom: 2px;
         margin-bottom: 4px;
+        padding-top: 4px;
       }
 
       /* ── Attribute cards ──────────────────────────────────────── */
@@ -165,7 +179,7 @@ GCS HTML Template v1
       }
 
       .attr-card .a-label {
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: .08em;
@@ -176,7 +190,7 @@ GCS HTML Template v1
       .attr-card .a-val {
         font-weight: 700;
         font-family: var(--mono);
-        font-size: 15px;
+        font-size: var(--font-size-md);
         color: var(--text);
       }
 
@@ -187,11 +201,11 @@ GCS HTML Template v1
 
       .attr-card.primary .a-label {
         color: var(--accent);
-        font-size: 12px;
+        font-size: var(--font-size-xs);
       }
 
       .attr-card.primary .a-val {
-        font-size: 20px;
+        font-size: var(--font-size-lg);
         color: var(--accent);
       }
 
@@ -220,14 +234,14 @@ GCS HTML Template v1
 
       .attr-pill .a-label {
         font-weight: 600;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         color: var(--text-muted);
       }
 
       .attr-pill .a-val {
         font-weight: 700;
         font-family: var(--mono);
-        font-size: 13px;
+        font-size: var(--font-size-sm);
       }
 
       .attr-row {
@@ -246,7 +260,7 @@ GCS HTML Template v1
       }
 
       .tracker-card .a-label {
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: .08em;
@@ -257,7 +271,7 @@ GCS HTML Template v1
       .tracker-card .t-max {
         font-family: var(--mono);
         font-weight: 700;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         color: var(--text);
       }
 
@@ -266,7 +280,7 @@ GCS HTML Template v1
         width: 2.2em;
         border-bottom: 1.5px solid var(--text-muted);
         font-family: var(--mono);
-        font-size: 15px;
+        font-size: var(--font-size-md);
         font-weight: 700;
         line-height: 1.3;
         color: var(--text);
@@ -290,7 +304,7 @@ GCS HTML Template v1
       }
 
       .def-item .d-label {
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         letter-spacing: .06em;
         color: var(--text-muted);
@@ -299,7 +313,7 @@ GCS HTML Template v1
       .def-item .d-val {
         font-weight: 700;
         font-family: var(--mono);
-        font-size: 16px;
+        font-size: var(--font-size-lg);
       }
 
 
@@ -315,12 +329,12 @@ GCS HTML Template v1
       .atk-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
       }
 
       .atk-table th {
         text-align: left;
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         letter-spacing: .06em;
         color: var(--text-inv);
@@ -348,10 +362,11 @@ GCS HTML Template v1
       .atk-table .dmg {
         font-weight: 700;
         color: var(--accent);
+        font-family: var(--mono);
       }
 
       .atk-table .atk-notes {
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         color: var(--text-muted);
         display: block;
       }
@@ -383,7 +398,7 @@ GCS HTML Template v1
       }
 
       .item-list .i-detail {
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         color: var(--text-muted);
       }
 
@@ -557,6 +572,9 @@ GCS HTML Template v1
         background: var(--surface-alt);
       }
 
+      .mono {
+        font-family: var(--mono);
+      }
 
       /* ── Table Consistent Spacing ───────────────────────────── */
       .atk-table td,
@@ -571,7 +589,7 @@ GCS HTML Template v1
 
       .item-list .user-description,
       .item-table td .equip-notes {
-        font-size: 11px;
+        font-size: var(--font-size-xs);
         color: var(--text-muted);
       }
     </style>
@@ -693,7 +711,7 @@ GCS HTML Template v1
       <!-- ═══ NOTES ═══ -->
       {{- if .Notes}}
       <div class="section">
-        <div class="section-title"><span class="icon" aria-hidden="true">📝</span>Notes</div>
+        <div class="section-title"><span class="icon" aria-hidden="true"></span>Notes</div>
         <div class="notes-block">
           {{- range .Notes}}
           <div>{{.Description}}</div>
@@ -790,7 +808,7 @@ GCS HTML Template v1
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
             </td>
             <td>{{.Usage}}</td>
-            <td><strong>{{.Level}}</strong></td>
+            <td><span class="mono"><strong>{{.Level}}</strong></span></td>
             <td class="dmg">{{.Damage}}</td>
             <td>{{.Reach}}</td>
             <td>{{.Parry}}</td>
@@ -819,7 +837,7 @@ GCS HTML Template v1
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
             </td>
             <td>{{.Usage}}</td>
-            <td><strong>{{.Level}}</strong></td>
+            <td><span class="mono"><strong>{{.Level}}</strong></span></td>
             <td class="dmg">{{.Damage}}</td>
             <td>{{.Accuracy}}</td>
             <td>{{.Range}}</td>
