@@ -12,7 +12,7 @@
     <style>
       :root {
         --bg: #fdfdfc;
-        --surface: #f4f3ef;
+        --surface: #e0ded7;
         --surface-alt: #eae8e2;
         --border: #d4d1c7;
         --accent: #8b2020;
@@ -515,10 +515,13 @@
         grid-template-columns: 1fr 1fr;
       }
 
+      .item-table tr:nth-child(odd) {
+        background: var(--surface);
+      }
+
       .item-table td {
         vertical-align: top;
         padding: 2px 8px 2px 8px;
-        background: var(--surface);
         border-radius: 2px;
         font-size: 13px;
         line-height: 1.4;
@@ -703,12 +706,12 @@
           <div class="section-title"><span class="icon" aria-hidden="true">💬</span>Reaction Modifiers</div>
           <table class="mod-table">
             <tr>
-              <td class="mod-val">&#43;1</td>
-              <td>from others</td>
+              <td class="mod-val">&#43;2</td>
+              <td>from anyone with whom you actively interact (converse, lecture, etc.)</td>
             </tr>
             <tr>
-              <td class="mod-val">&#43;2</td>
-              <td>from sapient being with whom you actively interact (converse, lecture, etc.)</td>
+              <td class="mod-val">&#43;1</td>
+              <td>from others who can see you</td>
             </tr>
             <tr>
               <td class="mod-val">&#43;2</td>
@@ -749,9 +752,6 @@
               <span class="i-name">Obsession</span> <span class="i-detail">Reach a million followers. </span>
               <div class="user-description">Make a self-control roll whenever it would be wise to deviate from your
                 goal. If you fail, you continue to pursue your Obsession, regardless of the consequences.</div>
-            </li>
-            <li>
-              <span class="i-name">Natural Attacks</span>
             </li>
           </ul>
         </div>
