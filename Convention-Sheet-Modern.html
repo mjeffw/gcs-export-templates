@@ -403,6 +403,13 @@ GCS HTML Template v1
         opacity: .7;
       }
 
+      .skill-name {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.5em;
+      }
+
       /* ── Spells ────────────────────────────────────────────────── */
       .spell-table {
         width: 100%;
@@ -747,9 +754,12 @@ GCS HTML Template v1
           <ul class="item-list">
             {{- range .Skills}}
             <li>
-              <span class="i-name">{{.Description}}</span>
-              <span class="i-level">{{.Level}}</span>
-              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+              <div class="skill-name">
+                <span class="i-name">{{.Description}}</span>
+                <span class="i-level">{{.Level}}</span>
+              </div>
+              {{- if .Notes}}
+              <div class="user-description">{{.Notes}}</div>{{end}}
             </li>
             {{- end}}
           </ul>
@@ -772,11 +782,11 @@ GCS HTML Template v1
           {{- range .MeleeWeapons}}
           <tr>
             <td>
-              {{.Description}}
+              <strong>{{.Description}}</strong>
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
             </td>
             <td>{{.Usage}}</td>
-            <td>{{.Level}}</td>
+            <td><strong>{{.Level}}</strong></td>
             <td class="dmg">{{.Damage}}</td>
             <td>{{.Reach}}</td>
             <td>{{.Parry}}</td>
@@ -801,11 +811,11 @@ GCS HTML Template v1
           {{- range .RangedWeapons}}
           <tr>
             <td>
-              {{.Description}}
+              <strong>{{.Description}}</strong>
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
             </td>
             <td>{{.Usage}}</td>
-            <td>{{.Level}}</td>
+            <td><strong>{{.Level}}</strong></td>
             <td class="dmg">{{.Damage}}</td>
             <td>{{.Accuracy}}</td>
             <td>{{.Range}}</td>

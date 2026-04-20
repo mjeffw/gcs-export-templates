@@ -3,72 +3,614 @@
 
   <head>
     <meta charset="utf-8">
-    <title>Sample Character – Adventurer — 250 pts</title>
+    <title>Alex Reyes – Influencer — 75 pts</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet">
     <style>
-      /* Copy the style block from Convention-Sheet-Modern.html here for full fidelity */
+      :root {
+        --bg: #fdfdfc;
+        --surface: #f4f3ef;
+        --surface-alt: #eae8e2;
+        --border: #d4d1c7;
+        --accent: #8b2020;
+        --accent-light: rgba(139, 32, 32, .08);
+        --text: #1a1a1a;
+        --text-muted: #5c5c5c;
+        --text-inv: #fff;
+        --radius: 6px;
+        --font: 'Inter', system-ui, sans-serif;
+        --mono: 'JetBrains Mono', monospace;
+        --gap: .5rem;
+        --gap-lg: 1rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      @page {
+        size: letter;
+        margin: .4in;
+      }
+
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .sheet {
+          box-shadow: none;
+          border: none;
+        }
+      }
+
+      body {
+        font-family: var(--font);
+        font-size: 13px;
+        line-height: 1.35;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+
+      .sheet {
+        max-width: 7.5in;
+        margin: 0 auto;
+        padding: var(--gap-lg);
+      }
+
+
+      .header {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-lg);
+        padding-bottom: var(--gap);
+        border-bottom: 3px solid var(--accent);
+        margin-bottom: var(--gap);
+      }
+
+      .header .portrait {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius);
+        object-fit: cover;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        background: var(--surface);
+      }
+
+      .header .identity {
+        flex: 1;
+      }
+
+      .header .identity h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .header .identity .subtitle {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .header .event {
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      .header .event .session {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .header .event .venue {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+      }
+
+
+      .top-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap-lg);
+        margin-bottom: var(--gap);
+      }
+
+
+      .section {
+        break-inside: avoid;
+      }
+
+      .section-title {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: var(--accent);
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 2px;
+        margin-bottom: 4px;
+      }
+
+
+      .attr-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .attr-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 6px 8px;
+        text-align: center;
+      }
+
+      .attr-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .attr-card .a-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 15px;
+        color: var(--text);
+      }
+
+      .attr-card.primary {
+        border-color: var(--accent);
+        background: var(--accent-light);
+      }
+
+      .attr-card.primary .a-label {
+        color: var(--accent);
+        font-size: 12px;
+      }
+
+      .attr-card.primary .a-val {
+        font-size: 20px;
+        color: var(--accent);
+      }
+
+      .attr-pills {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px;
+        margin-bottom: 6px;
+      }
+
+      .attr-pill {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: var(--radius);
+      }
+
+      .attr-pill:nth-child(odd) {
+        background: var(--surface);
+      }
+
+      .attr-pill:nth-child(even) {
+        background: var(--surface);
+      }
+
+      .attr-pill .a-label {
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .attr-pill .a-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+
+      .attr-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+
+      .tracker-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        padding: 4px 8px 6px;
+        text-align: center;
+      }
+
+      .tracker-card .a-label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: var(--text-muted);
+        margin-bottom: 2px;
+      }
+
+      .tracker-card .t-max {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .tracker-card .t-current {
+        display: inline-block;
+        width: 2.2em;
+        border-bottom: 1.5px solid var(--text-muted);
+        font-family: var(--mono);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--text);
+        text-align: center;
+      }
+
+
+      .def-bar {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .def-item {
+        flex: 1;
+        min-width: 46px;
+        text-align: center;
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 3px 4px;
+      }
+
+      .def-item .d-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+      }
+
+      .def-item .d-val {
+        font-weight: 700;
+        font-family: var(--mono);
+        font-size: 16px;
+      }
+
+
+
+
+      .attacks-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .atk-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .atk-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-inv);
+        background: var(--accent);
+        padding: 2px 4px;
+      }
+
+      .atk-table th:first-child {
+        border-radius: var(--radius) 0 0 0;
+      }
+
+      .atk-table th:last-child {
+        border-radius: 0 var(--radius) 0 0;
+      }
+
+      .atk-table td {
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+
+      .atk-table tr:nth-child(even) td {
+        background: var(--surface);
+      }
+
+      .atk-table .dmg {
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .atk-table .atk-notes {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: block;
+      }
+
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .item-list {
+        list-style: none;
+      }
+
+      .item-list li {
+        padding: 1px 4px;
+        line-height: 1.3;
+      }
+
+      .item-list li:nth-child(odd) {
+        background: var(--surface);
+        border-radius: 2px;
+      }
+
+      .item-list .i-name {
+        font-weight: 600;
+      }
+
+      .item-list .i-detail {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .item-list .i-level {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .item-list li.trait-neg .i-name {
+        color: var(--accent);
+      }
+
+      .item-list li.trait-neg .i-detail {
+        color: var(--accent);
+        opacity: .7;
+      }
+
+      .skill-name {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+
+      .spell-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-bottom: var(--gap);
+      }
+
+      .spell-table th {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+        padding: 1px 4px;
+      }
+
+      .spell-table td {
+        padding: 1px 4px;
+      }
+
+      .spell-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+
+      .mod-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+
+      .mod-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .mod-table td {
+        padding: 1px 4px;
+      }
+
+      .mod-table tr:nth-child(odd) td {
+        background: var(--surface);
+      }
+
+      .mod-table .mod-val {
+        font-family: var(--mono);
+        font-weight: 700;
+        text-align: right;
+        width: 3em;
+      }
+
+
+      .notes-block {
+        background: var(--surface);
+        border-radius: var(--radius);
+        padding: 4px 8px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+
+      .footer {
+        margin-top: var(--gap);
+        padding-top: 3px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+
+      .tracker {
+        display: flex;
+        gap: 3px;
+        margin-top: 2px;
+      }
+
+      .tracker-box {
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 2px;
+      }
+
+
+      .empty {
+        display: none;
+      }
+
+
+      .item-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 2px;
+        margin-bottom: var(--gap);
+      }
+
+      .item-table tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .item-table td {
+        vertical-align: top;
+        padding: 2px 8px 2px 8px;
+        background: var(--surface);
+        border-radius: 2px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .item-table td .equip-text {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+      }
+
+      .item-table .no-break {
+        break-inside: avoid;
+      }
+
+      .item-table .i-name {
+        font-weight: 700;
+        margin-right: 0.25em;
+      }
+
+      .item-table .i-detail {
+        color: var(--text-muted);
+        margin-left: 0.25em;
+        margin-right: 0.5em;
+      }
+
+      .item-table .i-pts {
+        font-family: var(--mono);
+        margin-left: 0.5em;
+      }
+
+      .item-row.alt td {
+        background: var(--surface-alt);
+      }
+
+
+
+      .atk-table td,
+      .atk-table th,
+      .mod-table td,
+      .mod-table th,
+      .spell-table td,
+      .spell-table th {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .item-list .user-description,
+      .item-table td .equip-notes {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
     </style>
   </head>
 
   <body>
     <div class="sheet">
-      <!-- HEADER -->
+
+
       <div class="header">
-        <img class="portrait" src="https://via.placeholder.com/72" alt="Portrait">
         <div class="identity">
-          <h1>Sample Character</h1>
-          <div class="subtitle">Adventurer · TL3 · Male · Age 25{{if and .Height (ne .Height "0'")}} ·
-            5'10"{{end}}{{if and .Weight (ne .Weight "0 lb")}}, 170 lbs{{end}}</div>
+          <h1>Alex Reyes</h1>
+          <div class="subtitle">Influencer
+          </div>
         </div>
-        <div class="event-block">
-          <div class="event-title">Blackout</div>
-          <div class="event-sub">Gen Con 2026</div>
+        <div class="event">
+          <div class="session">Blackout</div>
+          <div class="venue">Gen Con 2026</div>
         </div>
-        <style>
-          .event-block {
-            text-align: right;
-            flex-shrink: 0;
-          }
-
-          .event-title {
-            font-size: 26px;
-            font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
-            color: #8b2020;
-            line-height: 1;
-          }
-
-          .event-sub {
-            font-size: 13px;
-            color: #5c5c5c;
-            margin-top: 2px;
-          }
-        </style>
       </div>
-      <!-- TOP GRID -->
+
+
       <div class="top-grid">
+
+
         <div class="section">
-          <div class="section-title"><span class="icon">🔷</span>Attributes</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">🔷</span>Attributes</div>
           <div class="attr-cards">
             <div class="attr-card primary">
               <div class="a-label">ST</div>
-              <div class="a-val">12</div>
+              <div class="a-val">9</div>
             </div>
             <div class="attr-card primary">
               <div class="a-label">DX</div>
-              <div class="a-val">14</div>
-            </div>
-            <div class="attr-card primary">
-              <div class="a-label">IQ</div>
               <div class="a-val">11</div>
             </div>
             <div class="attr-card primary">
+              <div class="a-label">IQ</div>
+              <div class="a-val">10</div>
+            </div>
+            <div class="attr-card primary">
               <div class="a-label">HT</div>
-              <div class="a-val">12</div>
+              <div class="a-val">10</div>
             </div>
           </div>
           <div class="attr-cards">
@@ -78,67 +620,182 @@
             </div>
             <div class="attr-card">
               <div class="a-label">Fright</div>
-              <div class="a-val">12</div>
+              <div class="a-val">11</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Per</div>
-              <div class="a-val">10</div>
+              <div class="a-val">12</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Speed</div>
-              <div class="a-val">6.00</div>
+              <div class="a-val">5.25</div>
             </div>
           </div>
           <div class="attr-pills">
-            <div class="attr-pill"><span class="a-label">Thrust</span><span class="a-val">1d+1</span></div>
-            <div class="attr-pill"><span class="a-label">Swing</span><span class="a-val">2d-1</span></div>
-            <div class="attr-pill"><span class="a-label">Basic Move</span><span class="a-val">6</span></div>
-            <div class="attr-pill"><span class="a-label">Basic Lift</span><span class="a-val">29</span></div>
+
+            <div class="attr-pill">
+              <span class="a-label">Thrust</span>
+              <span class="a-val">1d-2</span>
+            </div>
+            <div class="attr-pill">
+              <span class="a-label">Swing</span>
+              <span class="a-val">1d-1</span>
+            </div>
+            <div class="attr-pill">
+              <span class="a-label">Basic Move</span>
+              <span class="a-val">5</span>
+            </div>
+
+            <div class="attr-pill">
+              <span class="a-label">Basic Lift</span>
+              <span class="a-val">16 lb</span>
+            </div>
           </div>
         </div>
+
+
         <div class="section">
-          <div class="section-title"><span class="icon">🛡️</span>Defenses</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">🛡️</span>Defenses</div>
           <div class="attr-cards">
             <div class="attr-card">
               <div class="a-label">Dodge</div>
-              <div class="a-val">9</div>
+              <div class="a-val">8</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Move</div>
-              <div class="a-val">6</div>
+              <div class="a-val">5</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Parry</div>
-              <div class="a-val">10</div>
+              <div class="a-val">—</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Block</div>
-              <div class="a-val">8</div>
+              <div class="a-val">—</div>
             </div>
           </div>
-          <div class="section-title section-spaced"><span class="icon">❤️</span>Status</div>
+          <div class="section-title section-spaced"><span class="icon" aria-hidden="true">❤️</span>Status</div>
           <div class="attr-row">
             <div class="tracker-card">
-              <div class="a-label">HP (12)</div>
-              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 12</span></div>
+              <div class="a-label">FP (10)</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 10</span></div>
             </div>
             <div class="tracker-card">
-              <div class="a-label">FP (12)</div>
-              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 12</span></div>
+              <div class="a-label">HP (10)</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ 10</span></div>
             </div>
           </div>
         </div>
       </div>
-      <!-- NOTES -->
+
+
       <div class="section">
-        <div class="section-title"><span class="icon">📝</span>Notes</div>
+        <div class="section-title"><span class="icon" aria-hidden="true">📝</span>Notes</div>
         <div class="notes-block">
-          <div>Sample note about the character's background or quirks.</div>
+          <div>Alex is an influencer with a moderate audience (several thousand followers). They are obsessed with
+            streaming and popularity.</div>
         </div>
       </div>
-      <!-- ATTACKS -->
+
+
+      <div class="mod-row">
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">💬</span>Reaction Modifiers</div>
+          <table class="mod-table">
+            <tr>
+              <td class="mod-val">&#43;1</td>
+              <td>from others</td>
+            </tr>
+            <tr>
+              <td class="mod-val">&#43;2</td>
+              <td>from sapient being with whom you actively interact (converse, lecture, etc.)</td>
+            </tr>
+            <tr>
+              <td class="mod-val">&#43;2</td>
+              <td>to Influence rolls</td>
+            </tr>
+          </table>
+        </div>
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">⚠️</span>Conditional Modifiers</div>
+          <table class="mod-table">
+            <tr>
+              <td class="mod-val">&#43;1</td>
+              <td>to any fine-manipulation tasks</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+
+      <div class="two-col">
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">⭐</span>Traits</div>
+          <ul class="item-list">
+            <li>
+              <span class="i-name">Appearance</span>
+            </li>
+            <li>
+              <span class="i-name">Charisma 2</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Compulsive Behaviour (Stream)</span>
+              <div class="user-description">Becomes irritable if unable to indulge</div>
+            </li>
+            <li>
+              <span class="i-name">High Manual Dexterity 1</span>
+            </li>
+            <li class="trait-neg">
+              <span class="i-name">Obsession</span> <span class="i-detail">Reach a million followers. </span>
+              <div class="user-description">Make a self-control roll whenever it would be wise to deviate from your
+                goal. If you fail, you continue to pursue your Obsession, regardless of the consequences.</div>
+            </li>
+            <li>
+              <span class="i-name">Natural Attacks</span>
+            </li>
+          </ul>
+        </div>
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">📚</span>Skills</div>
+          <ul class="item-list">
+            <li>
+              <div class="skill-name">
+                <span class="i-name">Driving (Automobile)</span>
+                <span class="i-level">10</span>
+              </div>
+            </li>
+            <li>
+              <div class="skill-name">
+                <span class="i-name">Electronics Operation (Media)</span>
+                <span class="i-level">12</span>
+              </div>
+            </li>
+            <li>
+              <div class="skill-name">
+                <span class="i-name">Fast-Talk</span>
+                <span class="i-level">11</span>
+              </div>
+            </li>
+            <li>
+              <div class="skill-name">
+                <span class="i-name">Photography</span>
+                <span class="i-level">14</span>
+              </div>
+            </li>
+            <li>
+              <div class="skill-name">
+                <span class="i-name">Stealth</span>
+                <span class="i-level">11</span>
+              </div>
+              <div class="user-description">Mostly for sneaking around anyone he can&#39;t fast-talk.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+
       <div class="section">
-        <div class="section-title"><span class="icon">⚔️</span>Melee Attacks</div>
+        <div class="section-title"><span class="icon" aria-hidden="true">⚔️</span>Melee Attacks</div>
         <table class="atk-table">
           <tr>
             <th>Weapon</th>
@@ -149,166 +806,114 @@
             <th>Parry</th>
           </tr>
           <tr>
-            <td>Broadsword</td>
-            <td>16</td>
-            <td class="dmg">1d+2 cut</td>
-            <td>1</td>
-            <td>10</td>
-            <td>sw</td>
+            <td>
+              <strong>Natural Attacks</strong>
+            </td>
+            <td>Bite</td>
+            <td><strong>11</strong></td>
+            <td class="dmg">1d-3 cr</td>
+            <td>C</td>
+            <td>No</td>
           </tr>
           <tr>
-            <td>Dagger</td>
-            <td>14</td>
-            <td class="dmg">1d-1 imp</td>
+            <td>
+              <strong>Natural Attacks</strong>
+            </td>
+            <td>Kick</td>
+            <td><strong>9</strong></td>
+            <td class="dmg">1d-2 cr</td>
             <td>C,1</td>
-            <td>9</td>
-            <td>th</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Natural Attacks</strong>
+            </td>
+            <td>Punch</td>
+            <td><strong>11</strong></td>
+            <td class="dmg">1d-3 cr</td>
+            <td>C</td>
+            <td>8</td>
           </tr>
         </table>
       </div>
-      <div class="section">
-        <div class="section-title"><span class="icon">🏹</span>Ranged Attacks</div>
-        <table class="atk-table">
-          <tr>
-            <th>Weapon</th>
-            <th>Lvl</th>
-            <th>Damage</th>
-            <th>Acc</th>
-            <th>Range</th>
-            <th>Usage</th>
-            <th>RoF</th>
-          </tr>
-          <tr>
-            <td>Shortbow</td>
-            <td>13</td>
-            <td class="dmg">1d+1 imp</td>
-            <td>2</td>
-            <td>150</td>
-            <td>2H</td>
-            <td>1</td>
-          </tr>
-        </table>
-      </div>
-      <!-- TRAITS + SKILLS -->
-      <div class="two-col">
-        <div class="section">
-          <div class="section-title"><span class="icon">⭐</span>Traits</div>
-          <ul class="item-list">
-            <li><span class="i-name">Combat Reflexes</span></li>
-            <li class="trait-neg"><span class="i-name">Overconfidence</span> <span class="i-detail">-5 pts</span></li>
-          </ul>
-        </div>
-        <div class="section">
-          <div class="section-title"><span class="icon">📚</span>Skills</div>
-          <ul class="item-list">
-            <li><span class="i-name">Broadsword</span> <span class="i-level">16</span></li>
-            <li><span class="i-name">Stealth</span> <span class="i-level">13</span></li>
-          </ul>
-        </div>
-      </div>
-      <!-- SPELLS -->
+
+
+
+
       <div class="section section-spaced">
-        <div class="section-title"><span class="icon">✨</span>Spells</div>
-        <table class="spell-table">
-          <tr>
-            <th>Spell</th>
-            <th>Class</th>
-            <th>College</th>
-            <th>Lvl</th>
-            <th>Cost</th>
-            <th>Maintain</th>
-            <th>Time</th>
-            <th>Duration</th>
-          </tr>
-          <tr>
-            <td><strong>Fireball</strong></td>
-            <td>Reg</td>
-            <td>Fire</td>
-            <td class="mono">15</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1</td>
-            <td>1 min</td>
-          </tr>
-        </table>
-      </div>
-      <!-- REACTIONS + CONDITIONAL MODIFIERS -->
-      <div class="mod-row">
-        <div class="section">
-          <div class="section-title"><span class="icon">💬</span>Reaction Modifiers</div>
-          <table class="mod-table">
-            <tr>
-              <td class="mod-val">+2</td>
-              <td>Charisma</td>
-            </tr>
-          </table>
-        </div>
-        <div class="section">
-          <div class="section-title"><span class="icon">⚠️</span>Conditional Modifiers</div>
-          <table class="mod-table">
-            <tr>
-              <td class="mod-val">-1</td>
-              <td>Low Light</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-      <!-- EQUIPMENT -->
-      <div class="section section-spaced">
-        <div class="section-title"><span class="icon">🎒</span>Equipment (45 lbs, $1,200)</div>
+        <div class="section-title"><span class="icon" aria-hidden="true">🎒</span>Equipment
+          (2.5 lb, $565)</div>
         <table class="item-table">
           <tbody>
-          <tbody>
+
+
             <tr>
               <td class="no-break">
-                <span class="i-name"><strong>Broadsword</strong></span><span class="i-pts"> 3 lbs</span>
-                <div class="equip-notes">Fine quality</div>
+                <div class="equip-text">
+                  <span class="i-level"></span>
+                  <span class="i-name"><strong>LED Light Bank</strong></span>
+                  <span class="i-pts">0.5 lb</span>
+                </div>
+
+                <div class="equip-notes">3 yard wide area illumination; color/warmth adjustable</div>
               </td>
+
+
+
+
+
               <td class="no-break">
-                <span class="i-name"><strong>Medium Shield</strong></span><span class="i-pts"> 15 lbs</span>
-                <div class="equip-notes">+2 DB</div>
+                <div class="equip-text">
+                  <span class="i-level"></span>
+                  <span class="i-name"><strong>Power Bank</strong></span>
+                  <span class="i-pts">0.5 lb</span>
+                </div>
+
+                <div class="equip-notes">Phone recharger with cable</div>
               </td>
+
             </tr>
+
+
+
             <tr>
               <td class="no-break">
-                <span class="i-name"><strong>Mail Hauberk</strong></span><span class="i-pts"> 25 lbs</span>
-                <div class="equip-notes">DR 4; Torso, Arms, Legs</div>
+                <div class="equip-text">
+                  <span class="i-level"></span>
+                  <span class="i-name"><strong>Smart Phone</strong></span>
+                  <span class="i-pts">0.5 lb</span>
+                </div>
+
               </td>
+
+
+
+
+
               <td class="no-break">
-                <span class="i-name"><strong>Steel Pot Helm</strong></span><span class="i-pts"> 5 lbs</span>
-                <div class="equip-notes">DR 4; Skull</div>
+                <div class="equip-text">
+                  <span class="i-level"></span>
+                  <span class="i-name"><strong>Umbrella, Pocket</strong></span>
+                  <span class="i-pts">1 lb</span>
+                </div>
+
               </td>
+
             </tr>
-            <tr>
-              <td class="no-break">
-                <span class="i-name"><strong>Large Knife</strong></span><span class="i-pts"> 1 lb</span>
-              </td>
-              <td class="no-break">
-                <span class="i-name"><strong>Throwing Axe</strong></span><span class="i-pts"> 4 lbs</span>
-              </td>
-            </tr>
-          </tbody>
-          <style>
-            .equip-notes {
-              margin-top: 2px;
-              font-size: 13px;
-              color: #5c5c5c;
-              font-style: italic;
-              line-height: 1.4;
-            }
-          </style>
-          lb</span></td>
-          <td class="no-break"><span class="i-name"><strong>Throwing Axe</strong></span><span class="i-pts"> 4
-              lbs</span></td>
-          </tr>
+
+
+
           </tbody>
         </table>
       </div>
-      <!-- FOOTER -->
+
+
       <div class="footer">
-        <span>Player: Jane Doe</span>
-        <span>Created: 2026-04-20 · Modified: 2026-04-20</span>
+        <span>Player: </span>
+        <span>Created: Apr 19, 2026, 6:12 PM · Modified: Apr 20, 2026, 3:25 PM</span>
       </div>
+
     </div>
   </body>
 
