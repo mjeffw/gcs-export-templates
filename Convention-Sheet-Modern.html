@@ -86,6 +86,7 @@ GCS HTML Template v1
         object-fit: cover;
         border: 2px solid var(--border);
         flex-shrink: 0;
+        background: var(--surface);
       }
 
       .header .identity {
@@ -498,6 +499,71 @@ GCS HTML Template v1
       .empty {
         display: none;
       }
+
+      /* ── Equipment Table ─────────────────────────────────────── */
+      .item-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 2px;
+        margin-bottom: var(--gap);
+      }
+
+      .item-table tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .item-table td {
+        vertical-align: top;
+        padding: 2px 8px 2px 8px;
+        background: var(--surface);
+        border-radius: 2px;
+        font-size: 13px;
+        line-height: 1.4;
+        display: grid;
+        grid-template-columns: auto auto 1fr auto;
+      }
+
+      .item-table .no-break {
+        break-inside: avoid;
+      }
+
+      .item-table .i-name {
+        font-weight: 700;
+        margin-right: 0.25em;
+      }
+
+      .item-table .i-detail {
+        color: var(--text-muted);
+        margin-left: 0.25em;
+        margin-right: 0.5em;
+      }
+
+      .item-table .i-pts {
+        font-family: var(--mono);
+        margin-left: 0.5em;
+      }
+
+      .item-row.alt td {
+        background: var(--surface-alt);
+      }
+
+      /* ── Table Consistent Spacing ───────────────────────────── */
+      .atk-table td,
+      .atk-table th,
+      .mod-table td,
+      .mod-table th,
+      .spell-table td,
+      .spell-table th {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .item-list .user-description {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--text-muted);
+      }
     </style>
   </head>
 
@@ -530,8 +596,7 @@ GCS HTML Template v1
 
         <!-- ── Attributes ── -->
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">🔷</span>Attributes</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">🔷</span>Attributes</div>
           <div class="attr-cards">
             {{- range .Attributes.Primary}}
             <div class="attr-card primary">
@@ -543,23 +608,23 @@ GCS HTML Template v1
           <div class="attr-cards">
             <div class="attr-card">
               <div class="a-label">Will</div>
-              <div class="a-val">{{index .Attributes.SecondaryByID "Will"}}</div>
+              <div class="a-val">{{(index .Attributes.SecondaryByID "will").Value}}</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Fright</div>
-              <div class="a-val">{{index .Attributes.SecondaryByID "Fright Check"}}</div>
+              <div class="a-val">{{(index .Attributes.SecondaryByID "fright_check").Value}}</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Per</div>
-              <div class="a-val">{{index .Attributes.SecondaryByID "Perception"}}</div>
+              <div class="a-val">{{(index .Attributes.SecondaryByID "per").Value}}</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Speed</div>
-              <div class="a-val">{{index .Attributes.SecondaryByID "Basic Speed"}}</div>
+              <div class="a-val">{{(index .Attributes.SecondaryByID "basic_speed").Value}}</div>
             </div>
           </div>
           <div class="attr-pills">
-            
+
             <div class="attr-pill">
               <span class="a-label">Thrust</span>
               <span class="a-val">{{.Thrust}}</span>
@@ -570,9 +635,9 @@ GCS HTML Template v1
             </div>
             <div class="attr-pill">
               <span class="a-label">Basic Move</span>
-              <span class="a-val">{{index .Attributes.SecondaryByID "Basic Move"}}</span>
+              <span class="a-val">{{(index .Attributes.SecondaryByID "basic_move").Value}}</span>
             </div>
-            
+
             <div class="attr-pill">
               <span class="a-label">Basic Lift</span>
               <span class="a-val">{{.Lift.Basic}}</span>
@@ -582,8 +647,7 @@ GCS HTML Template v1
 
         <!-- ── Defenses ── -->
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">🛡️</span>Defenses</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">🛡️</span>Defenses</div>
           <div class="attr-cards">
             {{- range .Encumbrance}}{{if .IsCurrent}}
             <div class="attr-card">
@@ -604,8 +668,7 @@ GCS HTML Template v1
               <div class="a-val">—</div>
             </div>
           </div>
-          <div class="section-title" style="margin-top:6px"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">❤️</span>Status</div>
+          <div class="section-title section-spaced"><span class="icon" aria-hidden="true">❤️</span>Status</div>
           <div class="attr-row">
             {{- range .Attributes.Pools}}
             <div class="tracker-card">
@@ -620,8 +683,7 @@ GCS HTML Template v1
       <!-- ═══ NOTES ═══ -->
       {{- if .Notes}}
       <div class="section">
-        <div class="section-title"><span class="icon" aria-hidden="true"
-            style="vertical-align:middle;margin-right:4px">📝</span>Notes</div>
+        <div class="section-title"><span class="icon" aria-hidden="true">📝</span>Notes</div>
         <div class="notes-block">
           {{- range .Notes}}
           <div>{{.Description}}</div>
@@ -630,135 +692,12 @@ GCS HTML Template v1
       </div>
       {{- end}}
 
-      <!-- ═══ ATTACKS ═══ -->
-      <div class="attacks-grid">
-        {{- if .MeleeWeapons}}
-        <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">⚔️</span>Melee Attacks</div>
-          <table class="atk-table">
-            <tr>
-              <th>Weapon</th>
-              <th>Lvl</th>
-              <th>Damage</th>
-              <th>Reach</th>
-              <th>Parry</th>
-            </tr>
-            {{- range .MeleeWeapons}}
-            <tr>
-              <td>
-                {{.Description}}
-                {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
-              </td>
-              <td>{{.Level}}</td>
-              <td class="dmg">{{.Damage}}</td>
-              <td>{{.Reach}}</td>
-              <td>{{.Parry}}</td>
-            </tr>
-            {{- end}}
-          </table>
-        </div>
-        {{- end}}
-        {{- if .RangedWeapons}}
-        <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">🏹</span>Ranged Attacks</div>
-          <table class="atk-table">
-            <tr>
-              <th>Weapon</th>
-              <th>Lvl</th>
-              <th>Damage</th>
-              <th>Acc</th>
-              <th>Range</th>
-              <th>RoF</th>
-            </tr>
-            {{- range .RangedWeapons}}
-            <tr>
-              <td>
-                {{.Description}}
-                {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
-              </td>
-              <td>{{.Level}}</td>
-              <td class="dmg">{{.Damage}}</td>
-              <td>{{.Accuracy}}</td>
-              <td>{{.Range}}</td>
-              <td>{{.RateOfFire}}</td>
-            </tr>
-            {{- end}}
-          </table>
-        </div>
-        {{- end}}
-      </div>
-
-      <!-- ═══ TRAITS + SKILLS ═══ -->
-      <div class="two-col">
-        <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">⭐</span>Traits</div>
-          <ul class="item-list">
-            {{- range .Traits}}
-            <li{{if hasPrefix .Points.String "-"}} class="trait-neg" {{end}}>
-              <span class="i-name">{{.Description}}</span>
-              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
-              </li>
-              {{- end}}
-          </ul>
-        </div>
-        <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">📚</span>Skills</div>
-          <ul class="item-list">
-            {{- range .Skills}}
-            <li>
-              <span class="i-name">{{.Description}}</span>
-              <span class="i-level">{{.Level}}</span>
-              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
-            </li>
-            {{- end}}
-          </ul>
-        </div>
-      </div>
-
-      <!-- ═══ SPELLS ═══ -->
-      {{- if .Spells}}
-      <div class="section" style="margin-bottom:var(--gap)">
-        <div class="section-title"><span class="icon" aria-hidden="true"
-            style="vertical-align:middle;margin-right:4px">✨</span>Spells</div>
-        <table class="spell-table">
-          <tr>
-            <th>Spell</th>
-            <th>Class</th>
-            <th>College</th>
-            <th>Lvl</th>
-            <th>Cost</th>
-            <th>Maintain</th>
-            <th>Time</th>
-            <th>Duration</th>
-          </tr>
-          {{- range .Spells}}
-          <tr>
-            <td><strong>{{.Description}}</strong>{{if .Notes}} <span
-                style="color:var(--text-muted)">{{.Notes}}</span>{{end}}</td>
-            <td>{{.Class}}</td>
-            <td>{{join .Colleges ", "}}</td>
-            <td style="font-family:var(--mono);font-weight:700">{{.Level}}</td>
-            <td>{{.Mana.Cast}}</td>
-            <td>{{.Mana.Maintain}}</td>
-            <td>{{.TimeToCast}}</td>
-            <td>{{.Duration}}</td>
-          </tr>
-          {{- end}}
-        </table>
-      </div>
-      {{- end}}
-
       <!-- ═══ REACTIONS + CONDITIONAL MODIFIERS ═══ -->
       {{- if or .Reactions .ConditionalModifiers}}
       <div class="mod-row">
         {{- if .Reactions}}
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">💬</span>Reaction Modifiers</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">💬</span>Reaction Modifiers</div>
           <table class="mod-table">
             {{- range .Reactions}}
             <tr>
@@ -771,8 +710,7 @@ GCS HTML Template v1
         {{- end}}
         {{- if .ConditionalModifiers}}
         <div class="section">
-          <div class="section-title"><span class="icon" aria-hidden="true"
-              style="vertical-align:middle;margin-right:4px">⚠️</span>Conditional Modifiers</div>
+          <div class="section-title"><span class="icon" aria-hidden="true">⚠️</span>Conditional Modifiers</div>
           <table class="mod-table">
             {{- range .ConditionalModifiers}}
             {{- if not (or (eq .Situation "Vision") (eq .Situation "Hearing") (eq .Situation "Taste & Smell") (eq .Situation "Touch"))}}
@@ -788,22 +726,153 @@ GCS HTML Template v1
       </div>
       {{- end}}
 
+      <!-- ═══ TRAITS + SKILLS ═══ -->
+      <div class="two-col">
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">⭐</span>Traits</div>
+          <ul class="item-list">
+            {{- range .Traits}}
+            <li{{if hasPrefix .Points.String "-"}} class="trait-neg" {{end}}>
+              <span class="i-name">{{.Description}}</span>
+              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+              {{- if .UserDescription}}
+              <div class="user-description">{{.UserDescription}}</div>{{end}}
+              </li>
+              {{- end}}
+          </ul>
+        </div>
+        <div class="section">
+          <div class="section-title"><span class="icon" aria-hidden="true">📚</span>Skills</div>
+          <ul class="item-list">
+            {{- range .Skills}}
+            <li>
+              <span class="i-name">{{.Description}}</span>
+              <span class="i-level">{{.Level}}</span>
+              {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
+            </li>
+            {{- end}}
+          </ul>
+        </div>
+      </div>
+
+      <!-- ═══ ATTACKS ═══ -->
+      {{- if .MeleeWeapons}}
+      <div class="section">
+        <div class="section-title"><span class="icon" aria-hidden="true">⚔️</span>Melee Attacks</div>
+        <table class="atk-table">
+          <tr>
+            <th>Weapon</th>
+            <th>Usage</th>
+            <th>Lvl</th>
+            <th>Damage</th>
+            <th>Reach</th>
+            <th>Parry</th>
+          </tr>
+          {{- range .MeleeWeapons}}
+          <tr>
+            <td>
+              {{.Description}}
+              {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
+            </td>
+            <td>{{.Usage}}</td>
+            <td>{{.Level}}</td>
+            <td class="dmg">{{.Damage}}</td>
+            <td>{{.Reach}}</td>
+            <td>{{.Parry}}</td>
+          </tr>
+          {{- end}}
+        </table>
+      </div>
+      {{- end}}
+      {{- if .RangedWeapons}}
+      <div class="section">
+        <div class="section-title"><span class="icon" aria-hidden="true">🏹</span>Ranged Attacks</div>
+        <table class="atk-table">
+          <tr>
+            <th>Weapon</th>
+            <th>Usage</th>
+            <th>Lvl</th>
+            <th>Damage</th>
+            <th>Acc</th>
+            <th>Range</th>
+            <th>RoF</th>
+          </tr>
+          {{- range .RangedWeapons}}
+          <tr>
+            <td>
+              {{.Description}}
+              {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
+            </td>
+            <td>{{.Usage}}</td>
+            <td>{{.Level}}</td>
+            <td class="dmg">{{.Damage}}</td>
+            <td>{{.Accuracy}}</td>
+            <td>{{.Range}}</td>
+            <td>{{.RateOfFire}}</td>
+          </tr>
+          {{- end}}
+        </table>
+      </div>
+      {{- end}}
+
+      <!-- ═══ SPELLS ═══ -->
+      {{- if .Spells}}
+      <div class="section section-spaced">
+        <div class="section-title"><span class="icon" aria-hidden="true">✨</span>Spells</div>
+        <table class="spell-table">
+          <tr>
+            <th>Spell</th>
+            <th>Class</th>
+            <th>College</th>
+            <th>Lvl</th>
+            <th>Cost</th>
+            <th>Maintain</th>
+            <th>Time</th>
+            <th>Duration</th>
+          </tr>
+          {{- range .Spells}}
+          <tr>
+            <td><strong>{{.Description}}</strong>{{if .Notes}} <span class="text-muted">{{.Notes}}</span>{{end}}</td>
+            <td>{{.Class}}</td>
+            <td>{{join .Colleges ", "}}</td>
+            <td class="mono">{{.Level}}</td>
+            <td>{{.Mana.Cast}}</td>
+            <td>{{.Mana.Maintain}}</td>
+            <td>{{.TimeToCast}}</td>
+            <td>{{.Duration}}</td>
+          </tr>
+          {{- end}}
+        </table>
+      </div>
+      {{- end}}
+
       <!-- ═══ EQUIPMENT ═══ -->
       {{- if .Equipment.Carried}}
-      <div class="section" style="margin-bottom:var(--gap)">
-        <div class="section-title"><span class="icon" aria-hidden="true"
-            style="vertical-align:middle;margin-right:4px">🎒</span>Equipment ({{.Equipment.CarriedWeight}},
-          ${{.Equipment.CarriedValue}})</div>
-        <ul class="item-list" style="columns:2; column-gap:var(--gap-lg)">
-          {{- range .Equipment.Carried}}
-          <li style="break-inside:avoid">
-            {{- if ne (numberToInt .Quantity) 1}}<span class="i-level">{{.Quantity}}×</span> {{end}}
-            <span class="i-name">{{.Description}}</span>
-            {{- if .Notes}} <span class="i-detail">{{.Notes}}</span>{{end}}
-            <span class="i-pts">{{.ExtendedWeight}}</span>
-          </li>
-          {{- end}}
-        </ul>
+      <div class="section section-spaced">
+        <div class="section-title"><span class="icon" aria-hidden="true">🎒</span>Equipment
+          ({{.Equipment.CarriedWeight}}, ${{.Equipment.CarriedValue}})</div>
+        <table class="item-table">
+          <tbody>
+            {{- $items := .Equipment.Carried }}
+            {{- $n := len $items }}
+            {{$open := 0}}
+            {{- range $i, $item := $items }}
+            {{if eq $open 0 }}
+            <tr>{{end}}
+              <td class="no-break">
+                <span class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}×{{end}}</span>
+                <span class="i-name"><strong>{{$item.Description}}</strong></span>
+                <span class="i-detail">{{if $item.Notes}}{{$item.Notes}}{{end}}</span>
+                <span class="i-pts">{{$item.ExtendedWeight}}</span>
+              </td>
+              {{if eq $open 1 }}
+            </tr>{{end}}
+            {{if eq $open 0 }}{{$open = 1}}
+            {{else}}{{$open = 0}}{{end}}
+              {{end}}
+              {{if eq $open 1 }}</tr>{{end}}
+          </tbody>
+        </table>
       </div>
       {{- end}}
 
