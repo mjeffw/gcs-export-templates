@@ -10,6 +10,7 @@ GCS HTML Template v1
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
     <style>
       /* ── Design Tokens ─────────────────────────────────────────── */
       :root {
@@ -27,19 +28,19 @@ GCS HTML Template v1
         --gap: .5rem;
         --gap-lg: 1rem;
         /* Font size scale */
-        --font-size-base: 12.5px;
+        --font-size-base: 11px;
         --font-size-xs: calc(var(--font-size-base) * 0.85);
-        /* ~11px */
+        /* ~9.35px */
         --font-size-sm: var(--font-size-base);
-        /* 12.5px */
+        /* 11px */
         --font-size-md: calc(var(--font-size-base) * 1.15);
-        /* ~14.4px */
+        /* ~12.65px */
         --font-size-lg: calc(var(--font-size-base) * 1.5);
-        /* ~18.75px */
+        /* ~16.5px */
         --font-size-xl: calc(var(--font-size-base) * 1.85);
-        /* ~23.1px */
+        /* ~20.35px */
         --font-size-xxl: calc(var(--font-size-base) * 2.3);
-        /* ~28.75px */
+        /* ~25.3px */
       }
 
       *,
@@ -405,7 +406,7 @@ GCS HTML Template v1
       .item-list .i-level {
         font-family: var(--mono);
         font-weight: 700;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
       }
 
       .item-list li.trait-neg .i-name {
@@ -428,13 +429,13 @@ GCS HTML Template v1
       .spell-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         margin-bottom: var(--gap);
       }
 
       .spell-table th {
         text-align: left;
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         letter-spacing: .06em;
         color: var(--text-muted);
@@ -452,16 +453,19 @@ GCS HTML Template v1
 
       /* ── Modifiers row ─────────────────────────────────────────── */
       .mod-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: inline-flex;
         gap: var(--gap);
         margin-bottom: var(--gap);
+      }
+
+      .mod-row .section {
+        width: 100%;
       }
 
       .mod-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
       }
 
       .mod-table td {
@@ -484,7 +488,7 @@ GCS HTML Template v1
         background: var(--surface);
         border-radius: var(--radius);
         padding: 4px 8px;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         line-height: 1.4;
       }
 
@@ -495,7 +499,7 @@ GCS HTML Template v1
         border-top: 1px solid var(--border);
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: var(--font-size-xs);
         color: var(--text-muted);
       }
 
@@ -539,7 +543,7 @@ GCS HTML Template v1
         vertical-align: top;
         padding: 2px 8px 2px 8px;
         border-radius: 2px;
-        font-size: 13px;
+        font-size: var(--font-size-sm);
         line-height: 1.4;
       }
 
@@ -601,6 +605,16 @@ GCS HTML Template v1
   </head>
 
   <body>
+    <script>
+      const md = window.markdownit()
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.notes-block > div').forEach(el => {
+          if (el.textContent.trim()) {
+            el.innerHTML = md.render(el.textContent)
+          }
+        })
+      });
+    </script>
     <div class="sheet">
 
       <!-- ═══ HEADER ═══ -->
@@ -918,10 +932,10 @@ GCS HTML Template v1
       {{- end}}
 
       <!-- ═══ FOOTER ═══ -->
-      <div class="footer">
+      <!-- <div class="footer">
         <span>Player: {{.Player}}</span>
         <span>Created: {{.CreatedOn}} · Modified: {{.ModifiedOn}}</span>
-      </div>
+      </div> -->
 
     </div>
   </body>
