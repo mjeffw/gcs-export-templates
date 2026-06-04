@@ -8,7 +8,7 @@ GCS HTML Template v1
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Martian+Mono:wght@500&display=swap"
       rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
     <style>
@@ -24,7 +24,7 @@ GCS HTML Template v1
         --text-inv: #fff;
         --radius: 6px;
         --font: 'Inter', system-ui, sans-serif;
-        --mono: 'JetBrains Mono', monospace;
+        --mono: 'Martian Mono', monospace;
         --gap: .5rem;
         --gap-lg: 1rem;
         /* Font size scale */
@@ -189,7 +189,7 @@ GCS HTML Template v1
       }
 
       .attr-card .a-val {
-        font-weight: 700;
+        font-weight: 500;
         font-family: var(--mono);
         font-size: var(--font-size-md);
         color: var(--text);
@@ -240,7 +240,7 @@ GCS HTML Template v1
       }
 
       .attr-pill .a-val {
-        font-weight: 700;
+        font-weight: 500;
         font-family: var(--mono);
         font-size: var(--font-size-sm);
       }
@@ -271,7 +271,7 @@ GCS HTML Template v1
 
       .tracker-card .t-max {
         font-family: var(--mono);
-        font-weight: 700;
+        font-weight: 500;
         font-size: var(--font-size-sm);
         color: var(--text);
       }
@@ -282,7 +282,7 @@ GCS HTML Template v1
         border-bottom: 1.5px solid var(--text-muted);
         font-family: var(--mono);
         font-size: var(--font-size-md);
-        font-weight: 700;
+        font-weight: 500;
         line-height: 1.3;
         color: var(--text);
         text-align: center;
@@ -312,7 +312,7 @@ GCS HTML Template v1
       }
 
       .def-item .d-val {
-        font-weight: 700;
+        font-weight: 500;
         font-family: var(--mono);
         font-size: var(--font-size-lg);
       }
@@ -361,7 +361,7 @@ GCS HTML Template v1
       }
 
       .atk-table .dmg {
-        font-weight: 700;
+        font-weight: 500;
         color: var(--accent);
         font-family: var(--mono);
       }
@@ -405,7 +405,7 @@ GCS HTML Template v1
 
       .item-list .i-level {
         font-family: var(--mono);
-        font-weight: 700;
+        font-weight: 500;
         font-size: var(--font-size-sm);
       }
 
@@ -479,7 +479,7 @@ GCS HTML Template v1
 
       .mod-table .mod-val {
         font-family: var(--mono);
-        font-weight: 700;
+        font-weight: 500;
         text-align: right;
         width: 3em;
       }
@@ -720,8 +720,10 @@ GCS HTML Template v1
           <div class="attr-row">
             {{- range .Attributes.Pools}}
             <div class="tracker-card">
-              <div class="a-label">{{.Name}} ({{.Maximum}})</div>
+              <div class="a-label">{{.Name}}</div>
               <div><span class="t-current">&nbsp;</span> <span class="t-max">/ {{.Maximum}}</span></div>
+              <div class="a-label" style="margin-top: 4px;">Reeling: {{ (numberToInt (.Maximum.Div (numberFrom 3))) }}
+              </div>
             </div>
             {{- end}}
           </div>
