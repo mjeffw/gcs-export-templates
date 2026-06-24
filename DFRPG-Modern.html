@@ -600,6 +600,7 @@ GCS HTML Template v1
       .item-table td .equip-text {
         display: grid;
         grid-template-columns: auto 1fr auto;
+        padding-left: calc(var(--equip-depth, 0) * 1rem);
       }
 
       .item-table .no-break {
@@ -1040,7 +1041,7 @@ GCS HTML Template v1
             <tbody>
               {{- range $item := .Equipment.Carried }}
               <tr>
-                <td class="no-break">
+                <td class="no-break" style="--equip-depth: {{$item.Depth}};">
                   <div class="equip-text">
                     <span class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}×{{end}}</span>
                     <span class="i-name"><strong>{{$item.Description}}</strong></span>
