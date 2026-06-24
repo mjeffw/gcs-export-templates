@@ -908,18 +908,6 @@ GCS HTML Template v1
             {{- end}}
           </ul>
 
-          <div class="section-title">Quirks</div>
-          <ul class="item-list trait-group">
-            {{- range .Traits}}
-            {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
-            <li class="trait-neg">
-              <span class="i-name">{{.Description}}</span>
-              {{- if .Notes}}
-              <div class="user-description">{{.Notes}}</div>{{end}}
-            </li>
-            {{- end}}
-            {{- end}}
-          </ul>
         </div>
         <div class="section">
           <div class="section-title">Skills</div>
@@ -933,6 +921,19 @@ GCS HTML Template v1
               {{- if .Notes}}
               <div class="user-description">{{.Notes}}</div>{{end}}
             </li>
+            {{- end}}
+          </ul>
+
+          <div class="section-title">Quirks</div>
+          <ul class="item-list trait-group">
+            {{- range .Traits}}
+            {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
+            <li class="trait-neg">
+              <span class="i-name">{{.Description}}</span>
+              {{- if .Notes}}
+              <div class="user-description">{{.Notes}}</div>{{end}}
+            </li>
+            {{- end}}
             {{- end}}
           </ul>
         </div>
