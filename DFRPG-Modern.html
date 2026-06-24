@@ -163,9 +163,7 @@ GCS HTML Template v1
       }
 
       /* ── Section chrome ────────────────────────────────────────── */
-      .section {
-        break-inside: avoid;
-      }
+      .section {}
 
       .section-title {
         font-size: var(--font-size-md);
@@ -513,12 +511,20 @@ GCS HTML Template v1
 
       /* ── Notes ─────────────────────────────────────────────────── */
       .notes-block {
-        background: var(--accent-light);
-        border-radius: var(--radius);
-        padding: 4px 8px;
         font-size: var(--font-size-sm);
         line-height: 1.4;
+      }
+
+      .notes-block div {
+        background: var(--accent-light);
+        padding: 4px 8px;
+        border-radius: var(--radius);
         border-left: 3px solid var(--accent);
+        margin-bottom: 4px;
+      }
+
+      .notes-block div p {
+        margin-bottom: 4px;
       }
 
       /* ── Footer ────────────────────────────────────────────────── */
@@ -758,18 +764,6 @@ GCS HTML Template v1
         </div>
       </div>
 
-      <!-- ═══ NOTES ═══ -->
-      {{- if .Notes}}
-      <div class="section">
-        <div class="section-title"><span class="icon" aria-hidden="true"></span>Notes</div>
-        <div class="notes-block">
-          {{- range .Notes}}
-          <div>{{.Description}}</div>
-          {{- end}}
-        </div>
-      </div>
-      {{- end}}
-
       <!-- ═══ REACTIONS + CONDITIONAL MODIFIERS ═══ -->
       {{- if or .Reactions .ConditionalModifiers}}
       <div class="mod-row">
@@ -984,6 +978,18 @@ GCS HTML Template v1
               {{if eq $open 1 }}</tr>{{end}}
           </tbody>
         </table>
+      </div>
+      {{- end}}
+
+      <!-- ═══ NOTES ═══ -->
+      {{- if .Notes}}
+      <div class="section">
+        <div class="section-title"><span class="icon" aria-hidden="true"></span>Notes</div>
+        <div class="notes-block">
+          {{- range .Notes}}
+          <div>{{.Description}}</div>
+          {{- end}}
+        </div>
       </div>
       {{- end}}
 
