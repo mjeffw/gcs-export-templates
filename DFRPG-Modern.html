@@ -440,6 +440,10 @@ GCS HTML Template v1
         opacity: .7;
       }
 
+      .trait-group {
+        margin-bottom: 4px;
+      }
+
       .skill-name {
         display: grid;
         grid-template-columns: 1fr auto;
@@ -803,17 +807,43 @@ GCS HTML Template v1
       <!-- ═══ TRAITS + SKILLS ═══ -->
       <div class="two-col">
         <div class="section">
-          <div class="section-title">Traits</div>
-          <ul class="item-list">
+          <div class="section-title">Advantages</div>
+          <ul class="item-list trait-group">
             {{- range .Traits}}
-            {{- if ne .Description "Natural Attacks"}}
-            <li{{if hasPrefix .Points.String "-"}} class="trait-neg" {{end}}>
+            {{- if and (ne .Description "Natural Attacks") (not (hasPrefix .Points.String "-"))}}
+            <li>
               <span class="i-name">{{.Description}}</span>
               {{- if .Notes}}
               <div class="user-description">{{.Notes}}</div>{{end}}
-              </li>
-              {{- end}}
-              {{- end}}
+            </li>
+            {{- end}}
+            {{- end}}
+          </ul>
+
+          <div class="section-title">Disadvantages</div>
+          <ul class="item-list trait-group">
+            {{- range .Traits}}
+            {{- if and (ne .Description "Natural Attacks") (hasPrefix .Points.String "-") (ne .Points.String "-1")}}
+            <li class="trait-neg">
+              <span class="i-name">{{.Description}}</span>
+              {{- if .Notes}}
+              <div class="user-description">{{.Notes}}</div>{{end}}
+            </li>
+            {{- end}}
+            {{- end}}
+          </ul>
+
+          <div class="section-title">Quirks</div>
+          <ul class="item-list trait-group">
+            {{- range .Traits}}
+            {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
+            <li class="trait-neg">
+              <span class="i-name">{{.Description}}</span>
+              {{- if .Notes}}
+              <div class="user-description">{{.Notes}}</div>{{end}}
+            </li>
+            {{- end}}
+            {{- end}}
           </ul>
         </div>
         <div class="section">
