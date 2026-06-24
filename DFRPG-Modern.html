@@ -642,12 +642,42 @@ GCS HTML Template v1
   <body>
     <script>
       const md = window.markdownit()
+
+      function getHighestMeleeParry(parryValues) {
+        let highestNumericParry = null
+        let highestParryValue = null
+
+        parryValues.forEach(value => {
+          const normalized = String(value || '').trim()
+          const match = normalized.match(/^(\d+)[A-Za-z]*$/)
+          if (!match) {
+            return
+          }
+
+          const numericParry = Number.parseInt(match[1], 10)
+          if (highestNumericParry === null || numericParry > highestNumericParry) {
+            highestNumericParry = numericParry
+            highestParryValue = normalized
+          }
+        })
+
+        return highestParryValue
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
             el.innerHTML = md.render(el.textContent)
           }
         })
+
+        const parryField = document.getElementById('defense-parry-value')
+        if (parryField) {
+          const meleeParryValues = Array.from(document.querySelectorAll('[data-melee-parry]'))
+            .map(el => el.getAttribute('data-melee-parry'))
+          const highestParry = getHighestMeleeParry(meleeParryValues)
+          parryField.textContent = highestParry === null ? '–' : highestParry
+        }
       });
     </script>
     <div class="sheet">
@@ -743,7 +773,8 @@ GCS HTML Template v1
             {{- end}}{{end}}
             <div class="attr-card">
               <div class="a-label">Parry</div>
-              <div class="a-val">—</div>
+              <div class="a-val" id="defense-parry-value">–</div>
+
             </div>
             <div class="attr-card">
               <div class="a-label">Block</div>
@@ -871,7 +902,7 @@ GCS HTML Template v1
             <th>Parry</th>
           </tr>
           {{- range .MeleeWeapons}}
-          <tr>
+          <tr data-melee-parry="{{.Parry}}">
             <td>
               <strong>{{.Description}}</strong>
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
