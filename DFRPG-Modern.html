@@ -23,7 +23,7 @@ GCS HTML Template v1
         --text-muted: #4e4030;
         --text-inv: #fff;
         --radius: 6px;
-        --font: 'Crimson Text', Georgia, serif;
+        --font: Constantia, Georgia, serif;
         --font-display: 'IM Fell English SC', Georgia, serif;
         --mono: 'Martian Mono', monospace;
         --gap: .5rem;
@@ -1043,7 +1043,8 @@ GCS HTML Template v1
               <tr>
                 <td class="no-break" style="--equip-depth: {{$item.Depth}};">
                   <div class="equip-text">
-                    <span class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}×{{end}}</span>
+                    <span
+                      class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}&nbsp;×&nbsp;{{end}}</span>
                     <span class="i-name"><strong>{{$item.Description}}</strong></span>
                     <span class="i-pts">{{$item.ExtendedWeight}}</span>
                   </div>
