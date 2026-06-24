@@ -558,6 +558,22 @@ GCS HTML Template v1
       }
 
       /* ── Equipment Table ─────────────────────────────────────── */
+      .equipment-hit-grid {
+        display: flex;
+        gap: var(--gap);
+        align-items: flex-start;
+      }
+
+      .equipment-half {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .hit-location-half {
+        flex: 0 0 auto;
+        width: auto;
+      }
+
       .item-table {
         width: 100%;
         border-collapse: separate;
@@ -566,8 +582,7 @@ GCS HTML Template v1
       }
 
       .item-table tr {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: table-row;
       }
 
       .item-table tr:nth-child(odd) {
@@ -615,10 +630,6 @@ GCS HTML Template v1
         font-family: var(--mono);
       }
 
-      .item-table td:nth-child(odd) {
-        border-right: 1px solid var(--border);
-      }
-
 
       /* ── Table Consistent Spacing ───────────────────────────── */
       .atk-table td,
@@ -635,6 +646,45 @@ GCS HTML Template v1
       .item-table td .equip-notes {
         font-size: var(--font-size-xs);
         color: var(--text-muted);
+      }
+
+      .hit-location-table {
+        width: auto;
+        min-width: max-content;
+        border-collapse: collapse;
+        font-size: var(--font-size-sm);
+      }
+
+      .hit-location-table th {
+        text-align: left;
+        font-size: var(--font-size-xs);
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-inv);
+        background: linear-gradient(180deg, #714126 0%, var(--accent) 100%);
+        padding: 2px 4px;
+        font-family: var(--font-display);
+      }
+
+      .hit-location-table th:first-child {
+        border-radius: var(--radius) 0 0 0;
+      }
+
+      .hit-location-table th:last-child {
+        border-radius: 0 var(--radius) 0 0;
+      }
+
+      .hit-location-table td {
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+
+      .hit-location-table tr:nth-child(even) td {
+        background: var(--surface);
+      }
+
+      .hit-location-table .mono {
+        text-align: center;
       }
     </style>
   </head>
@@ -979,36 +1029,59 @@ GCS HTML Template v1
       </div>
       {{- end}}
 
-      <!-- ═══ EQUIPMENT ═══ -->
-      {{- if .Equipment.Carried}}
-      <div class="section section-spaced">
-        <div class="section-title">Equipment
-          ({{.Equipment.CarriedWeight}}, ${{.Equipment.CarriedValue}})</div>
-        <table class="item-table">
-          <tbody>
-            {{- $items := .Equipment.Carried }}
-            {{- $n := len $items }}
-            {{$open := 0}}
-            {{- range $i, $item := $items }}
-            {{if eq $open 0 }}
-            <tr>{{end}}
-              <td class="no-break">
-                <div class="equip-text">
-                  <span class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}×{{end}}</span>
-                  <span class="i-name"><strong>{{$item.Description}}</strong></span>
-                  <span class="i-pts">{{$item.ExtendedWeight}}</span>
-                </div>
-                {{if $item.Notes}}
-                <div class="equip-notes">{{$item.Notes}}</div>{{end}}
-              </td>
-              {{if eq $open 1 }}
-            </tr>{{end}}
-            {{if eq $open 0 }}{{$open = 1}}
-            {{else}}{{$open = 0}}{{end}}
-              {{end}}
-              {{if eq $open 1 }}</tr>{{end}}
-          </tbody>
-        </table>
+      <!-- ═══ EQUIPMENT + HIT LOCATIONS ═══ -->
+      {{- if or .Equipment.Carried .Locations}}
+      <div class="equipment-hit-grid section-spaced">
+        <div class="section equipment-half">
+          <div class="section-title">Equipment
+            ({{.Equipment.CarriedWeight}}, ${{.Equipment.CarriedValue}})</div>
+          <table class="item-table">
+            <tbody>
+              {{- range $item := .Equipment.Carried }}
+              <tr>
+                <td class="no-break">
+                  <div class="equip-text">
+                    <span class="i-level">{{if ne (numberToInt $item.Quantity) 1}}{{$item.Quantity}}×{{end}}</span>
+                    <span class="i-name"><strong>{{$item.Description}}</strong></span>
+                    <span class="i-pts">{{$item.ExtendedWeight}}</span>
+                  </div>
+                  {{if $item.Notes}}
+                  <div class="equip-notes">{{$item.Notes}}</div>{{end}}
+                </td>
+              </tr>
+              {{- end}}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section hit-location-half">
+          <div class="section-title">Hit Locations</div>
+          <table class="hit-location-table">
+            <tr>
+              <th>Roll</th>
+              <th>Location</th>
+              <th>Penalty</th>
+              <th>DR</th>
+            </tr>
+            {{- if .BodyType.Locations}}
+            {{- range .BodyType.Locations}}
+            <tr>
+              <td class="mono">{{.RollRange}}</td>
+              <td>{{.Where}}</td>
+              <td class="mono">{{.Penalty}}</td>
+              <td class="mono">{{.DR}}</td>
+            </tr>
+            {{- end}}
+            {{- else}}
+            <tr>
+              <td class="mono">—</td>
+              <td>—</td>
+              <td class="mono">—</td>
+              <td class="mono">—</td>
+            </tr>
+            {{- end}}
+          </table>
+        </div>
       </div>
       {{- end}}
 
