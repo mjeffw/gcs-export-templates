@@ -715,6 +715,25 @@ GCS HTML Template v1
         return highestParryValue
       }
 
+      function parseEnergyReserveTrait(descriptionValue) {
+        const normalized = String(descriptionValue || '').trim()
+        if (!normalized) {
+          return { label: 'ER', level: 0 }
+        }
+
+        const parts = normalized.split(/\s+/)
+        const levelToken = parts[parts.length - 1]
+        const parsedLevel = Number.parseInt(levelToken, 10)
+        const level = Number.isNaN(parsedLevel) ? 0 : parsedLevel
+        const withoutLevel = level === 0 ? normalized : normalized.replace(/\s+\S+$/, '')
+        const label = withoutLevel.replace(/^Energy\s+Reserve/i, 'ER')
+
+        return {
+          label: label || 'ER',
+          level
+        }
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
@@ -729,6 +748,18 @@ GCS HTML Template v1
           const highestParry = getHighestMeleeParry(meleeParryValues)
           parryField.textContent = highestParry === null ? '–' : highestParry
         }
+
+        document.querySelectorAll('[data-er-label]').forEach(el => {
+          const description = el.getAttribute('data-er-label')
+          const erTrait = parseEnergyReserveTrait(description)
+          el.textContent = erTrait.label
+        })
+
+        document.querySelectorAll('[data-er-max]').forEach(el => {
+          const description = el.getAttribute('data-er-max')
+          const erTrait = parseEnergyReserveTrait(description)
+          el.textContent = String(erTrait.level)
+        })
       });
     </script>
     <div class="sheet">
@@ -835,12 +866,26 @@ GCS HTML Template v1
           <div class="section-title section-spaced">Status</div>
           <div class="attr-row">
             {{- range .Attributes.Pools}}
+            {{- if or (eq .Name "FP") (eq .Name "HP")}}
             <div class="tracker-card">
               <div class="a-label">{{.Name}}</div>
               <div><span class="t-current">&nbsp;</span> <span class="t-max">/ {{.Maximum}}</span></div>
-              <div class="a-label" style="margin-top: 4px;">Reeling: {{ (numberToInt (.Maximum.Div (numberFrom 3))) }}
+              <div class="a-label" style="margin-top: 4px;">Reeling: <span
+                  class="mono">{{ (numberToInt (.Maximum.Div (numberFrom 3))) }}</span>
               </div>
             </div>
+            {{- end}}
+            {{- end}}
+
+            {{- range .Traits}}
+            {{- if hasPrefix .Description "Energy Reserve"}}
+            <div class="tracker-card">
+              <div class="a-label" data-er-label="{{.Description}}">ER</div>
+              <div><span class="t-current">&nbsp;</span> <span class="t-max">/ <span class="mono"
+                    data-er-max="{{.Description}}">0</span></span></div>
+              <div class="a-label" style="margin-top: 4px;">&nbsp;</div>
+            </div>
+            {{- end}}
             {{- end}}
           </div>
         </div>
