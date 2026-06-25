@@ -8,7 +8,7 @@ GCS HTML Template v1
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Crimson+Text:wght@400;600;700&family=Martian+Mono:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IM+Fell+English+SC&family=Martian+Mono:wght@500&display=swap"
       rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.1/dist/markdown-it.min.js"></script>
     <style>
@@ -23,7 +23,7 @@ GCS HTML Template v1
         --text-muted: #4e4030;
         --text-inv: #fff;
         --radius: 6px;
-        --font: Constantia, Georgia, serif;
+        --font: 'Inter', system-ui, sans-serif;
         --font-display: 'IM Fell English SC', Georgia, serif;
         --mono: 'Martian Mono', monospace;
         --gap: .5rem;
@@ -66,6 +66,11 @@ GCS HTML Template v1
         .sheet {
           box-shadow: none;
           border: none;
+        }
+
+        .print-page-break-before {
+          break-before: page;
+          page-break-before: always;
         }
       }
 
@@ -1045,37 +1050,6 @@ GCS HTML Template v1
       </div>
       {{- end}}
 
-      <!-- ═══ SPELLS ═══ -->
-      {{- if .Spells}}
-      <div class="section section-spaced">
-        <div class="section-title">Spells</div>
-        <table class="spell-table">
-          <tr>
-            <th>Spell</th>
-            <th>Class</th>
-            <th>College</th>
-            <th>Lvl</th>
-            <th>Cost</th>
-            <th>Maintain</th>
-            <th>Time</th>
-            <th>Duration</th>
-          </tr>
-          {{- range .Spells}}
-          <tr>
-            <td><strong>{{.Description}}</strong>{{if .Notes}} <span class="text-muted">{{.Notes}}</span>{{end}}</td>
-            <td>{{.Class}}</td>
-            <td>{{join .Colleges ", "}}</td>
-            <td class="mono">{{.Level}}</td>
-            <td>{{.Mana.Cast}}</td>
-            <td>{{.Mana.Maintain}}</td>
-            <td>{{.TimeToCast}}</td>
-            <td>{{.Duration}}</td>
-          </tr>
-          {{- end}}
-        </table>
-      </div>
-      {{- end}}
-
       <!-- ═══ EQUIPMENT + HIT LOCATIONS ═══ -->
       {{- if or .Equipment.Carried .Locations}}
       <div class="equipment-hit-grid section-spaced">
@@ -1142,6 +1116,37 @@ GCS HTML Template v1
           <div>{{.Description}}</div>
           {{- end}}
         </div>
+      </div>
+      {{- end}}
+
+      <!-- ═══ SPELLS ═══ -->
+      {{- if .Spells}}
+      <div class="section section-spaced print-page-break-before">
+        <div class="section-title">Spells</div>
+        <table class="spell-table">
+          <tr>
+            <th>Spell</th>
+            <th>Class</th>
+            <th>College</th>
+            <th>Lvl</th>
+            <th>Cost</th>
+            <th>Maintain</th>
+            <th>Time</th>
+            <th>Duration</th>
+          </tr>
+          {{- range .Spells}}
+          <tr>
+            <td><strong>{{.Description}}</strong>{{if .Notes}} <span class="text-muted">{{.Notes}}</span>{{end}}</td>
+            <td>{{.Class}}</td>
+            <td>{{join .Colleges ", "}}</td>
+            <td class="mono">{{.Level}}</td>
+            <td>{{.Mana.Cast}}</td>
+            <td>{{.Mana.Maintain}}</td>
+            <td>{{.TimeToCast}}</td>
+            <td>{{.Duration}}</td>
+          </tr>
+          {{- end}}
+        </table>
       </div>
       {{- end}}
 
