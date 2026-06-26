@@ -490,6 +490,32 @@ GCS HTML Template v1
         text-transform: uppercase;
       }
 
+      .spell-title-line {
+        display: flex;
+        align-items: baseline;
+        gap: .5em;
+      }
+
+      .spell-name-meta {
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .spell-class {
+        font-style: italic;
+        margin-left: auto;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .spell-description {
+        margin-top: 2px;
+      }
+
+      .spell-description p {
+        margin: 0;
+      }
+
       /* ── Modifiers row ─────────────────────────────────────────── */
       .mod-row {
         display: inline-flex;
@@ -762,11 +788,14 @@ GCS HTML Template v1
           const colleges = rawColleges.split('||').map(college => college.trim()).filter(Boolean)
           const primaryCollege = colleges[0] || 'Uncategorized'
           const extraColleges = colleges.slice(1)
+          const spellClass = String(row.getAttribute('data-spell-class') || '').trim()
 
-          const spellName = row.querySelector('.spell-name')
-          if (spellName && extraColleges.length > 0 && !spellName.dataset.collegesAppended) {
-            spellName.insertAdjacentText('afterend', ` (${extraColleges.join(', ')})`)
-            spellName.dataset.collegesAppended = 'true'
+          const spellExtraColleges = row.querySelector('.spell-extra-colleges')
+          const spellClassEl = row.querySelector('.spell-class')
+          if (spellExtraColleges && spellClassEl && !spellClassEl.dataset.metaSet) {
+            spellExtraColleges.textContent = extraColleges.length > 0 ? ` (${extraColleges.join(', ')})` : ''
+            spellClassEl.textContent = spellClass
+            spellClassEl.dataset.metaSet = 'true'
           }
 
           if (!rowsByGroup.has(primaryCollege)) {
@@ -793,7 +822,7 @@ GCS HTML Template v1
           const headerRow = document.createElement('tr')
           headerRow.className = 'spell-group-row'
           const headerCell = document.createElement('td')
-          headerCell.colSpan = 7
+          headerCell.colSpan = 6
           headerCell.textContent = group
           headerRow.appendChild(headerCell)
           target.appendChild(headerRow)
@@ -808,6 +837,13 @@ GCS HTML Template v1
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
             el.innerHTML = md.render(el.textContent)
+          }
+        })
+
+        document.querySelectorAll('.spell-description').forEach(el => {
+          const description = el.textContent.trim()
+          if (description) {
+            el.innerHTML = md.render(description)
           }
         })
 
@@ -1195,7 +1231,6 @@ GCS HTML Template v1
         <table class="spell-table">
           <tr>
             <th>Spell</th>
-            <th>Class</th>
             <th>Lvl</th>
             <th>Cost</th>
             <th>Maintain</th>
@@ -1203,10 +1238,14 @@ GCS HTML Template v1
             <th>Duration</th>
           </tr>
           {{- range .Spells}}
-          <tr data-spell-colleges='{{join .Colleges "||"}}'>
-            <td><strong class="spell-name">{{.Description}}</strong>{{if .Notes}} <span
-                class="text-muted">{{.Notes}}</span>{{end}}</td>
-            <td>{{.Class}}</td>
+          <tr data-spell-colleges='{{join .Colleges "||"}}' data-spell-class='{{.Class}}'>
+            <td>
+              <span class="spell-title-line"><span class="spell-name-meta"><strong
+                    class="spell-name">{{.Description}}</strong><span class="spell-extra-colleges"></span></span><span
+                  class="spell-class"></span></span>
+              {{if .Notes}}
+              <div class="spell-description text-muted">{{.Notes}}</div>{{end}}
+            </td>
             <td class="mono">{{.Level}}</td>
             <td>{{.Mana.Cast}}</td>
             <td>{{.Mana.Maintain}}</td>
