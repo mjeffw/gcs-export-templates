@@ -526,6 +526,12 @@ GCS HTML Template v1
         margin: 0;
       }
 
+      .spell-note {
+        margin: 2px 0 6px;
+        font-size: var(--font-size-sm);
+        color: var(--text-muted);
+      }
+
       /* ── Modifiers row ─────────────────────────────────────────── */
       .mod-row {
         display: inline-flex;
@@ -843,6 +849,22 @@ GCS HTML Template v1
         })
       }
 
+      function placeQuirksInShorterColumn() {
+        const quirksSection = document.getElementById('quirks-section')
+        const traitsColumn = document.getElementById('traits-column')
+        const skillsColumn = document.getElementById('skills-column')
+
+        if (!quirksSection || !traitsColumn || !skillsColumn) {
+          return
+        }
+
+        quirksSection.remove()
+        const traitsHeight = traitsColumn.getBoundingClientRect().height
+        const skillsHeight = skillsColumn.getBoundingClientRect().height
+        const targetColumn = traitsHeight <= skillsHeight ? traitsColumn : skillsColumn
+        targetColumn.appendChild(quirksSection)
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
@@ -880,6 +902,8 @@ GCS HTML Template v1
         document.querySelectorAll('.spell-table').forEach(table => {
           groupSpellsByCollege(table)
         })
+
+        placeQuirksInShorterColumn()
       });
     </script>
     <div class="sheet">
@@ -1047,7 +1071,7 @@ GCS HTML Template v1
 
       <!-- ═══ TRAITS + SKILLS ═══ -->
       <div class="two-col">
-        <div class="section">
+        <div class="section" id="traits-column">
           <div class="section-title">Advantages</div>
           <ul class="item-list trait-group">
             {{- range .Traits}}
@@ -1075,7 +1099,7 @@ GCS HTML Template v1
           </ul>
 
         </div>
-        <div class="section">
+        <div class="section" id="skills-column">
           <div class="section-title">Skills</div>
           <ul class="item-list">
             {{- range .Skills}}
@@ -1090,18 +1114,20 @@ GCS HTML Template v1
             {{- end}}
           </ul>
 
-          <div class="section-title">Quirks</div>
-          <ul class="item-list trait-group">
-            {{- range .Traits}}
-            {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
-            <li class="trait-neg">
-              <span class="i-name">{{.Description}}</span>
-              {{- if .Notes}}
-              <div class="user-description">{{.Notes}}</div>{{end}}
-            </li>
-            {{- end}}
-            {{- end}}
-          </ul>
+          <div id="quirks-section">
+            <div class="section-title">Quirks</div>
+            <ul class="item-list trait-group">
+              {{- range .Traits}}
+              {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
+              <li class="trait-neg">
+                <span class="i-name">{{.Description}}</span>
+                {{- if .Notes}}
+                <div class="user-description">{{.Notes}}</div>{{end}}
+              </li>
+              {{- end}}
+              {{- end}}
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -1238,15 +1264,17 @@ GCS HTML Template v1
       {{- if .Spells}}
       <div class="section section-spaced print-page-break-before">
         <div class="section-title">Spells</div>
+        <div class="spell-note">All spell energy costs are reduced by 1 due to skill. All spells require a spoken word
+          or two <em>OR</em> a small gesture.</div>
         <table class="spell-table">
           <thead>
             <tr>
               <th>Spell</th>
               <th>Lvl</th>
               <th>Cost</th>
-              <th>Maintain</th>
+              <th>Maint</th>
               <th>Time</th>
-              <th>Duration</th>
+              <th>Dur</th>
             </tr>
           </thead>
           <tbody>
