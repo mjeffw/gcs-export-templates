@@ -82,6 +82,14 @@ GCS HTML Template v1
           break-inside: avoid;
           page-break-inside: avoid;
         }
+
+        .attack-section,
+        .attack-section .atk-table,
+        .attack-section .atk-table tr,
+        .attack-section .atk-table td {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
       }
 
       body {
@@ -520,6 +528,7 @@ GCS HTML Template v1
 
       .spell-description {
         margin-top: 2px;
+        font-size: var(--font-size-xs);
       }
 
       .spell-description p {
@@ -1133,7 +1142,7 @@ GCS HTML Template v1
 
       <!-- ═══ ATTACKS ═══ -->
       {{- if .MeleeWeapons}}
-      <div class="section">
+      <div class="section attack-section">
         <div class="section-title">Melee Attacks</div>
         <table class="atk-table">
           <tr>
@@ -1161,7 +1170,7 @@ GCS HTML Template v1
       </div>
       {{- end}}
       {{- if .RangedWeapons}}
-      <div class="section">
+      <div class="section attack-section">
         <div class="section-title">Ranged Attacks</div>
         <table class="atk-table">
           <tr>
@@ -1262,7 +1271,7 @@ GCS HTML Template v1
 
       <!-- ═══ SPELLS ═══ -->
       {{- if .Spells}}
-      <div class="section section-spaced print-page-break-before">
+      <div class="section section-spaced">
         <div class="section-title">Spells</div>
         <div class="spell-note">All spell energy costs are reduced by 1 due to skill. All spells require a spoken word
           or two <em>OR</em> a small gesture.</div>
