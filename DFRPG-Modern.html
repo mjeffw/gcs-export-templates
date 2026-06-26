@@ -481,6 +481,15 @@ GCS HTML Template v1
         background: var(--surface);
       }
 
+      .spell-table tr.spell-group-row td {
+        background: var(--accent-light);
+        color: var(--accent);
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+      }
+
       /* ── Modifiers row ─────────────────────────────────────────── */
       .mod-row {
         display: inline-flex;
@@ -739,6 +748,62 @@ GCS HTML Template v1
         }
       }
 
+      function groupSpellsByCollege(table) {
+        const spellRows = Array.from(table.querySelectorAll('tr[data-spell-colleges]'))
+        if (spellRows.length === 0) {
+          return
+        }
+
+        const groups = []
+        const rowsByGroup = new Map()
+
+        spellRows.forEach(row => {
+          const rawColleges = String(row.getAttribute('data-spell-colleges') || '')
+          const colleges = rawColleges.split('||').map(college => college.trim()).filter(Boolean)
+          const primaryCollege = colleges[0] || 'Uncategorized'
+          const extraColleges = colleges.slice(1)
+
+          const spellName = row.querySelector('.spell-name')
+          if (spellName && extraColleges.length > 0 && !spellName.dataset.collegesAppended) {
+            spellName.insertAdjacentText('afterend', ` (${extraColleges.join(', ')})`)
+            spellName.dataset.collegesAppended = 'true'
+          }
+
+          if (!rowsByGroup.has(primaryCollege)) {
+            rowsByGroup.set(primaryCollege, [])
+            groups.push(primaryCollege)
+          }
+          rowsByGroup.get(primaryCollege).push(row)
+        })
+
+        const sortedGroups = [...groups].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+        sortedGroups.forEach(group => {
+          const sortedRows = rowsByGroup.get(group).sort((a, b) => {
+            const aName = (a.querySelector('.spell-name')?.textContent || '').trim()
+            const bName = (b.querySelector('.spell-name')?.textContent || '').trim()
+            return aName.localeCompare(bName, undefined, { sensitivity: 'base' })
+          })
+          rowsByGroup.set(group, sortedRows)
+        })
+
+        const target = table.querySelector('tbody') || table
+        spellRows.forEach(row => row.remove())
+
+        sortedGroups.forEach(group => {
+          const headerRow = document.createElement('tr')
+          headerRow.className = 'spell-group-row'
+          const headerCell = document.createElement('td')
+          headerCell.colSpan = 7
+          headerCell.textContent = group
+          headerRow.appendChild(headerCell)
+          target.appendChild(headerRow)
+
+          rowsByGroup.get(group).forEach(row => {
+            target.appendChild(row)
+          })
+        })
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
@@ -764,6 +829,10 @@ GCS HTML Template v1
           const description = el.getAttribute('data-er-max')
           const erTrait = parseEnergyReserveTrait(description)
           el.textContent = String(erTrait.level)
+        })
+
+        document.querySelectorAll('.spell-table').forEach(table => {
+          groupSpellsByCollege(table)
         })
       });
     </script>
@@ -1127,7 +1196,6 @@ GCS HTML Template v1
           <tr>
             <th>Spell</th>
             <th>Class</th>
-            <th>College</th>
             <th>Lvl</th>
             <th>Cost</th>
             <th>Maintain</th>
@@ -1135,10 +1203,10 @@ GCS HTML Template v1
             <th>Duration</th>
           </tr>
           {{- range .Spells}}
-          <tr>
-            <td><strong>{{.Description}}</strong>{{if .Notes}} <span class="text-muted">{{.Notes}}</span>{{end}}</td>
+          <tr data-spell-colleges='{{join .Colleges "||"}}'>
+            <td><strong class="spell-name">{{.Description}}</strong>{{if .Notes}} <span
+                class="text-muted">{{.Notes}}</span>{{end}}</td>
             <td>{{.Class}}</td>
-            <td>{{join .Colleges ", "}}</td>
             <td class="mono">{{.Level}}</td>
             <td>{{.Mana.Cast}}</td>
             <td>{{.Mana.Maintain}}</td>
