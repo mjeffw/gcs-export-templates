@@ -804,6 +804,38 @@ GCS HTML Template v1
         }
       }
 
+      function getBestDbBonus(noteValues) {
+        let bestBonus = null
+
+        noteValues.forEach(value => {
+          const normalized = String(value || '').trim()
+          const match = normalized.match(/\bDB\s*\+(\d+)\b/i)
+          if (!match) {
+            return
+          }
+
+          const bonus = Number.parseInt(match[1], 10)
+          if (bestBonus === null || bonus > bestBonus) {
+            bestBonus = bonus
+          }
+        })
+
+        return bestBonus
+      }
+
+      function appendDefenseBonus(field, bonus) {
+        if (!field || bonus === null) {
+          return
+        }
+
+        const baseValue = String(field.textContent || '').trim()
+        if (!baseValue || baseValue === '–' || baseValue === '—' || /\/\+\d+$/.test(baseValue)) {
+          return
+        }
+
+        field.textContent = `${baseValue}/+${bonus}`
+      }
+
       function groupSpellsByCollege(table) {
         const spellRows = Array.from(table.querySelectorAll('tr[data-spell-colleges]'))
         if (spellRows.length === 0) {
@@ -929,6 +961,16 @@ GCS HTML Template v1
           blockField.textContent = highestBlock === null ? '–' : highestBlock
         }
 
+        const dodgeField = document.getElementById('defense-dodge-value')
+        const equipmentNotes = Array.from(document.querySelectorAll('.equip-notes'))
+          .map(el => el.textContent)
+        const bestDbBonus = getBestDbBonus(equipmentNotes)
+        if (bestDbBonus !== null) {
+          appendDefenseBonus(dodgeField, bestDbBonus)
+          appendDefenseBonus(parryField, bestDbBonus)
+          appendDefenseBonus(blockField, bestDbBonus)
+        }
+
         document.querySelectorAll('[data-er-label]').forEach(el => {
           const description = el.getAttribute('data-er-label')
           const erTrait = parseEnergyReserveTrait(description)
@@ -1034,7 +1076,7 @@ GCS HTML Template v1
             {{- range .Encumbrance}}{{if .IsCurrent}}
             <div class="attr-card">
               <div class="a-label">Dodge</div>
-              <div class="a-val">{{.Dodge}}</div>
+              <div class="a-val" id="defense-dodge-value">{{.Dodge}}</div>
             </div>
             <div class="attr-card">
               <div class="a-label">Move</div>
