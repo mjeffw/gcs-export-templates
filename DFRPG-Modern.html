@@ -764,25 +764,25 @@ GCS HTML Template v1
     <script>
       const md = window.markdownit()
 
-      function getHighestMeleeParry(parryValues) {
-        let highestNumericParry = null
-        let highestParryValue = null
+      function getHighestDefenseValue(defenseValues) {
+        let highestNumericValue = null
+        let highestValue = null
 
-        parryValues.forEach(value => {
+        defenseValues.forEach(value => {
           const normalized = String(value || '').trim()
           const match = normalized.match(/^(\d+)[A-Za-z]*$/)
           if (!match) {
             return
           }
 
-          const numericParry = Number.parseInt(match[1], 10)
-          if (highestNumericParry === null || numericParry > highestNumericParry) {
-            highestNumericParry = numericParry
-            highestParryValue = normalized
+          const numericValue = Number.parseInt(match[1], 10)
+          if (highestNumericValue === null || numericValue > highestNumericValue) {
+            highestNumericValue = numericValue
+            highestValue = normalized
           }
         })
 
-        return highestParryValue
+        return highestValue
       }
 
       function parseEnergyReserveTrait(descriptionValue) {
@@ -872,10 +872,30 @@ GCS HTML Template v1
           return
         }
 
+        const getColumnContentHeight = (column) => {
+          const blocks = Array.from(column.children)
+            .filter(child => child.id !== 'quirks-section')
+
+          if (blocks.length === 0) {
+            return 0
+          }
+
+          let top = Number.POSITIVE_INFINITY
+          let bottom = Number.NEGATIVE_INFINITY
+
+          blocks.forEach(block => {
+            const rect = block.getBoundingClientRect()
+            top = Math.min(top, rect.top)
+            bottom = Math.max(bottom, rect.bottom)
+          })
+
+          return Math.max(0, bottom - top)
+        }
+
         quirksSection.remove()
-        const traitsHeight = traitsColumn.getBoundingClientRect().height
-        const skillsHeight = skillsColumn.getBoundingClientRect().height
-        const targetColumn = traitsHeight <= skillsHeight ? traitsColumn : skillsColumn
+        const traitsHeight = getColumnContentHeight(traitsColumn)
+        const skillsHeight = getColumnContentHeight(skillsColumn)
+        const targetColumn = traitsHeight < skillsHeight ? traitsColumn : skillsColumn
         targetColumn.appendChild(quirksSection)
       }
 
@@ -897,8 +917,16 @@ GCS HTML Template v1
         if (parryField) {
           const meleeParryValues = Array.from(document.querySelectorAll('[data-melee-parry]'))
             .map(el => el.getAttribute('data-melee-parry'))
-          const highestParry = getHighestMeleeParry(meleeParryValues)
+          const highestParry = getHighestDefenseValue(meleeParryValues)
           parryField.textContent = highestParry === null ? '–' : highestParry
+        }
+
+        const blockField = document.getElementById('defense-block-value')
+        if (blockField) {
+          const meleeBlockValues = Array.from(document.querySelectorAll('[data-melee-block]'))
+            .map(el => el.getAttribute('data-melee-block'))
+          const highestBlock = getHighestDefenseValue(meleeBlockValues)
+          blockField.textContent = highestBlock === null ? '–' : highestBlock
         }
 
         document.querySelectorAll('[data-er-label]').forEach(el => {
@@ -918,6 +946,8 @@ GCS HTML Template v1
         })
 
         placeQuirksInShorterColumn()
+        window.addEventListener('load', placeQuirksInShorterColumn)
+        window.addEventListener('resize', placeQuirksInShorterColumn)
       });
     </script>
     <div class="sheet">
@@ -1018,7 +1048,7 @@ GCS HTML Template v1
             </div>
             <div class="attr-card">
               <div class="a-label">Block</div>
-              <div class="a-val">—</div>
+              <div class="a-val" id="defense-block-value">–</div>
             </div>
           </div>
           <div class="section-title section-spaced">Status</div>
@@ -1159,7 +1189,7 @@ GCS HTML Template v1
             <th>Parry</th>
           </tr>
           {{- range .MeleeWeapons}}
-          <tr data-melee-parry="{{.Parry}}">
+          <tr data-melee-parry="{{.Parry}}" data-melee-block="{{.Block}}">
             <td>
               <strong>{{.Description}}</strong>
               {{- if .Notes}}<span class="atk-notes">{{.Notes}}</span>{{end}}
