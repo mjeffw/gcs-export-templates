@@ -72,6 +72,16 @@ GCS HTML Template v1
           break-before: page;
           page-break-before: always;
         }
+
+        .spell-table thead {
+          display: table-header-group;
+        }
+
+        .spell-table tr,
+        .spell-table td {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
       }
 
       body {
@@ -823,7 +833,7 @@ GCS HTML Template v1
           headerRow.className = 'spell-group-row'
           const headerCell = document.createElement('td')
           headerCell.colSpan = 6
-          headerCell.textContent = group
+          headerCell.textContent = /\bCollege\b/i.test(group) ? group : `${group} College`
           headerRow.appendChild(headerCell)
           target.appendChild(headerRow)
 
@@ -1229,30 +1239,34 @@ GCS HTML Template v1
       <div class="section section-spaced print-page-break-before">
         <div class="section-title">Spells</div>
         <table class="spell-table">
-          <tr>
-            <th>Spell</th>
-            <th>Lvl</th>
-            <th>Cost</th>
-            <th>Maintain</th>
-            <th>Time</th>
-            <th>Duration</th>
-          </tr>
-          {{- range .Spells}}
-          <tr data-spell-colleges='{{join .Colleges "||"}}' data-spell-class='{{.Class}}'>
-            <td>
-              <span class="spell-title-line"><span class="spell-name-meta"><strong
-                    class="spell-name">{{.Description}}</strong><span class="spell-extra-colleges"></span></span><span
-                  class="spell-class"></span></span>
-              {{if .Notes}}
-              <div class="spell-description text-muted">{{.Notes}}</div>{{end}}
-            </td>
-            <td class="mono">{{.Level}}</td>
-            <td>{{.Mana.Cast}}</td>
-            <td>{{.Mana.Maintain}}</td>
-            <td>{{.TimeToCast}}</td>
-            <td>{{.Duration}}</td>
-          </tr>
-          {{- end}}
+          <thead>
+            <tr>
+              <th>Spell</th>
+              <th>Lvl</th>
+              <th>Cost</th>
+              <th>Maintain</th>
+              <th>Time</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{- range .Spells}}
+            <tr data-spell-colleges='{{join .Colleges "||"}}' data-spell-class='{{.Class}}'>
+              <td>
+                <span class="spell-title-line"><span class="spell-name-meta"><strong
+                      class="spell-name">{{.Description}}</strong><span class="spell-extra-colleges"></span></span><span
+                    class="spell-class"></span></span>
+                {{if .Notes}}
+                <div class="spell-description text-muted">{{.Notes}}</div>{{end}}
+              </td>
+              <td class="mono">{{.Level}}</td>
+              <td>{{.Mana.Cast}}</td>
+              <td>{{.Mana.Maintain}}</td>
+              <td>{{.TimeToCast}}</td>
+              <td>{{.Duration}}</td>
+            </tr>
+            {{- end}}
+          </tbody>
         </table>
       </div>
       {{- end}}
