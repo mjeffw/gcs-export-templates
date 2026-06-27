@@ -839,56 +839,32 @@ GCS HTML Template v1
           return
         }
 
-        const groups = []
-        const rowsByGroup = new Map()
+        Array.from(table.querySelectorAll('tr.spell-group-row')).forEach(row => row.remove())
 
         spellRows.forEach(row => {
           const rawColleges = String(row.getAttribute('data-spell-colleges') || '')
           const colleges = rawColleges.split('||').map(college => college.trim()).filter(Boolean)
-          const primaryCollege = colleges[0] || 'Uncategorized'
-          const extraColleges = colleges.slice(1)
           const spellClass = String(row.getAttribute('data-spell-class') || '').trim()
 
           const spellExtraColleges = row.querySelector('.spell-extra-colleges')
           const spellClassEl = row.querySelector('.spell-class')
           if (spellExtraColleges && spellClassEl && !spellClassEl.dataset.metaSet) {
-            spellExtraColleges.textContent = extraColleges.length > 0 ? ` (${extraColleges.join(', ')})` : ''
+            spellExtraColleges.textContent = colleges.length > 0 ? ` (${colleges.join(', ')})` : ''
             spellClassEl.textContent = spellClass
             spellClassEl.dataset.metaSet = 'true'
           }
-
-          if (!rowsByGroup.has(primaryCollege)) {
-            rowsByGroup.set(primaryCollege, [])
-            groups.push(primaryCollege)
-          }
-          rowsByGroup.get(primaryCollege).push(row)
         })
 
-        const sortedGroups = [...groups].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
-        sortedGroups.forEach(group => {
-          const sortedRows = rowsByGroup.get(group).sort((a, b) => {
-            const aName = (a.querySelector('.spell-name')?.textContent || '').trim()
-            const bName = (b.querySelector('.spell-name')?.textContent || '').trim()
-            return aName.localeCompare(bName, undefined, { sensitivity: 'base' })
-          })
-          rowsByGroup.set(group, sortedRows)
+        spellRows.sort((a, b) => {
+          const aName = (a.querySelector('.spell-name')?.textContent || '').trim()
+          const bName = (b.querySelector('.spell-name')?.textContent || '').trim()
+          return aName.localeCompare(bName, undefined, { sensitivity: 'base' })
         })
 
         const target = table.querySelector('tbody') || table
         spellRows.forEach(row => row.remove())
-
-        sortedGroups.forEach(group => {
-          const headerRow = document.createElement('tr')
-          headerRow.className = 'spell-group-row'
-          const headerCell = document.createElement('td')
-          headerCell.colSpan = 6
-          headerCell.textContent = /\bCollege\b/i.test(group) ? group : `${group} College`
-          headerRow.appendChild(headerCell)
-          target.appendChild(headerRow)
-
-          rowsByGroup.get(group).forEach(row => {
-            target.appendChild(row)
-          })
+        spellRows.forEach(row => {
+          target.appendChild(row)
         })
       }
 
@@ -926,6 +902,56 @@ GCS HTML Template v1
         const skillsHeight = getColumnContentHeight(skillsColumn)
         const targetColumn = traitsHeight < skillsHeight ? traitsColumn : skillsColumn
         targetColumn.appendChild(quirksSection)
+      }
+
+      function getIqValue() {
+        const iqCard = Array.from(document.querySelectorAll('.attr-card.primary')).find(card => {
+          const label = card.querySelector('.a-label')
+          return label && label.textContent.trim().toUpperCase() === 'IQ'
+        })
+
+        if (!iqCard) {
+          return 0
+        }
+
+        const value = iqCard.querySelector('.a-val')?.textContent || ''
+        const parsed = Number.parseInt(value, 10)
+        return Number.isNaN(parsed) ? 0 : parsed
+      }
+
+      function getBestMagicalTalentLevel() {
+        let bestLevel = 0
+        const talentPattern = /^(Magery|Power\s+Investiture)(?:\s*\([^)]*\))?\s+(\d+)$/i
+
+        document.querySelectorAll('.item-list .i-name').forEach(el => {
+          const name = (el.textContent || '').trim()
+          const match = name.match(talentPattern)
+          if (!match) {
+            return
+          }
+
+          const level = Number.parseInt(match[2], 10)
+          if (!Number.isNaN(level) && level > bestLevel) {
+            bestLevel = level
+          }
+        })
+
+        return bestLevel
+      }
+
+      function updateSpellNoteForMagicalAbility() {
+        const spellNote = document.getElementById('spell-note-text')
+        if (!spellNote) {
+          return
+        }
+
+        const magicalAbilityTotal = getIqValue() + getBestMagicalTalentLevel()
+        if (magicalAbilityTotal >= 17) {
+          spellNote.innerHTML = 'All spell energy costs are reduced by 1 due to skill. All spells require a spoken word or two <em>OR</em> a small gesture.'
+          return
+        }
+
+        spellNote.textContent = 'All spells require the caster to speak quietly and make a small gesture.'
       }
 
       document.addEventListener('DOMContentLoaded', function () {
@@ -983,6 +1009,8 @@ GCS HTML Template v1
         document.querySelectorAll('.spell-table').forEach(table => {
           groupSpellsByCollege(table)
         })
+
+        updateSpellNoteForMagicalAbility()
 
         placeQuirksInShorterColumn()
         window.addEventListener('load', placeQuirksInShorterColumn)
@@ -1347,7 +1375,8 @@ GCS HTML Template v1
       {{- if .Spells}}
       <div class="section section-spaced">
         <div class="section-title">Spells</div>
-        <div class="spell-note">All spell energy costs are reduced by 1 due to skill. All spells require a spoken word
+        <div class="spell-note" id="spell-note-text">All spell energy costs are reduced by 1 due to skill. All spells
+          require a spoken word
           or two <em>OR</em> a small gesture.</div>
         <table class="spell-table">
           <thead>
