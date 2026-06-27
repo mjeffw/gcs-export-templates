@@ -30,8 +30,8 @@ GCS HTML Template v1
         --gap-lg: 1rem;
         /* Font size scale */
         --font-size-base: 11px;
-        --font-size-xs: calc(var(--font-size-base) * 0.85);
-        /* ~9.35px */
+        --font-size-xs: calc(var(--font-size-base) * 0.95);
+        /* ~10.45px */
         --font-size-sm: var(--font-size-base);
         /* 11px */
         --font-size-md: calc(var(--font-size-base) * 1.15);
@@ -92,18 +92,42 @@ GCS HTML Template v1
         }
 
         .footer {
-          position: fixed;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 2px .4in 0;
-          background: var(--bg);
+          display: none !important;
           break-inside: avoid;
           page-break-inside: avoid;
         }
 
-        .footer-page::after {
-          content: counter(page);
+        .generated-print-footer {
+          position: absolute;
+          left: .4in;
+          right: .4in;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: baseline;
+          column-gap: .5rem;
+          font-size: var(--font-size-xs);
+          color: var(--text-muted);
+          padding-top: 2px;
+          border-top: 1px solid var(--border);
+          background: var(--bg);
+          pointer-events: none;
+          z-index: 999;
+        }
+
+        .generated-print-footer .name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .generated-print-footer .page {
+          white-space: nowrap;
+        }
+      }
+
+      @media screen {
+        .generated-print-footer {
+          display: none;
         }
       }
 
@@ -198,8 +222,6 @@ GCS HTML Template v1
       }
 
       /* ── Section chrome ────────────────────────────────────────── */
-      .section {}
-
       .section-title {
         font-size: var(--font-size-md);
         font-weight: 700;
@@ -969,6 +991,72 @@ GCS HTML Template v1
         spellNote.textContent = 'All spells require the caster to speak quietly and make a small gesture.'
       }
 
+      function getPixelsPerInch() {
+        const probe = document.createElement('div')
+        probe.style.position = 'absolute'
+        probe.style.left = '-9999px'
+        probe.style.top = '-9999px'
+        probe.style.width = '1in'
+        document.body.appendChild(probe)
+        const pixelsPerInch = probe.getBoundingClientRect().width || 96
+        probe.remove()
+        return pixelsPerInch
+      }
+
+      function clearGeneratedPrintFooters() {
+        document.querySelectorAll('.generated-print-footer').forEach(el => el.remove())
+      }
+
+      function buildGeneratedPrintFooters() {
+        clearGeneratedPrintFooters()
+
+        const printMedia = window.matchMedia ? window.matchMedia('print') : null
+        if (printMedia && !printMedia.matches) {
+          return
+        }
+
+        const sheet = document.querySelector('.sheet')
+        const footerName = (document.querySelector('.footer span')?.textContent || '').trim()
+        if (!sheet || !footerName) {
+          return
+        }
+
+        const pixelsPerInch = getPixelsPerInch()
+        const pageContentHeightPx = (11 - 0.8) * pixelsPerInch
+        const footerGapPx = 2
+
+        const sheetRect = sheet.getBoundingClientRect()
+        const sheetTop = sheetRect.top + window.scrollY
+        const sheetHeight = sheetRect.height
+        const totalPages = Math.max(1, Math.ceil((sheetHeight - 1) / pageContentHeightPx))
+
+        for (let pageIndex = 0; pageIndex < totalPages; pageIndex += 1) {
+          const pageNumber = pageIndex + 1
+
+          const footer = document.createElement('div')
+          footer.className = 'generated-print-footer'
+          footer.style.top = '0'
+          footer.style.visibility = 'hidden'
+
+          const name = document.createElement('span')
+          name.className = 'name'
+          name.textContent = footerName
+
+          const page = document.createElement('span')
+          page.className = 'page'
+          page.textContent = `PAGE ${pageNumber} of ${totalPages}`
+
+          footer.appendChild(name)
+          footer.appendChild(page)
+          document.body.appendChild(footer)
+
+          const footerHeight = footer.getBoundingClientRect().height
+          const footerTop = sheetTop + ((pageIndex + 1) * pageContentHeightPx) - footerHeight - footerGapPx
+          footer.style.top = `${footerTop}px`
+          footer.style.visibility = ''
+        }
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
@@ -1030,6 +1118,29 @@ GCS HTML Template v1
         placeQuirksInShorterColumn()
         window.addEventListener('load', placeQuirksInShorterColumn)
         window.addEventListener('resize', placeQuirksInShorterColumn)
+
+        buildGeneratedPrintFooters()
+        window.addEventListener('beforeprint', buildGeneratedPrintFooters)
+        window.addEventListener('afterprint', clearGeneratedPrintFooters)
+        window.addEventListener('resize', () => {
+          const printMedia = window.matchMedia ? window.matchMedia('print') : null
+          if (printMedia && printMedia.matches) {
+            buildGeneratedPrintFooters()
+          } else {
+            clearGeneratedPrintFooters()
+          }
+        })
+
+        const printMedia = window.matchMedia ? window.matchMedia('print') : null
+        if (printMedia && typeof printMedia.addEventListener === 'function') {
+          printMedia.addEventListener('change', event => {
+            if (event.matches) {
+              buildGeneratedPrintFooters()
+            } else {
+              clearGeneratedPrintFooters()
+            }
+          })
+        }
       });
     </script>
     <div class="sheet">
@@ -1245,7 +1356,7 @@ GCS HTML Template v1
             <ul class="item-list trait-group">
               {{- range .Traits}}
               {{- if and (ne .Description "Natural Attacks") (eq .Points.String "-1")}}
-              <li class="trait-neg">
+              <li>
                 <span class="i-name">{{.Description}}</span>
                 {{- if .Notes}}
                 <div class="user-description">{{.Notes}}</div>{{end}}
@@ -1429,7 +1540,7 @@ GCS HTML Template v1
       <!-- ═══ FOOTER ═══ -->
       <div class="footer">
         <span>{{.Name}}</span>
-        <span>Page <span class="footer-page"></span></span>
+        <span class="footer-page"></span>
       </div>
 
     </div>
