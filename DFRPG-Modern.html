@@ -90,6 +90,21 @@ GCS HTML Template v1
           break-inside: avoid;
           page-break-inside: avoid;
         }
+
+        .footer {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 2px .4in 0;
+          background: var(--bg);
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .footer-page::after {
+          content: counter(page);
+        }
       }
 
       body {
@@ -1412,10 +1427,10 @@ GCS HTML Template v1
       {{- end}}
 
       <!-- ═══ FOOTER ═══ -->
-      <!-- <div class="footer">
-        <span>Player: {{.Player}}</span>
-        <span>Created: {{.CreatedOn}} · Modified: {{.ModifiedOn}}</span>
-      </div> -->
+      <div class="footer">
+        <span>{{.Name}}</span>
+        <span>Page <span class="footer-page"></span></span>
+      </div>
 
     </div>
   </body>
