@@ -92,6 +92,12 @@ GCS HTML Template v1
           break-inside: avoid;
           page-break-inside: avoid;
         }
+
+        #traits-column .item-list li,
+        #quirks-section .item-list li {
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
       }
 
       body {
@@ -943,6 +949,28 @@ GCS HTML Template v1
         spellNote.textContent = 'All spells require the caster to speak quietly and make a small gesture.'
       }
 
+      function formatTraitDescriptionsAsMarkdown() {
+        const traitNameNodes = document.querySelectorAll('#traits-column .trait-group .i-name, #quirks-section .trait-group .i-name')
+        traitNameNodes.forEach(el => {
+          const description = (el.textContent || '').trim()
+          if (!description) {
+            return
+          }
+
+          el.innerHTML = md.renderInline(description)
+        })
+
+        const traitDetailNodes = document.querySelectorAll('#traits-column .trait-group .user-description, #quirks-section .trait-group .user-description')
+        traitDetailNodes.forEach(el => {
+          const description = (el.textContent || '').trim()
+          if (!description) {
+            return
+          }
+
+          el.innerHTML = md.render(description)
+        })
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.notes-block > div').forEach(el => {
           if (el.textContent.trim()) {
@@ -956,6 +984,8 @@ GCS HTML Template v1
             el.innerHTML = md.render(description)
           }
         })
+
+        formatTraitDescriptionsAsMarkdown()
 
         const parryField = document.getElementById('defense-parry-value')
         if (parryField) {
